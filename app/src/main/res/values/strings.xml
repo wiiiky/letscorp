@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Letscorp</string>
+    <string name="api_error_message">network error: </string>
+    <string name="api_failure_message">request error:</string>
+</resources>

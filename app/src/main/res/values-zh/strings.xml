@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">墙外楼</string>
+    <string name="api_error_message">网络错误：</string>
+    <string name="api_failure_message">请求错误：</string>
+</resources>
