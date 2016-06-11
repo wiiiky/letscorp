@@ -43,6 +43,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
         PostItem data = mData.get(position);
         PostItemHolder viewHolder = (PostItemHolder) holder;
         viewHolder.mTitle.setText(data.Title);
+        viewHolder.mImage.setURL(data.Img);
     }
 
     @Override
@@ -53,10 +54,13 @@ public class PostListAdapter extends RecyclerView.Adapter {
     private class PostItemHolder extends RecyclerView.ViewHolder {
 
         public TextView mTitle;
+        public ImageViewer mImage;
 
         public PostItemHolder(View itemView) {
             super(itemView);
             mTitle = (TextView) itemView.findViewById(R.id.title);
+            mImage = (ImageViewer) itemView.findViewById(R.id.img);
         }
     }
+
 }

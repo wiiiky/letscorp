@@ -26,7 +26,7 @@ public class MainActivity extends BaseActivity {
         mPostListAdapter = new PostListAdapter();
         mPostListView = (RecyclerView) findViewById(R.id.post_list);
         mPostListView.setLayoutManager(new LinearLayoutManager(this));
-        mPostListView.addItemDecoration(new CardItemDecoration(20));
+        mPostListView.addItemDecoration(new CardItemDecoration(10));
         mPostListView.setAdapter(mPostListAdapter);
 
         API.getPostList(1, new API.ApiResponseHandler() {
