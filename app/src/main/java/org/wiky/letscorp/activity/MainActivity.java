@@ -6,7 +6,7 @@ import org.wiky.letscorp.R;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.PostListView;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseDrawerActivity {
 
     private PostListView mPostListView;
 
@@ -22,8 +22,8 @@ public class MainActivity extends BaseActivity {
 
     private void startAnimation() {
         float actionbarSize = Util.dp2px(56);
-        getToolbar().setTranslationY(-actionbarSize);
-        getToolbar().animate().translationY(0)
+        mToolBar.setTranslationY(-actionbarSize);
+        mToolBar.animate().translationY(0)
                 .setDuration(300)
                 .setStartDelay(300);
     }

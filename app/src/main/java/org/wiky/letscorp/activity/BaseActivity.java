@@ -19,11 +19,11 @@ public class BaseActivity extends AppCompatActivity {
         bindViews();
     }
 
-    private void bindViews() {
+    protected void bindViews() {
         setupToolbar();
     }
 
-    private void setupToolbar() {
+    protected void setupToolbar() {
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);

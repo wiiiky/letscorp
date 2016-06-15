@@ -1,0 +1,41 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/menu_category"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_economics"
+            android:checkable="true"
+            android:checked="true"
+            android:icon="@mipmap/ic_attach_money_black"
+            android:title="经济" />
+        <item
+            android:id="@+id/menu_news"
+            android:title="新闻" />
+        <item
+            android:id="@+id/menu_view"
+            android:title="观点" />
+        <item
+            android:id="@+id/menu_politics"
+            android:title="政治" />
+        <item
+            android:id="@+id/menu_gallery"
+            android:title="图片" />
+        <item
+            android:id="@+id/menu_rumor"
+            android:title="传闻" />
+        <item
+            android:id="@+id/menu_tech"
+            android:title="科技" />
+        <item
+            android:id="@+id/menu_history"
+            android:title="历史" />
+    </group>
+    <group android:id="@+id/menu_group_2">
+        <item
+            android:id="@+id/menu_settings"
+            android:title="Settings" />
+        <item
+            android:id="@+id/menu_about"
+            android:title="About" />
+    </group>
+</menu>
