@@ -1,4 +1,4 @@
-package org.wiky.letscorp.view;
+package org.wiky.letscorp.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,20 +8,17 @@ import android.widget.TextView;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.model.PostItem;
+import org.wiky.letscorp.view.ImageViewer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wiky on 6/11/16.
+ * Created by wiky on 6/14/16.
  */
 public class PostListAdapter extends RecyclerView.Adapter {
 
     private List<PostItem> mData;
-
-    public PostListAdapter(List<PostItem> data) {
-        mData = data;
-    }
 
     public PostListAdapter() {
         mData = new ArrayList<>();
@@ -50,6 +47,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return mData.size();
     }
+
 
     private class PostItemHolder extends RecyclerView.ViewHolder {
 

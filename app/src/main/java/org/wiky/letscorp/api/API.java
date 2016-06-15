@@ -7,7 +7,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.wiky.letscorp.Application;
+import org.wiky.letscorp.LetscorpApplication;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.model.PostItem;
 
@@ -48,13 +48,14 @@ public class API {
 
         @Override
         public void onError(IOException e) {
-            android.app.Application app = Application.getApplication();
+            android.app.Application app = LetscorpApplication.getApplication();
             Toast.makeText(app, app.getString(R.string.api_error_message) + e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
 
         @Override
         public void onFailure(int statusCode) {
-            android.app.Application app = Application.getApplication();
+            android.app.Application app = LetscorpApplication.getApplication();
             Toast.makeText(app, app.getString(R.string.api_failure_message) + statusCode, Toast.LENGTH_LONG).show();
         }
 

@@ -3,6 +3,8 @@ package org.wiky.letscorp.api;
 
 import android.os.Handler;
 
+import org.wiky.letscorp.LetscorpApplication;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -39,7 +41,7 @@ public class HttpClient {
 
         public CallbackWrapper(HttpResponseHandler hander) {
             mHandler = hander;
-            mLoopHandler = new Handler(org.wiky.letscorp.Application.getApplication().getMainLooper());
+            mLoopHandler = new Handler(LetscorpApplication.getApplication().getMainLooper());
         }
 
         @Override
