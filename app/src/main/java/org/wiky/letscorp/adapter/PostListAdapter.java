@@ -18,15 +18,19 @@ import java.util.List;
  */
 public class PostListAdapter extends RecyclerView.Adapter {
 
+    public static final int VIEW_TYPE_DEFAULT = 1;
+    public static final int VIEW_TYPE_LOADER = 2;
+
     private List<PostItem> mData;
 
     public PostListAdapter() {
         mData = new ArrayList<>();
     }
 
-    public void setData(List<PostItem> data) {
+    public void addPosts(List<PostItem> data) {
+        int start = mData.size() - 1;
         mData = data;
-        notifyDataSetChanged();
+        notifyItemRangeInserted(start, mData.size());
     }
 
     @Override
@@ -44,12 +48,17 @@ public class PostListAdapter extends RecyclerView.Adapter {
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return VIEW_TYPE_DEFAULT;
+    }
+
+    @Override
     public int getItemCount() {
         return mData.size();
     }
 
 
-    private class PostItemHolder extends RecyclerView.ViewHolder {
+    public class PostItemHolder extends RecyclerView.ViewHolder {
 
         public TextView mTitle;
         public ImageViewer mImage;

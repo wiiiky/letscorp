@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import org.wiky.letscorp.adapter.PostListAdapter;
+import org.wiky.letscorp.animator.PostItemAnimator;
 import org.wiky.letscorp.api.API;
 import org.wiky.letscorp.data.model.PostItem;
 
@@ -35,9 +36,16 @@ public class PostListView extends RecyclerView {
 
     private void init(Context context) {
         mAdapter = new PostListAdapter();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context) {
+            @Override
+            protected int getExtraLayoutSpace(RecyclerView.State state) {
+                return 300;
+            }
+        };
         setAdapter(mAdapter);
-//        setItemAnimator(new PostItemAnimator());
-        setLayoutManager(new LinearLayoutManager(context));
+        setLayoutManager(linearLayoutManager);
+        setItemAnimator(new PostItemAnimator());
         addItemDecoration(new CardItemDecoration(10));
     }
 
@@ -46,7 +54,7 @@ public class PostListView extends RecyclerView {
             @Override
             public void onSuccess(Object data) {
                 List<PostItem> posts = (List<PostItem>) data;
-                mAdapter.setData(posts);
+                mAdapter.addPosts(posts);
             }
         });
     }
