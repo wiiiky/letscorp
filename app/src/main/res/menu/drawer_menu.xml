@@ -1,13 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group
-        android:id="@+id/menu_category"
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_all"
+            android:title="@string/drawer_menu_all" />
         <item
             android:id="@+id/menu_economics"
-            android:checkable="true"
-            android:checked="true"
             android:icon="@mipmap/ic_attach_money_black"
-            android:title="经济" />
+            android:title="@string/drawer_menu_economics" />
         <item
             android:id="@+id/menu_news"
             android:title="新闻" />

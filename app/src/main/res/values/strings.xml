@@ -2,4 +2,8 @@
     <string name="app_name">Letscorp</string>
     <string name="api_error_message">network error: </string>
     <string name="api_failure_message">request error:</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="drawer_menu_all">ALL</string>
+    <string name="drawer_menu_economics">ECONOMICS</string>
 </resources>

@@ -3,4 +3,6 @@
     <string name="app_name">墙外楼</string>
     <string name="api_error_message">网络错误：</string>
     <string name="api_failure_message">请求错误：</string>
+    <string name="drawer_menu_all">全部</string>
+    <string name="drawer_menu_economics">经济</string>
 </resources>
