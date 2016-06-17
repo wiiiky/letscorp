@@ -2,6 +2,7 @@ package org.wiky.letscorp.activity;
 
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -32,10 +33,10 @@ public class BaseDrawerActivity extends BaseActivity implements View.OnClickList
         mNavigation = (NavigationView) findViewById(R.id.vNavigation);
 
         if (mDrawerLayout != null) {
-//            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                    this, mDrawerLayout, mToolBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//            mDrawerLayout.setDrawerListener(toggle);
-//            toggle.syncState();
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, mDrawerLayout, mToolBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            mDrawerLayout.setDrawerListener(toggle);
+            toggle.syncState();
 
             mNavigation.setNavigationItemSelectedListener(this);
         }

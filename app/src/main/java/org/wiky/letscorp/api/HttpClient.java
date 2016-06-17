@@ -21,6 +21,7 @@ public class HttpClient {
 
     public static void get(String url, HttpResponseHandler hander) {
         Request request = new Request.Builder()
+                .addHeader("User-Agent", "Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0")
                 .url(url)
                 .build();
         mClient.newCall(request).enqueue(new CallbackWrapper(hander));

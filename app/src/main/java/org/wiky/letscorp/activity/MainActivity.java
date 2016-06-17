@@ -15,7 +15,7 @@ public class MainActivity extends BaseDrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mPostListView = (PostListView) findViewById(R.id.post_list);
-        mPostListView.setPostPage(1);
+        mPostListView.loadPage(1);
 
         startAnimation();
     }

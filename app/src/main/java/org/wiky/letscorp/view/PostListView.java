@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class PostListView extends RecyclerView {
     private PostListAdapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
+    private int mPage;
 
     public PostListView(Context context) {
         super(context);
@@ -36,24 +38,37 @@ public class PostListView extends RecyclerView {
 
     private void init(Context context) {
         mAdapter = new PostListAdapter();
+        mLayoutManager = new LinearLayoutManager(context);
+        mPage = 1;
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context) {
-            @Override
-            protected int getExtraLayoutSpace(RecyclerView.State state) {
-                return 300;
-            }
-        };
         setAdapter(mAdapter);
-        setLayoutManager(linearLayoutManager);
+        setLayoutManager(mLayoutManager);
         setItemAnimator(new PostItemAnimator());
         addItemDecoration(new CardItemDecoration(10));
+
+        addOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int totalItemCount = mLayoutManager.getItemCount();
+                int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
+                int visibleThreshold = mLayoutManager.findLastVisibleItemPosition() - mLayoutManager.findFirstVisibleItemPosition();
+
+                if (!mAdapter.isLoading() && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    mAdapter.setLoading();
+                    loadPage(++mPage);
+                }
+            }
+        });
     }
 
-    public void setPostPage(int page) {
+    public void loadPage(int page) {
         API.getPostList(page, new API.ApiResponseHandler() {
             @Override
             public void onSuccess(Object data) {
                 List<PostItem> posts = (List<PostItem>) data;
+                mAdapter.setLoaded();
                 mAdapter.addPosts(posts);
             }
         });
@@ -63,5 +78,4 @@ public class PostListView extends RecyclerView {
     public boolean isInEditMode() {
         return true;
     }
-
 }
