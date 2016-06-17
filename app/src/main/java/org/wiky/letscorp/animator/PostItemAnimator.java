@@ -43,10 +43,12 @@ public class PostItemAnimator extends DefaultItemAnimator {
     }
 
     private void runEnterAnimation(final RecyclerView.ViewHolder holder) {
-        final int width = LetscorpApplication.getScreenWidth();
-        holder.itemView.setTranslationX(width);
+        final int height = LetscorpApplication.getScreenHeight();
+        holder.itemView.setTranslationY(height);
+        holder.itemView.setAlpha(0.0f);
         holder.itemView.animate()
-                .translationX(0)
+                .translationY(0)
+                .alpha(1.0f)
                 .setInterpolator(new DecelerateInterpolator(3.f))
                 .setDuration(300 + 100 * Math.min(holder.getLayoutPosition(), 6))
                 .setListener(new AnimatorListenerAdapter() {

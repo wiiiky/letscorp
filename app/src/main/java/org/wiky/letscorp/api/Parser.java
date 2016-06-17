@@ -23,9 +23,17 @@ public class Parser {
         if (_img != null && !_img.attr("data-original").isEmpty()) {
             img = _img.attr("data-original");
         }
-        content = _content.text();
+        for (Element e : _content.getAllElements()) { /* 删除多余的标签 */
+            if (e.tagName() == "a" || e.text().isEmpty()) {
+                e.remove();
+            }
+        }
+        content = _content.html();
         if (_comment != null) {
             commentCount = _comment.text();
+            if (!commentCount.endsWith("条评论")) {
+                commentCount = "没有评论";
+            }
         }
         if (_date != null) {
             date = _date.text();

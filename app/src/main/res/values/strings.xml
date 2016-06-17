@@ -6,4 +6,11 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="drawer_menu_all">ALL</string>
     <string name="drawer_menu_economics">ECONOMICS</string>
+    <string name="drawer_menu_news">NEWS</string>
+    <string name="drawer_menu_view">VIEW</string>
+    <string name="drawer_menu_politics">POLITICS</string>
+    <string name="drawer_menu_gallery">GALLERY</string>
+    <string name="drawer_menu_rumor">RUMOR</string>
+    <string name="drawer_menu_tech">TECH</string>
+    <string name="drawer_menu_history">HISTORY</string>
 </resources>

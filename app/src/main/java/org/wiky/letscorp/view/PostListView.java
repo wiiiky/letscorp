@@ -20,6 +20,22 @@ public class PostListView extends RecyclerView {
     private PostListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private int mPage;
+    /* 滚动事件监听 */
+    private OnScrollListener mOnScrollListener = new OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+
+            int totalItemCount = mLayoutManager.getItemCount();
+            int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
+            int visibleThreshold = mLayoutManager.findLastVisibleItemPosition() - mLayoutManager.findFirstVisibleItemPosition();
+
+            if (!mAdapter.isLoading() && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                mAdapter.setLoading();
+                loadPage(++mPage);
+            }
+        }
+    };
 
     public PostListView(Context context) {
         super(context);
@@ -46,21 +62,7 @@ public class PostListView extends RecyclerView {
         setItemAnimator(new PostItemAnimator());
         addItemDecoration(new CardItemDecoration(10));
 
-        addOnScrollListener(new OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                int totalItemCount = mLayoutManager.getItemCount();
-                int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-                int visibleThreshold = mLayoutManager.findLastVisibleItemPosition() - mLayoutManager.findFirstVisibleItemPosition();
-
-                if (!mAdapter.isLoading() && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                    mAdapter.setLoading();
-                    loadPage(++mPage);
-                }
-            }
-        });
+        addOnScrollListener(mOnScrollListener);
     }
 
     public void loadPage(int page) {

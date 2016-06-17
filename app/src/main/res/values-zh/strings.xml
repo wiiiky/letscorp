@@ -5,4 +5,11 @@
     <string name="api_failure_message">请求错误：</string>
     <string name="drawer_menu_all">全部</string>
     <string name="drawer_menu_economics">经济</string>
+    <string name="drawer_menu_news">新闻</string>
+    <string name="drawer_menu_view">观点</string>
+    <string name="drawer_menu_politics">政治</string>
+    <string name="drawer_menu_gallery">图片</string>
+    <string name="drawer_menu_rumor">传闻</string>
+    <string name="drawer_menu_tech">科技</string>
+    <string name="drawer_menu_history">历史</string>
 </resources>

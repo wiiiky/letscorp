@@ -1,6 +1,7 @@
 package org.wiky.letscorp.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import android.widget.TextView;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.model.PostItem;
-import org.wiky.letscorp.view.ImageViewer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,12 +69,8 @@ public class PostListAdapter extends RecyclerView.Adapter {
             PostItemHolder viewHolder = (PostItemHolder) holder;
             PostItem data = mData.get(position);
             viewHolder.mTitle.setText(data.Title);
-            if (!data.Img.isEmpty()) {
-                viewHolder.mImage.setVisibility(View.VISIBLE);
-                viewHolder.mImage.setURL(data.Img);
-            } else {
-                viewHolder.mImage.setVisibility(View.GONE);
-            }
+            viewHolder.mContent.setText(Html.fromHtml(data.Content));
+            viewHolder.mComment.setText(data.CommentCount);
         } else if (holder instanceof LoaderHolder) {
             LoaderHolder viewHolder = (LoaderHolder) holder;
             viewHolder.mLoader.setIndeterminate(true);
@@ -98,12 +94,14 @@ public class PostListAdapter extends RecyclerView.Adapter {
     public class PostItemHolder extends RecyclerView.ViewHolder {
 
         public TextView mTitle;
-        public ImageViewer mImage;
+        public TextView mContent;
+        public TextView mComment;
 
         public PostItemHolder(View itemView) {
             super(itemView);
             mTitle = (TextView) itemView.findViewById(R.id.title);
-            mImage = (ImageViewer) itemView.findViewById(R.id.img);
+            mContent = (TextView) itemView.findViewById(R.id.content);
+            mComment = (TextView) itemView.findViewById(R.id.comment);
         }
     }
 
