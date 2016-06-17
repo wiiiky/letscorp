@@ -65,7 +65,18 @@ public class PostListView extends RecyclerView {
         addOnScrollListener(mOnScrollListener);
     }
 
-    public void loadPage(int page) {
+    public void resetPage(API.HttpFinalHandler finalHandler) {
+        mPage = 1;
+        API.getPostList(mPage, new API.ApiResponseHandler() {
+            @Override
+            public void onSuccess(Object data) {
+                List<PostItem> posts = (List<PostItem>) data;
+                mAdapter.resetPosts(posts);
+            }
+        }, finalHandler);
+    }
+
+    public void loadPage(int page, API.HttpFinalHandler finalHandler) {
         API.getPostList(page, new API.ApiResponseHandler() {
             @Override
             public void onSuccess(Object data) {
@@ -73,7 +84,11 @@ public class PostListView extends RecyclerView {
                 mAdapter.setLoaded();
                 mAdapter.addPosts(posts);
             }
-        });
+        }, finalHandler);
+    }
+
+    public void loadPage(int page) {
+        loadPage(page, null);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.wiky.letscorp.adapter;
 
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -34,6 +35,20 @@ public class PostListAdapter extends RecyclerView.Adapter {
         int start = mData.size();
         mData.addAll(data);
         notifyItemRangeInserted(start, data.size());
+    }
+
+    public void resetPosts(final List<PostItem> data) {
+        int count = getItemCount();
+        mLoading = false;
+        mData.clear();
+        notifyItemRangeRemoved(0, count);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mData.addAll(data);
+                notifyItemRangeInserted(0, mData.size());
+            }
+        }, 400);
     }
 
     public void setLoading() {
@@ -72,8 +87,8 @@ public class PostListAdapter extends RecyclerView.Adapter {
             viewHolder.mContent.setText(Html.fromHtml(data.Content));
             viewHolder.mComment.setText(data.CommentCount);
         } else if (holder instanceof LoaderHolder) {
-            LoaderHolder viewHolder = (LoaderHolder) holder;
-            viewHolder.mLoader.setIndeterminate(true);
+//            LoaderHolder viewHolder = (LoaderHolder) holder;
+//            viewHolder.mLoader.setIndeterminate(true);
         }
     }
 

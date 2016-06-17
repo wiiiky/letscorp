@@ -1,6 +1,5 @@
 package org.wiky.letscorp.api;
 
-import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
@@ -20,9 +19,9 @@ import java.util.List;
  */
 public class API {
 
-    public static RecyclerView getPostList(int page, final ApiResponseHandler hander) {
+    public static void getPostList(int page, final ApiResponseHandler hander, HttpFinalHandler finalHandler) {
         String url = Const.getPostListUrl(page);
-        HttpClient.get(url, new HttpResponseHandlerWrapper() {
+        HttpClient.get(url, new HttpResponseHandlerWrapper(finalHandler) {
             @Override
             public void onSuccess(String body) throws Exception {
                 Document doc = Jsoup.parse(body);
@@ -37,17 +36,37 @@ public class API {
                 hander.onSuccess(results);
             }
         });
-        return null;
     }
 
     public interface ApiResponseHandler {
         void onSuccess(Object data);
     }
 
+    public interface HttpFinalHandler {
+        void onFinally();
+    }
+
     private static abstract class HttpResponseHandlerWrapper implements HttpClient.HttpResponseHandler {
+
+        private HttpFinalHandler mFinalHandler;
+
+        public HttpResponseHandlerWrapper(HttpFinalHandler finalHandler) {
+            mFinalHandler = finalHandler;
+        }
+
+        public HttpResponseHandlerWrapper() {
+
+        }
+
+        private void onFinally() {
+            if (mFinalHandler != null) {
+                mFinalHandler.onFinally();
+            }
+        }
 
         @Override
         public void onError(IOException e) {
+            onFinally();
             android.app.Application app = LetscorpApplication.getApplication();
             Toast.makeText(app, app.getString(R.string.api_error_message) + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -55,6 +74,7 @@ public class API {
 
         @Override
         public void onFailure(int statusCode) {
+            onFinally();
             android.app.Application app = LetscorpApplication.getApplication();
             Toast.makeText(app, app.getString(R.string.api_failure_message) + statusCode, Toast.LENGTH_LONG).show();
         }
@@ -65,6 +85,8 @@ public class API {
                 this.onSuccess(new String(body));
             } catch (Exception e) {
                 this.onFailure(-1);
+            } finally {
+                onFinally();
             }
         }
 

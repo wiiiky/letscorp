@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import org.wiky.letscorp.LetscorpApplication;
@@ -43,14 +44,15 @@ public class PostItemAnimator extends DefaultItemAnimator {
     }
 
     private void runEnterAnimation(final RecyclerView.ViewHolder holder) {
-        final int height = LetscorpApplication.getScreenHeight();
+        int height = LetscorpApplication.getScreenHeight();
         holder.itemView.setTranslationY(height);
         holder.itemView.setAlpha(0.0f);
         holder.itemView.animate()
                 .translationY(0)
                 .alpha(1.0f)
-                .setInterpolator(new DecelerateInterpolator(3.f))
-                .setDuration(300 + 100 * Math.min(holder.getLayoutPosition(), 6))
+                .setInterpolator(new DecelerateInterpolator())
+                .setDuration(300)
+                .setStartDelay(100 * Math.min(holder.getLayoutPosition(), 5))
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
@@ -60,29 +62,70 @@ public class PostItemAnimator extends DefaultItemAnimator {
                     @Override
                     public void onAnimationCancel(Animator animator) {
                         dispatchAddFinished(holder);
-                        holder.itemView.setTranslationX(0);
                     }
                 })
                 .start();
     }
 
     @Override
-    public boolean animateChange(@NonNull RecyclerView.ViewHolder oldHolder,
-                                 @NonNull RecyclerView.ViewHolder newHolder,
-                                 @NonNull ItemHolderInfo preInfo,
-                                 @NonNull ItemHolderInfo postInfo) {
-        cancelCurrentAnimationIfExists(newHolder);
-
+    public boolean animateRemove(RecyclerView.ViewHolder viewHolder) {
+        if (viewHolder.getItemViewType() == PostListAdapter.VIEW_TYPE_DEFAULT) {
+            runExitAnimation(viewHolder);
+        } else {
+            runLoaderExitAnimation(viewHolder);
+        }
         return false;
     }
 
-    private void cancelCurrentAnimationIfExists(RecyclerView.ViewHolder item) {
+    private void runExitAnimation(final RecyclerView.ViewHolder holder) {
+        int height = LetscorpApplication.getScreenHeight();
+        holder.itemView.animate()
+                .translationY(-height)
+                .alpha(0.0f)
+                .setInterpolator(new AccelerateInterpolator())
+                .setDuration(250)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        holder.itemView.setTranslationY(0.0f);
+                        holder.itemView.setAlpha(1.0f);
+                        dispatchAddFinished(holder);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        holder.itemView.setTranslationY(0.0f);
+                        holder.itemView.setAlpha(1.0f);
+                        dispatchAddFinished(holder);
+                    }
+                })
+                .start();
     }
+
+    private void runLoaderExitAnimation(final RecyclerView.ViewHolder holder) {
+        holder.itemView.animate()
+                .alpha(0.0f)
+                .setDuration(300)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        holder.itemView.setAlpha(1.0f);
+                        dispatchAddFinished(holder);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        holder.itemView.setAlpha(1.0f);
+                        dispatchAddFinished(holder);
+                    }
+                })
+                .start();
+    }
+
 
     @Override
     public void endAnimation(RecyclerView.ViewHolder item) {
         super.endAnimation(item);
-        cancelCurrentAnimationIfExists(item);
     }
 
     @Override
