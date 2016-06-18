@@ -86,7 +86,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PostItemHolder) {
-            PostItemHolder viewHolder = (PostItemHolder) holder;
+            final PostItemHolder viewHolder = (PostItemHolder) holder;
             final PostItem data = mData.get(position);
             viewHolder.mTitle.setText(data.Title);
             viewHolder.mContent.setText(Html.fromHtml(data.Content));
@@ -94,7 +94,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnItemClickListener.onItemClick(data);
+                    mOnItemClickListener.onItemClick(viewHolder, data);
                 }
             });
         } else if (holder instanceof LoaderHolder) {
@@ -117,7 +117,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
     }
 
     public interface OnItemClickListener {
-        void onItemClick(PostItem data);
+        void onItemClick(PostItemHolder holder, PostItem data);
     }
 
     public class PostItemHolder extends RecyclerView.ViewHolder {

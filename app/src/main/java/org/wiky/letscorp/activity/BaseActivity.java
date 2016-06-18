@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.util.Util;
 
 /**
  * Created by wiky on 6/11/16.
@@ -29,6 +30,14 @@ public class BaseActivity extends AppCompatActivity {
             setSupportActionBar(mToolBar);
 //            mToolBar.setNavigationIcon(R.mipmap.ic_menu_white);
         }
+    }
+
+    protected void startToolbarAnimation() {
+        float actionbarSize = Util.dp2px(56);
+        mToolBar.setTranslationY(-actionbarSize);
+        mToolBar.animate().translationY(0)
+                .setDuration(300)
+                .setStartDelay(300);
     }
 
 }

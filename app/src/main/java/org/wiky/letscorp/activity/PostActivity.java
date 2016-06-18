@@ -14,6 +14,15 @@ public class PostActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mData = getIntent().getParcelableExtra("data");
         setContentView(R.layout.activity_post);
+
         setTitle(mData.Title);
+
+//        Slide slide = new Slide(Gravity.LEFT);
+//        slide.setDuration(300);
+//        getWindow().setEnterTransition(slide);
+//
+//        slide = new Slide(Gravity.RIGHT);
+//        slide.setDuration(300);
+//        getWindow().setReturnTransition(slide);
     }
 }

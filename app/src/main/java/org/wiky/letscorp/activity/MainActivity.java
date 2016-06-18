@@ -3,13 +3,13 @@ package org.wiky.letscorp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.adapter.PostListAdapter;
 import org.wiky.letscorp.api.API;
 import org.wiky.letscorp.data.model.PostItem;
-import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.PostListView;
 
 public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -18,13 +18,15 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private PostListAdapter.OnItemClickListener mOnItemClickListener = new PostListAdapter.OnItemClickListener() {
         @Override
-        public void onItemClick(final PostItem data) {
+        public void onItemClick(final PostListAdapter.PostItemHolder viewHolder, final PostItem data) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     Intent intent = new Intent(MainActivity.this, PostActivity.class);
                     intent.putExtra("data", data);
-                    startActivity(intent);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation(MainActivity.this, viewHolder.mTitle, viewHolder.mTitle.getTransitionName());
+                    startActivity(intent, options.toBundle());
                 }
             }, 150);
         }
@@ -39,15 +41,15 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        startAnimation();
-    }
+        startToolbarAnimation();
 
-    private void startAnimation() {
-        float actionbarSize = Util.dp2px(56);
-        mToolBar.setTranslationY(-actionbarSize);
-        mToolBar.animate().translationY(0)
-                .setDuration(300)
-                .setStartDelay(300);
+//        Fade fade = new Fade();
+//        fade.setDuration(300);
+//        getWindow().setEnterTransition(fade);
+//
+//        Slide slide = new Slide(Gravity.LEFT);
+//        slide.setDuration(300);
+//        getWindow().setEnterTransition(slide);
     }
 
     @Override
