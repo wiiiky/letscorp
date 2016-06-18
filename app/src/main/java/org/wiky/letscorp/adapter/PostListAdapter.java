@@ -25,10 +25,15 @@ public class PostListAdapter extends RecyclerView.Adapter {
 
     private List<PostItem> mData;
     private boolean mLoading;
+    private OnItemClickListener mOnItemClickListener;
 
     public PostListAdapter() {
         mData = new ArrayList<>();
         mLoading = false;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mOnItemClickListener = listener;
     }
 
     public void addPosts(List<PostItem> data) {
@@ -82,10 +87,16 @@ public class PostListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PostItemHolder) {
             PostItemHolder viewHolder = (PostItemHolder) holder;
-            PostItem data = mData.get(position);
+            final PostItem data = mData.get(position);
             viewHolder.mTitle.setText(data.Title);
             viewHolder.mContent.setText(Html.fromHtml(data.Content));
             viewHolder.mComment.setText(data.CommentCount);
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onItemClick(data);
+                }
+            });
         } else if (holder instanceof LoaderHolder) {
 //            LoaderHolder viewHolder = (LoaderHolder) holder;
 //            viewHolder.mLoader.setIndeterminate(true);
@@ -105,6 +116,9 @@ public class PostListAdapter extends RecyclerView.Adapter {
         return mData.size() + (mLoading ? 1 : 0);
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(PostItem data);
+    }
 
     public class PostItemHolder extends RecyclerView.ViewHolder {
 
@@ -117,7 +131,9 @@ public class PostListAdapter extends RecyclerView.Adapter {
             mTitle = (TextView) itemView.findViewById(R.id.title);
             mContent = (TextView) itemView.findViewById(R.id.content);
             mComment = (TextView) itemView.findViewById(R.id.comment);
+
         }
+
     }
 
     public class LoaderHolder extends RecyclerView.ViewHolder {

@@ -65,6 +65,10 @@ public class PostListView extends RecyclerView {
         addOnScrollListener(mOnScrollListener);
     }
 
+    public void setOnItemClickListener(PostListAdapter.OnItemClickListener listener) {
+        mAdapter.setOnItemClickListener(listener);
+    }
+
     public void resetPage(API.HttpFinalHandler finalHandler) {
         mPage = 1;
         API.getPostList(mPage, new API.ApiResponseHandler() {

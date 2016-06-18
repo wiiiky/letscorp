@@ -14,9 +14,15 @@ import org.wiky.letscorp.R;
 /**
  * Created by wiky on 6/15/16.
  */
-public class BaseDrawerActivity extends BaseActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class BaseDrawerActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     protected DrawerLayout mDrawerLayout;
     protected NavigationView mNavigation;
+    private View.OnClickListener mNavigationClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+        }
+    };
 
     @Override
     public void setContentView(int layoutResID) {
@@ -42,13 +48,8 @@ public class BaseDrawerActivity extends BaseActivity implements View.OnClickList
         }
 
         if (mToolBar != null) {
-            mToolBar.setNavigationOnClickListener(this);
+            mToolBar.setNavigationOnClickListener(mNavigationClickListener);
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-        mDrawerLayout.openDrawer(Gravity.LEFT);
     }
 
     @Override

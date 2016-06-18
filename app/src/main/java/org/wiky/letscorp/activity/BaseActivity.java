@@ -27,11 +27,8 @@ public class BaseActivity extends AppCompatActivity {
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
-            mToolBar.setNavigationIcon(R.mipmap.ic_menu_white);
+//            mToolBar.setNavigationIcon(R.mipmap.ic_menu_white);
         }
     }
 
-    public Toolbar getToolbar() {
-        return mToolBar;
-    }
 }
