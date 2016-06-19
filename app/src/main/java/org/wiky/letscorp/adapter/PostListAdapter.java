@@ -128,9 +128,9 @@ public class PostListAdapter extends RecyclerView.Adapter {
 
         public PostItemHolder(View itemView) {
             super(itemView);
-            mTitle = (TextView) itemView.findViewById(R.id.title);
-            mContent = (TextView) itemView.findViewById(R.id.content);
-            mComment = (TextView) itemView.findViewById(R.id.comment);
+            mTitle = (TextView) itemView.findViewById(R.id.item_title);
+            mContent = (TextView) itemView.findViewById(R.id.item_content);
+            mComment = (TextView) itemView.findViewById(R.id.item_comment);
 
         }
 

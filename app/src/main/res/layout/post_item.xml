@@ -13,18 +13,17 @@
         android:paddingTop="8dp">
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/item.title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/md_black_1000"
-            android:textSize="22sp"
-            android:transitionName="title" />
+            android:textSize="22sp" />
 
         <TextView
-            android:id="@+id/content"
+            android:id="@+id/item.content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title"
+            android:layout_below="@id/item.title"
             android:layout_marginTop="2dp"
             android:ellipsize="end"
             android:maxLines="5"
@@ -33,12 +32,12 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/content"
+            android:layout_below="@id/item.content"
             android:layout_marginTop="4dp">
 
 
             <TextView
-                android:id="@+id/comment"
+                android:id="@+id/item.comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

@@ -12,4 +12,5 @@
     <string name="drawer_menu_rumor">传闻</string>
     <string name="drawer_menu_tech">科技</string>
     <string name="drawer_menu_history">历史</string>
+    <string name="post_activity_title">文章</string>
 </resources>

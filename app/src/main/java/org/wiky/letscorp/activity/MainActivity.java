@@ -25,7 +25,7 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
                     Intent intent = new Intent(MainActivity.this, PostActivity.class);
                     intent.putExtra("data", data);
                     ActivityOptionsCompat options = ActivityOptionsCompat.
-                            makeSceneTransitionAnimation(MainActivity.this, viewHolder.mTitle, viewHolder.mTitle.getTransitionName());
+                            makeSceneTransitionAnimation(MainActivity.this);
                     startActivity(intent, options.toBundle());
                 }
             }, 150);
@@ -42,14 +42,6 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         startToolbarAnimation();
-
-//        Fade fade = new Fade();
-//        fade.setDuration(300);
-//        getWindow().setEnterTransition(fade);
-//
-//        Slide slide = new Slide(Gravity.LEFT);
-//        slide.setDuration(300);
-//        getWindow().setEnterTransition(slide);
     }
 
     @Override
