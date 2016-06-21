@@ -19,12 +19,16 @@ import java.util.List;
 public class PostListView extends RecyclerView {
     private PostListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
+    private boolean mReseting;
     private int mPage;
     /* 滚动事件监听 */
     private OnScrollListener mOnScrollListener = new OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
+            if (mReseting) {
+                return;
+            }
 
             int totalItemCount = mLayoutManager.getItemCount();
             int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
@@ -56,6 +60,7 @@ public class PostListView extends RecyclerView {
         mAdapter = new PostListAdapter();
         mLayoutManager = new LinearLayoutManager(context);
         mPage = 1;
+        mReseting = false;
 
         setAdapter(mAdapter);
         setLayoutManager(mLayoutManager);
@@ -71,11 +76,13 @@ public class PostListView extends RecyclerView {
 
     public void resetPage(API.HttpFinalHandler finalHandler) {
         mPage = 1;
+        mReseting = true;
         API.getPostList(mPage, new API.ApiResponseHandler() {
             @Override
             public void onSuccess(Object data) {
                 List<PostItem> posts = (List<PostItem>) data;
                 mAdapter.resetPosts(posts);
+                mReseting = false;
             }
         }, finalHandler);
     }

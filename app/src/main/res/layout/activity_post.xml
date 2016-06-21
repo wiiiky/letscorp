@@ -46,13 +46,27 @@
                 android:textColor="@color/md_black_1000"
                 android:textSize="26sp" />
 
-            <TextView
-                android:id="@+id/post.content"
+            <LinearLayout
+                android:id="@+id/post.content_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:textSize="18sp" />
+                android:orientation="vertical">
+
+                <ProgressBar
+                    android:id="@+id/post.loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="55dp" />
+
+                <TextView
+                    android:id="@+id/post.content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

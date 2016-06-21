@@ -88,9 +88,9 @@ public class PostListAdapter extends RecyclerView.Adapter {
         if (holder instanceof PostItemHolder) {
             final PostItemHolder viewHolder = (PostItemHolder) holder;
             final PostItem data = mData.get(position);
-            viewHolder.mTitle.setText(data.Title);
-            viewHolder.mContent.setText(Html.fromHtml(data.Content));
-            viewHolder.mComment.setText(data.CommentCount);
+            viewHolder.mTitle.setText(data.title);
+            viewHolder.mContent.setText(Html.fromHtml(data.content));
+            viewHolder.mComment.setText(data.commentCount);
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

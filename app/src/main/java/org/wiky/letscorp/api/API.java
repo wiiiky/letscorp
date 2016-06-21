@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.wiky.letscorp.LetscorpApplication;
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 
 import java.io.IOException;
@@ -34,6 +35,18 @@ public class API {
                     }
                 }
                 hander.onSuccess(results);
+            }
+        });
+    }
+
+    public static void getPostDetail(final String url, final ApiResponseHandler handler, HttpFinalHandler finalHandler) {
+        HttpClient.get(url, new HttpResponseHandlerWrapper(finalHandler) {
+            @Override
+            public void onSuccess(String body) throws Exception {
+                Document doc = Jsoup.parse(body);
+                Element e = doc.select("article.post").first();
+                Post post = Parser.parsePost(e, url);
+                handler.onSuccess(post);
             }
         });
     }

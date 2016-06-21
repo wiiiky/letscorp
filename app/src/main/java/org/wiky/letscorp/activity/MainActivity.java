@@ -42,6 +42,14 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         startToolbarAnimation();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
+        }, 200);
     }
 
     @Override

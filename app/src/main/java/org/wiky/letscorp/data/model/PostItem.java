@@ -18,32 +18,32 @@ public class PostItem implements Parcelable {
             return new PostItem[size];
         }
     };
-    public String Id;
-    public String Title;
-    public String Href;
-    public String Img;
-    public String Content;
-    public String CommentCount;
-    public String Date;
+    public String id;
+    public String title;
+    public String href;
+    public String img;
+    public String content;
+    public String commentCount;
+    public String date;
 
     public PostItem(String id, String title, String href, String img, String content, String ccount, String date) {
-        Id = id;
-        Title = title;
-        Href = href;
-        Img = img;
-        Content = content;
-        CommentCount = ccount;
-        Date = date;
+        this.id = id;
+        this.title = title;
+        this.href = href;
+        this.img = img;
+        this.content = content;
+        this.commentCount = ccount;
+        this.date = date;
     }
 
     protected PostItem(Parcel in) {
-        Id = in.readString();
-        Title = in.readString();
-        Href = in.readString();
-        Img = in.readString();
-        Content = in.readString();
-        CommentCount = in.readString();
-        Date = in.readString();
+        id = in.readString();
+        title = in.readString();
+        href = in.readString();
+        img = in.readString();
+        content = in.readString();
+        commentCount = in.readString();
+        date = in.readString();
     }
 
     @Override
@@ -53,12 +53,12 @@ public class PostItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(Id);
-        dest.writeString(Title);
-        dest.writeString(Href);
-        dest.writeString(Img);
-        dest.writeString(Content);
-        dest.writeString(CommentCount);
-        dest.writeString(Date);
+        dest.writeString(id);
+        dest.writeString(title);
+        dest.writeString(href);
+        dest.writeString(img);
+        dest.writeString(content);
+        dest.writeString(commentCount);
+        dest.writeString(date);
     }
 }
