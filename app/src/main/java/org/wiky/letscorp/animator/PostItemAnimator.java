@@ -45,7 +45,7 @@ public class PostItemAnimator extends DefaultItemAnimator {
 
     private void runEnterAnimation(final RecyclerView.ViewHolder holder) {
         int height = LetscorpApplication.getScreenHeight();
-        holder.itemView.setTranslationY(height);
+        holder.itemView.setTranslationY(height / 2.0f);
         holder.itemView.setAlpha(0.0f);
         holder.itemView.animate()
                 .translationY(0)
@@ -80,7 +80,7 @@ public class PostItemAnimator extends DefaultItemAnimator {
     private void runExitAnimation(final RecyclerView.ViewHolder holder) {
         int height = LetscorpApplication.getScreenHeight();
         holder.itemView.animate()
-                .translationY(-height)
+                .translationY(-height / 2.0f)
                 .alpha(0.0f)
                 .setInterpolator(new AccelerateInterpolator())
                 .setDuration(250)

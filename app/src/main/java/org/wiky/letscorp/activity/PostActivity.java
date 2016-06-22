@@ -40,6 +40,10 @@ public class PostActivity extends BaseActivity {
         PostItem data = getIntent().getParcelableExtra("data");
         setContentView(R.layout.activity_post);
 
+        setProgressBarIndeterminateVisibility(true);
+        setProgressBarIndeterminate(true);
+        setProgressBarVisibility(true);
+
         setTitle(getString(R.string.post_activity_title));
         mTitle = (TextView) findViewById(R.id.post_title);
         mProgressBar = (ProgressBar) findViewById(R.id.post_loading);
@@ -50,7 +54,7 @@ public class PostActivity extends BaseActivity {
         API.getPostDetail(data.href, mApiHandler, new API.HttpFinalHandler() {
             @Override
             public void onFinally() {
-                mProgressBar.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
