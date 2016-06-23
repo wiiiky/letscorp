@@ -1,10 +1,9 @@
 package org.wiky.letscorp.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.transition.Explode;
-import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,12 +22,16 @@ public class PostActivity extends BaseActivity {
     private TextView mContent;
     private API.ApiResponseHandler mApiHandler = new API.ApiResponseHandler() {
         @Override
-        public void onSuccess(Object data) {
-            mData = (Post) data;
-            mContent.setText(Html.fromHtml(mData.content));
-            AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
-            alphaAnimation.setDuration(150);
-            mContent.startAnimation(alphaAnimation);
+        public void onSuccess(final Object data) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mData = (Post) data;
+                    mContent.setText(Html.fromHtml(mData.content));
+                    mContent.setAlpha(0.0f);
+                    mContent.animate().alpha(1.0f).setDuration(150).start();
+                }
+            }, 250);
         }
     };
 
@@ -51,10 +54,15 @@ public class PostActivity extends BaseActivity {
         mContent = (TextView) findViewById(R.id.post_content);
 
         mTitle.setText(data.title);
+        getPostDetail(data);
+    }
+
+    private void getPostDetail(PostItem data) {
         API.getPostDetail(data.href, mApiHandler, new API.HttpFinalHandler() {
             @Override
             public void onFinally() {
-                mProgressBar.setVisibility(View.INVISIBLE);
+                mProgressBar.animate().alpha(0.0f).setDuration(250).start();
+//                mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
