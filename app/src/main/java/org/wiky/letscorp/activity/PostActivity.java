@@ -3,21 +3,20 @@ package org.wiky.letscorp.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
-import android.transition.Explode;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.API;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
+import org.wiky.materialprogressbar.MaterialProgressBar;
 
 public class PostActivity extends BaseActivity {
 
     private Post mData;
     private TextView mTitle;
-    private ProgressBar mProgressBar;
+    private MaterialProgressBar mProgressBar;
     private LinearLayout mContentLayout;
     private TextView mContent;
     private API.ApiResponseHandler mApiHandler = new API.ApiResponseHandler() {
@@ -38,7 +37,6 @@ public class PostActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setEnterTransition(new Explode());
 
         PostItem data = getIntent().getParcelableExtra("data");
         setContentView(R.layout.activity_post);
@@ -47,9 +45,9 @@ public class PostActivity extends BaseActivity {
         setProgressBarIndeterminate(true);
         setProgressBarVisibility(true);
 
-        setTitle(getString(R.string.post_activity_title));
+        setTitle(data.title);
         mTitle = (TextView) findViewById(R.id.post_title);
-        mProgressBar = (ProgressBar) findViewById(R.id.post_loading);
+        mProgressBar = (MaterialProgressBar) findViewById(R.id.post_loading);
         mContentLayout = (LinearLayout) findViewById(R.id.post_content_layout);
         mContent = (TextView) findViewById(R.id.post_content);
 
@@ -62,7 +60,6 @@ public class PostActivity extends BaseActivity {
             @Override
             public void onFinally() {
                 mProgressBar.animate().alpha(0.0f).setDuration(250).start();
-//                mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
     }

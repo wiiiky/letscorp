@@ -26,14 +26,15 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <ProgressBar
+        <org.wiky.materialprogressbar.MaterialProgressBar
             android:id="@+id/post.loading"
-            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+            style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="-6dp"
-            android:layout_marginTop="-6dp"
-            android:indeterminate="true" />
+            android:indeterminate="true"
+            app:mpb_progressStyle="horizontal"
+            app:mpb_showTrack="false"
+            app:mpb_useIntrinsicPadding="false" />
 
     </LinearLayout>
 
