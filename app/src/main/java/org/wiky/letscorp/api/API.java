@@ -20,21 +20,26 @@ import java.util.List;
  */
 public class API {
 
-    public static void getPostList(int page, final ApiResponseHandler hander, HttpFinalHandler finalHandler) {
+    public static void getPostList(int page, final ApiResponseHandler handler, HttpFinalHandler finalHandler) {
         String url = Const.getPostListUrl(page);
         HttpClient.get(url, new HttpResponseHandlerWrapper(finalHandler) {
             @Override
             public void onSuccess(String body) throws Exception {
                 Document doc = Jsoup.parse(body);
                 Elements posts = doc.select("article.post");
-                List<PostItem> results = new ArrayList<PostItem>();
+                final List<PostItem> results = new ArrayList<PostItem>();
                 for (Element post : posts) {
                     PostItem item = Parser.parsePostItem(post);
                     if (item != null) {
                         results.add(item);
                     }
                 }
-                hander.onSuccess(results);
+                LetscorpApplication.getUIHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        handler.onSuccess(results);
+                    }
+                });
             }
         });
     }
@@ -45,8 +50,13 @@ public class API {
             public void onSuccess(String body) throws Exception {
                 Document doc = Jsoup.parse(body);
                 Element e = doc.select("article.post").first();
-                Post post = Parser.parsePost(e, url);
-                handler.onSuccess(post);
+                final Post post = Parser.parsePost(e, url);
+                LetscorpApplication.getUIHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        handler.onSuccess(post);
+                    }
+                });
             }
         });
     }
@@ -78,18 +88,28 @@ public class API {
         }
 
         @Override
-        public void onError(IOException e) {
-            onFinally();
-            android.app.Application app = LetscorpApplication.getApplication();
-            Toast.makeText(app, app.getString(R.string.api_error_message) + e.getMessage(), Toast.LENGTH_LONG).show();
-            e.printStackTrace();
+        public void onError(final IOException e) {
+            LetscorpApplication.getUIHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    onFinally();
+                    android.app.Application app = LetscorpApplication.getApplication();
+                    Toast.makeText(app, app.getString(R.string.api_error_message) + e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            });
         }
 
         @Override
-        public void onFailure(int statusCode) {
-            onFinally();
-            android.app.Application app = LetscorpApplication.getApplication();
-            Toast.makeText(app, app.getString(R.string.api_failure_message) + statusCode, Toast.LENGTH_LONG).show();
+        public void onFailure(final int statusCode) {
+            LetscorpApplication.getUIHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    onFinally();
+                    android.app.Application app = LetscorpApplication.getApplication();
+                    Toast.makeText(app, app.getString(R.string.api_failure_message) + statusCode, Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
         @Override
@@ -98,8 +118,14 @@ public class API {
                 this.onSuccess(new String(body));
             } catch (Exception e) {
                 this.onFailure(-1);
+                e.printStackTrace();
             } finally {
-                onFinally();
+                LetscorpApplication.getUIHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        onFinally();
+                    }
+                });
             }
         }
 

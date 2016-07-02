@@ -1,10 +1,6 @@
 package org.wiky.letscorp.api;
 
 
-import android.os.Handler;
-
-import org.wiky.letscorp.LetscorpApplication;
-
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -38,40 +34,27 @@ public class HttpClient {
     private static class CallbackWrapper implements Callback {
 
         private HttpResponseHandler mHandler;
-        private Handler mLoopHandler;
 
         public CallbackWrapper(HttpResponseHandler hander) {
             mHandler = hander;
-            mLoopHandler = new Handler(LetscorpApplication.getApplication().getMainLooper());
         }
 
         @Override
-        public void onFailure(Call call, final IOException e) {
-            mLoopHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mHandler.onError(e);
-                }
-            });
-
+        public void onFailure(Call call, IOException e) {
+            mHandler.onError(e);
         }
 
         @Override
-        public void onResponse(Call call, final Response response) {
-            mLoopHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (!response.isSuccessful()) {
-                            mHandler.onFailure(response.code());
-                        } else {
-                            mHandler.onSuccess(response.body().bytes());
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+        public void onResponse(Call call, Response response) {
+            try {
+                if (!response.isSuccessful()) {
+                    mHandler.onFailure(response.code());
+                } else {
+                    mHandler.onSuccess(response.body().bytes());
                 }
-            });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

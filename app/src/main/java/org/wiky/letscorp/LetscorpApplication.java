@@ -2,6 +2,7 @@ package org.wiky.letscorp;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.os.Handler;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -11,9 +12,17 @@ import android.view.WindowManager;
 public class LetscorpApplication extends android.app.Application {
 
     private static LetscorpApplication mApplication = null;
+    private static Handler mUIHandler = null;
 
     public static LetscorpApplication getApplication() {
         return mApplication;
+    }
+
+    public static Handler getUIHandler() {
+        if (mUIHandler == null) {
+            mUIHandler = new Handler(mApplication.getMainLooper());
+        }
+        return mUIHandler;
     }
 
     public static int getScreenHeight() {

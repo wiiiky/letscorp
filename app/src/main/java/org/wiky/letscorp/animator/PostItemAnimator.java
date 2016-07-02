@@ -61,6 +61,8 @@ public class PostItemAnimator extends DefaultItemAnimator {
 
                     @Override
                     public void onAnimationCancel(Animator animator) {
+                        holder.itemView.setTranslationY(0);
+                        holder.itemView.setAlpha(1.0f);
                         dispatchAddFinished(holder);
                     }
                 })
