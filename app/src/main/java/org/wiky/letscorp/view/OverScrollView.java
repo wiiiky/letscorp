@@ -60,8 +60,8 @@ public class OverScrollView extends NestedScrollView {
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
                 int yDistance = (int) getTranslationY();
-                if (yDistance != 0 && listener != null) {
-                    if (!listener.onOverScroll(yDistance, true)) { //only do this if listener returns false
+                if (yDistance != 0) {
+                    if (listener == null || !listener.onOverScroll(yDistance, true)) { //only do this if listener returns false
                         animate().translationY(0)
                                 .setDuration(600)
                                 .setInterpolator(new DecelerateInterpolator(6))
