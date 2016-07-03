@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.text.Html;
 import android.transition.Fade;
 import android.transition.Transition;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,7 +27,6 @@ public class PostActivity extends BaseActivity {
     private MaterialProgressBar mProgressBar;
     private LinearLayout mContentLayout;
     private TextView mContent;
-    private OverScrollView mScrollView;
     private RelativeLayout mScrollViewLayout;
     private API.ApiResponseHandler mApiHandler = new API.ApiResponseHandler() {
         @Override
@@ -36,6 +36,7 @@ public class PostActivity extends BaseActivity {
             mContent.setText(Html.fromHtml(mPostData.content));
             mContent.setAlpha(0.0f);
             mContent.animate().alpha(1.0f).setDuration(300).start();
+            Log.d("content", mPostData.content);
         }
     };
 
@@ -53,25 +54,10 @@ public class PostActivity extends BaseActivity {
         mTitle = (TextView) findViewById(R.id.post_title);
         mAuthor = (TextView) findViewById(R.id.post_author);
         mProgressBar = (MaterialProgressBar) findViewById(R.id.post_loading);
-        mScrollView = (OverScrollView) findViewById(R.id.post_scrollview);
         mScrollViewLayout = (RelativeLayout) findViewById(R.id.post_scrollview_layout);
         mContentLayout = (LinearLayout) findViewById(R.id.post_content_layout);
         mContent = (TextView) findViewById(R.id.post_content);
 
-//        mScrollView.setOverScrollListener(new OverScrollView.OverScrollListener() {
-//            int translationThreshold = 200;
-//
-//            @Override
-//            public boolean onOverScroll(int yDistance, boolean isReleased) {
-//                if (Math.abs(yDistance) > translationThreshold) { //passed threshold
-//                    if (isReleased) {
-////                        onBackPressed();
-//                        return false;
-//                    }
-//                }
-//                return false;
-//            }
-//        });
 
         mTitle.setText(mItemData.title);
     }

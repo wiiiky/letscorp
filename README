@@ -1,0 +1,12 @@
+# Introduce
+
+This is an unofficial Android APP of [letscorp](https://www.letscorp.net/)
+
+[letscorp's official Android APP](https://play.google.com/store/apps/details?id=net.letscorp.anbound) is ***strange***.
+
+[letscorp](https://www.letscorp.net/) doesn't provide any API for developers, so I use
+their mobile version website [m.letscorp](https://m.letscorp.net/) as data source.
+
+In practise, this APP downloads a page from [m.letscorp](https://m.letscorp.net/) and parses the article info from the HTML.
+
+This APP is in development.
