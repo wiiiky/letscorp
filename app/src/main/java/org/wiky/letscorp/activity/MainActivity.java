@@ -21,39 +21,24 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
     private PostListAdapter.OnItemClickListener mOnItemClickListener = new PostListAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(final PostListAdapter.PostItemHolder viewHolder, final PostItem data) {
-//            Intent intent = new Intent(MainActivity.this, PostActivity.class);
-//            intent.putExtra("data", data);
-//
-//
-//            View shared=viewHolder.itemView;
-//            shared.setTransitionName(getResources().getString(R.string.transition_shared));
-//            ActivityOptionsCompat options = ActivityOptionsCompat.
-//                    makeSceneTransitionAnimation(MainActivity.this,
-//                            Pair.create(shared, shared.getTransitionName())
-//                    );
-//            startActivity(intent, options.toBundle());
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(MainActivity.this, PostActivity.class);
-                    intent.putExtra("data", data);
+            Intent intent = new Intent(MainActivity.this, PostActivity.class);
+            intent.putExtra("data", data);
 
 
-                    View shared = viewHolder.itemView;
-                    shared.setTransitionName(getResources().getString(R.string.transition_shared));
-                    ActivityOptionsCompat options = ActivityOptionsCompat.
-                            makeSceneTransitionAnimation(MainActivity.this,
-                                    Pair.create(shared, shared.getTransitionName())
-                            );
-                    startActivity(intent, options.toBundle());
-                }
-            }, 250);
+            View shared = viewHolder.itemView;
+            shared.setTransitionName(getResources().getString(R.string.transition_shared));
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(MainActivity.this,
+                            Pair.create(shared, shared.getTransitionName())
+                    );
+            startActivity(intent, options.toBundle());
         }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         setContentView(R.layout.activity_main);
         mPostListView = (PostListView) findViewById(R.id.post_list);
