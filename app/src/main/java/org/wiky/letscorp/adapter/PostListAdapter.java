@@ -1,5 +1,6 @@
 package org.wiky.letscorp.adapter;
 
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -94,12 +95,15 @@ public class PostListAdapter extends RecyclerView.Adapter {
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    data.readn = true;
                     mOnItemClickListener.onItemClick(viewHolder, data);
                 }
             });
-        } else if (holder instanceof LoaderHolder) {
-//            LoaderHolder viewHolder = (LoaderHolder) holder;
-//            viewHolder.mLoader.setIndeterminate(true);
+            if (data.readn) { /* 文章已经阅读过 */
+                viewHolder.mTitle.setTextColor(Color.GRAY);
+            } else {
+                viewHolder.mTitle.setTextColor(Color.BLACK);
+            }
         }
     }
 

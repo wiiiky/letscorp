@@ -25,6 +25,7 @@ public class PostItem implements Parcelable {
     public String content;
     public String commentCount;
     public String date;
+    public boolean readn;
 
 
     public PostItem(int id, String title, String href, String img, String content, String ccount, String date) {
@@ -35,6 +36,7 @@ public class PostItem implements Parcelable {
         this.content = content;
         this.commentCount = ccount;
         this.date = date;
+        readn = false;
     }
 
     protected PostItem(Parcel in) {

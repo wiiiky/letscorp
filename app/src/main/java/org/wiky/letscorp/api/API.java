@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.wiky.letscorp.LetscorpApplication;
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.data.db.PostHelper;
 import org.wiky.letscorp.data.db.PostItemHelper;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
@@ -35,17 +36,23 @@ public class API {
                         results.add(item);
                     }
                 }
+                PostItemHelper.savePostItems(results);
+                for (PostItem item : results) {
+                    item.readn = PostHelper.checkPost(item.href);
+                }
                 LetscorpApplication.getUIHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         handler.onSuccess(results);
-                        PostItemHelper.savePostItems(results);
                     }
                 });
             }
         });
     }
 
+    /*
+     * 获取文章详细内容
+     */
     public static void getPostDetail(final String url, final ApiResponseHandler handler, HttpFinalHandler finalHandler) {
         HttpClient.get(url, new HttpResponseHandlerWrapper(finalHandler) {
             @Override
@@ -53,6 +60,7 @@ public class API {
                 Document doc = Jsoup.parse(body);
                 Element e = doc.select("article.post").first();
                 final Post post = Parser.parsePost(e, url);
+                PostHelper.savePost(post);
                 LetscorpApplication.getUIHandler().post(new Runnable() {
                     @Override
                     public void run() {
@@ -77,10 +85,6 @@ public class API {
 
         public HttpResponseHandlerWrapper(HttpFinalHandler finalHandler) {
             mFinalHandler = finalHandler;
-        }
-
-        public HttpResponseHandlerWrapper() {
-
         }
 
         private void onFinally() {

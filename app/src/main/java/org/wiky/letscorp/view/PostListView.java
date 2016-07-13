@@ -69,21 +69,21 @@ public class PostListView extends RecyclerView {
         addItemDecoration(new CardItemDecoration(10));
 
         addOnScrollListener(mOnScrollListener);
-        loadLocal();
     }
 
     public void setOnItemClickListener(PostListAdapter.OnItemClickListener listener) {
         mAdapter.setOnItemClickListener(listener);
     }
 
-    public void loadLocal(int page, int count) {
+    public boolean loadLocal(int page, int count) {
         mPage = 1;
         List<PostItem> items = PostItemHelper.getPostItems(page, count);
         mAdapter.resetPosts(items);
+        return items.size() > 0;
     }
 
-    public void loadLocal() {
-        loadLocal(1, 15);
+    public boolean loadLocal() {
+        return loadLocal(1, 15);
     }
 
     public void resetPage(API.HttpFinalHandler finalHandler) {

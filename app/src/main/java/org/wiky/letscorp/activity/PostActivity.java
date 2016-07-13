@@ -13,9 +13,9 @@ import android.widget.TextView;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.API;
+import org.wiky.letscorp.data.db.PostHelper;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
-import org.wiky.letscorp.view.OverScrollView;
 import org.wiky.materialprogressbar.MaterialProgressBar;
 
 public class PostActivity extends BaseActivity {
@@ -31,14 +31,18 @@ public class PostActivity extends BaseActivity {
     private API.ApiResponseHandler mApiHandler = new API.ApiResponseHandler() {
         @Override
         public void onSuccess(Object data) {
-            mPostData = (Post) data;
-            mAuthor.setText(mPostData.author + "发表于" + mPostData.date);
-            mContent.setText(Html.fromHtml(mPostData.content));
-            mContent.setAlpha(0.0f);
-            mContent.animate().alpha(1.0f).setDuration(300).start();
-            Log.d("content", mPostData.content);
+            updatePost((Post) data);
         }
     };
+
+    private void updatePost(Post data) {
+        mPostData = data;
+        mAuthor.setText(mPostData.author + "发表于" + mPostData.date);
+        mContent.setText(Html.fromHtml(mPostData.content));
+        mContent.setAlpha(0.0f);
+        mContent.animate().alpha(1.0f).setDuration(300).start();
+        Log.d("content", mPostData.content);
+    }
 
 
     @Override
@@ -98,13 +102,19 @@ public class PostActivity extends BaseActivity {
     }
 
     private void getPostDetail() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        API.getPostDetail(mItemData.href, mApiHandler, new API.HttpFinalHandler() {
-            @Override
-            public void onFinally() {
-                mProgressBar.animate().alpha(0.0f).setDuration(250).start();
-            }
-        });
+        Post data = PostHelper.getPost(mItemData.href);
+        if (data == null) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            API.getPostDetail(mItemData.href, mApiHandler, new API.HttpFinalHandler() {
+                @Override
+                public void onFinally() {
+                    mProgressBar.animate().alpha(0.0f).setDuration(250).start();
+                }
+            });
+        } else {
+            mProgressBar.setVisibility(View.INVISIBLE);
+            updatePost(data);
+        }
     }
 
 }

@@ -56,7 +56,11 @@ public class PostItemHelper implements BaseColumns {
         String content = c.getString(c.getColumnIndex(COLUMN_NAME_CONTENT));
         String commentCount = c.getString(c.getColumnIndex(COLUMN_NAME_COMMENT_COUNT));
         String date = c.getString(c.getColumnIndex(COLUMN_NAME_DATE));
-        return new PostItem(id, title, href, img, content, commentCount, date);
+        PostItem p = new PostItem(id, title, href, img, content, commentCount, date);
+        if (c.getColumnIndex("readn") >= 0) {
+            p.readn = c.getInt(c.getColumnIndex("readn")) != 0;
+        }
+        return p;
     }
 
     public static PostItem getPostItem(int id) {
@@ -70,8 +74,9 @@ public class PostItemHelper implements BaseColumns {
 
     public static List<PostItem> getPostItems(int page, int count) {
         SQLiteDatabase db = LetscorpApplication.getDBHelper().getReadableDatabase();
-        String limit = "LIMIT " + count + " OFFSET " + (page - 1) * count;
-        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_NAME_ITEM_ID + " DESC LIMIT " + count + " OFFSET " + (page - 1) * count, null);
+        String sql = String.format("SELECT *, IFNULL((SELECT 1 FROM %s AS `B` WHERE `A`.`%s`=`B`.`%s`), 0) AS `readn` FROM %s AS `A` ORDER BY %s DESC LIMIT %d OFFSET %d",
+                PostHelper.TABLE_NAME, COLUMN_NAME_HREF, PostHelper.COLUMN_NAME_HREF, TABLE_NAME, COLUMN_NAME_ITEM_ID, count, (page - 1) * count);
+        Cursor c = db.rawQuery(sql, null);
         ArrayList<PostItem> items = new ArrayList<>();
         while (c.moveToNext()) {
             items.add(getPostItem(c));

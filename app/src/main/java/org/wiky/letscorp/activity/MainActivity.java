@@ -7,6 +7,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
+import org.wiky.letscorp.LetscorpApplication;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.adapter.PostListAdapter;
 import org.wiky.letscorp.api.API;
@@ -47,13 +48,15 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
 
         startToolbarAnimation();
 
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mSwipeRefreshLayout.setRefreshing(true);
-//                onRefresh();
-//            }
-//        }, 200);
+        if (!mPostListView.loadLocal()) {
+            LetscorpApplication.getUIHandler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    onRefresh();
+                }
+            }, 200);
+        }
     }
 
     @Override

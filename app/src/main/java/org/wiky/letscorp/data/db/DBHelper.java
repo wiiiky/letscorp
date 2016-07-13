@@ -19,11 +19,14 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(PostItemHelper.SQL_CREATE_TABLE);
+        db.execSQL(PostHelper.SQL_CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(PostItemHelper.SQL_DELETE_TABLE);
         db.execSQL(PostItemHelper.SQL_CREATE_TABLE);
+        db.execSQL(PostHelper.SQL_DELETE_TABLE);
+        db.execSQL(PostHelper.SQL_CREATE_TABLE);
     }
 }
