@@ -18,7 +18,7 @@ public class PostItem implements Parcelable {
             return new PostItem[size];
         }
     };
-    public String id;
+    public int id;
     public String title;
     public String href;
     public String img;
@@ -26,7 +26,8 @@ public class PostItem implements Parcelable {
     public String commentCount;
     public String date;
 
-    public PostItem(String id, String title, String href, String img, String content, String ccount, String date) {
+
+    public PostItem(int id, String title, String href, String img, String content, String ccount, String date) {
         this.id = id;
         this.title = title;
         this.href = href;
@@ -37,7 +38,7 @@ public class PostItem implements Parcelable {
     }
 
     protected PostItem(Parcel in) {
-        id = in.readString();
+        id = in.readInt();
         title = in.readString();
         href = in.readString();
         img = in.readString();
@@ -53,7 +54,7 @@ public class PostItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
+        dest.writeInt(id);
         dest.writeString(title);
         dest.writeString(href);
         dest.writeString(img);

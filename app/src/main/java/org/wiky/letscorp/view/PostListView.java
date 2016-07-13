@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import org.wiky.letscorp.adapter.PostListAdapter;
 import org.wiky.letscorp.animator.PostItemAnimator;
 import org.wiky.letscorp.api.API;
+import org.wiky.letscorp.data.db.PostItemHelper;
 import org.wiky.letscorp.data.model.PostItem;
 
 import java.util.List;
@@ -68,10 +69,21 @@ public class PostListView extends RecyclerView {
         addItemDecoration(new CardItemDecoration(10));
 
         addOnScrollListener(mOnScrollListener);
+        loadLocal();
     }
 
     public void setOnItemClickListener(PostListAdapter.OnItemClickListener listener) {
         mAdapter.setOnItemClickListener(listener);
+    }
+
+    public void loadLocal(int page, int count) {
+        mPage = 1;
+        List<PostItem> items = PostItemHelper.getPostItems(page, count);
+        mAdapter.resetPosts(items);
+    }
+
+    public void loadLocal() {
+        loadLocal(1, 15);
     }
 
     public void resetPage(API.HttpFinalHandler finalHandler) {
@@ -80,8 +92,8 @@ public class PostListView extends RecyclerView {
         API.getPostList(mPage, new API.ApiResponseHandler() {
             @Override
             public void onSuccess(Object data) {
-                List<PostItem> posts = (List<PostItem>) data;
-                mAdapter.resetPosts(posts);
+                List<PostItem> items = (List<PostItem>) data;
+                mAdapter.resetPosts(items);
                 mReseting = false;
             }
         }, finalHandler);
@@ -91,9 +103,9 @@ public class PostListView extends RecyclerView {
         API.getPostList(page, new API.ApiResponseHandler() {
             @Override
             public void onSuccess(Object data) {
-                List<PostItem> posts = (List<PostItem>) data;
+                List<PostItem> items = (List<PostItem>) data;
                 mAdapter.setLoaded();
-                mAdapter.addPosts(posts);
+                mAdapter.addPosts(items);
             }
         }, finalHandler);
     }

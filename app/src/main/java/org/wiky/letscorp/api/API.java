@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.wiky.letscorp.LetscorpApplication;
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.data.db.PostItemHelper;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 
@@ -38,6 +39,7 @@ public class API {
                     @Override
                     public void run() {
                         handler.onSuccess(results);
+                        PostItemHelper.savePostItems(results);
                     }
                 });
             }

@@ -81,24 +81,27 @@ public class PostItemAnimator extends DefaultItemAnimator {
 
     private void runExitAnimation(final RecyclerView.ViewHolder holder) {
         int height = LetscorpApplication.getScreenHeight();
+        holder.itemView.setClickable(false);
         holder.itemView.animate()
                 .translationY(-height / 2.0f)
                 .alpha(0.0f)
                 .setInterpolator(new AccelerateInterpolator())
                 .setDuration(250)
                 .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
+                    private void end() {
                         holder.itemView.setTranslationY(0.0f);
                         holder.itemView.setAlpha(1.0f);
+                        holder.itemView.setClickable(true);
                         dispatchAddFinished(holder);
+                    }
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        end();
                     }
 
                     @Override
                     public void onAnimationCancel(Animator animation) {
-                        holder.itemView.setTranslationY(0.0f);
-                        holder.itemView.setAlpha(1.0f);
-                        dispatchAddFinished(holder);
+                        end();
                     }
                 })
                 .start();

@@ -5,6 +5,7 @@ import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by wiky on 6/11/16.
@@ -27,7 +28,7 @@ public class Parser {
             img = _img.attr("data-original");
         }
         for (Element t : _content.getAllElements()) { /* 删除多余的标签 */
-            if (t.tagName() == "a" || t.text().isEmpty()) {
+            if (Objects.equals(t.tagName(), "a") || t.text().isEmpty()) {
                 t.remove();
             }
         }
@@ -42,7 +43,11 @@ public class Parser {
             date = _date.text();
         }
 
-        return new PostItem(id, title, href, img, content, commentCount, date);
+        if (id.startsWith("post-")) {
+            id = id.substring(5);
+        }
+
+        return new PostItem(Integer.parseInt(id), title, href, img, content, commentCount, date);
     }
 
     public static Post parsePost(Element e, String href) {

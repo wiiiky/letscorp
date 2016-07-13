@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.view.Display;
 import android.view.WindowManager;
 
+import org.wiky.letscorp.data.db.DBHelper;
+
 /**
  * Created by wiky on 6/11/16.
  */
@@ -13,6 +15,7 @@ public class LetscorpApplication extends android.app.Application {
 
     private static LetscorpApplication mApplication = null;
     private static Handler mUIHandler = null;
+    private static DBHelper mdbHelper = null;
 
     public static LetscorpApplication getApplication() {
         return mApplication;
@@ -23,6 +26,13 @@ public class LetscorpApplication extends android.app.Application {
             mUIHandler = new Handler(mApplication.getMainLooper());
         }
         return mUIHandler;
+    }
+
+    public static DBHelper getDBHelper() {
+        if (mdbHelper == null) {
+            mdbHelper = new DBHelper(mApplication);
+        }
+        return mdbHelper;
     }
 
     public static int getScreenHeight() {
