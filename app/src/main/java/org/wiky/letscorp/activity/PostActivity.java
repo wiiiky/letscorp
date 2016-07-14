@@ -98,6 +98,11 @@ public class PostActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         onExit();
+        if (mPostData != null) {    /* 如果已经下载了文章，则将文章ID返回，用户设置文章已读 */
+            setResult(mItemData.id);
+        } else {
+            setResult(0);
+        }
         super.onBackPressed();
     }
 

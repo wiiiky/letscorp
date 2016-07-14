@@ -1,4 +1,4 @@
-package org.wiky.letscorp.animator;
+package org.wiky.letscorp.listview;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -8,13 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
-import org.wiky.letscorp.LetscorpApplication;
-import org.wiky.letscorp.adapter.PostListAdapter;
+import org.wiky.letscorp.Application;
 
 import java.util.List;
 
 /**
  * Created by wiky on 6/14/16.
+ * 文章列表的动画效果
  */
 public class PostItemAnimator extends DefaultItemAnimator {
 
@@ -44,7 +44,7 @@ public class PostItemAnimator extends DefaultItemAnimator {
     }
 
     private void runEnterAnimation(final RecyclerView.ViewHolder holder) {
-        int height = LetscorpApplication.getScreenHeight();
+        int height = Application.getScreenHeight();
         holder.itemView.setTranslationY(height / 2.0f);
         holder.itemView.setAlpha(0.0f);
         holder.itemView.animate()
@@ -80,7 +80,7 @@ public class PostItemAnimator extends DefaultItemAnimator {
     }
 
     private void runExitAnimation(final RecyclerView.ViewHolder holder) {
-        int height = LetscorpApplication.getScreenHeight();
+        int height = Application.getScreenHeight();
         holder.itemView.setClickable(false);
         holder.itemView.animate()
                 .translationY(-height / 2.0f)

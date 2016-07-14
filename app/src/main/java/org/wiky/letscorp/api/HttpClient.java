@@ -11,6 +11,7 @@ import okhttp3.Response;
 
 /**
  * Created by wiky on 6/11/16.
+ * 对HTTP请求的简单封装
  */
 public class HttpClient {
     private static OkHttpClient mClient = new OkHttpClient();

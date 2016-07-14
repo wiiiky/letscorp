@@ -4,9 +4,7 @@ import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.wiky.letscorp.LetscorpApplication;
+import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.db.PostHelper;
 import org.wiky.letscorp.data.db.PostItemHelper;
@@ -14,36 +12,30 @@ import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by wiky on 6/11/16.
+ * 并不是真正的API，下载HTML并解析文章信息
  */
 public class API {
 
+    /* 获取文章列表 */
     public static void getPostList(int page, final ApiResponseHandler handler, HttpFinalHandler finalHandler) {
         String url = Const.getPostListUrl(page);
         HttpClient.get(url, new HttpResponseHandlerWrapper(finalHandler) {
             @Override
             public void onSuccess(String body) throws Exception {
                 Document doc = Jsoup.parse(body);
-                Elements posts = doc.select("article.post");
-                final List<PostItem> results = new ArrayList<PostItem>();
-                for (Element post : posts) {
-                    PostItem item = Parser.parsePostItem(post);
-                    if (item != null) {
-                        results.add(item);
-                    }
-                }
-                PostItemHelper.savePostItems(results);
-                for (PostItem item : results) {
+                final List<PostItem> items = Parser.parsePostItems(doc);
+                PostItemHelper.savePostItems(items);
+                for (PostItem item : items) {
                     item.readn = PostHelper.checkPost(item.href);
                 }
-                LetscorpApplication.getUIHandler().post(new Runnable() {
+                Application.getUIHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        handler.onSuccess(results);
+                        handler.onSuccess(items);
                     }
                 });
             }
@@ -58,10 +50,9 @@ public class API {
             @Override
             public void onSuccess(String body) throws Exception {
                 Document doc = Jsoup.parse(body);
-                Element e = doc.select("article.post").first();
-                final Post post = Parser.parsePost(e, url);
+                final Post post = Parser.parsePost(doc, url);
                 PostHelper.savePost(post);
-                LetscorpApplication.getUIHandler().post(new Runnable() {
+                Application.getUIHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         handler.onSuccess(post);
@@ -95,11 +86,11 @@ public class API {
 
         @Override
         public void onError(final IOException e) {
-            LetscorpApplication.getUIHandler().post(new Runnable() {
+            Application.getUIHandler().post(new Runnable() {
                 @Override
                 public void run() {
                     onFinally();
-                    android.app.Application app = LetscorpApplication.getApplication();
+                    android.app.Application app = Application.getApplication();
                     Toast.makeText(app, app.getString(R.string.api_error_message) + e.getMessage(), Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
@@ -108,11 +99,11 @@ public class API {
 
         @Override
         public void onFailure(final int statusCode) {
-            LetscorpApplication.getUIHandler().post(new Runnable() {
+            Application.getUIHandler().post(new Runnable() {
                 @Override
                 public void run() {
                     onFinally();
-                    android.app.Application app = LetscorpApplication.getApplication();
+                    android.app.Application app = Application.getApplication();
                     Toast.makeText(app, app.getString(R.string.api_failure_message) + statusCode, Toast.LENGTH_LONG).show();
                 }
             });
@@ -126,7 +117,7 @@ public class API {
                 this.onFailure(-1);
                 e.printStackTrace();
             } finally {
-                LetscorpApplication.getUIHandler().post(new Runnable() {
+                Application.getUIHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         onFinally();

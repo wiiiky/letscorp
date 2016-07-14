@@ -1,7 +1,6 @@
-package org.wiky.letscorp.adapter;
+package org.wiky.letscorp.listview;
 
 import android.graphics.Color;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.model.PostItem;
 
@@ -24,12 +24,12 @@ public class PostListAdapter extends RecyclerView.Adapter {
     public static final int VIEW_TYPE_DEFAULT = 1;
     public static final int VIEW_TYPE_LOADER = 2;
 
-    private List<PostItem> mData;
+    private List<PostItem> mItems;
     private boolean mLoading;
     private OnItemClickListener mOnItemClickListener;
 
     public PostListAdapter() {
-        mData = new ArrayList<>();
+        mItems = new ArrayList<>();
         mLoading = false;
     }
 
@@ -37,26 +37,29 @@ public class PostListAdapter extends RecyclerView.Adapter {
         mOnItemClickListener = listener;
     }
 
-    public void addPosts(List<PostItem> data) {
-        int start = mData.size();
-        mData.addAll(data);
-        notifyItemRangeInserted(start, data.size());
+    /* 添加数据 */
+    public void addItems(List<PostItem> items) {
+        int start = mItems.size();
+        mItems.addAll(items);
+        notifyItemRangeInserted(start, items.size());
     }
 
-    public void resetPosts(final List<PostItem> data) {
+    /* 重置数据 */
+    public void resetItems(final List<PostItem> data) {
         int count = getItemCount();
         mLoading = false;
-        mData.clear();
+        mItems.clear();
         notifyItemRangeRemoved(0, count);
-        new Handler().postDelayed(new Runnable() {
+        Application.getUIHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mData.addAll(data);
-                notifyItemRangeInserted(0, mData.size());
+                mItems.addAll(data);
+                notifyItemRangeInserted(0, mItems.size());
             }
         }, 400);
     }
 
+    /* 设置当前状态为载入更多 */
     public void setLoading() {
         mLoading = true;
         notifyDataSetChanged();
@@ -64,9 +67,10 @@ public class PostListAdapter extends RecyclerView.Adapter {
 
     public void setLoaded() {
         mLoading = false;
-        notifyItemRemoved(mData.size());
+        notifyItemRemoved(mItems.size());
     }
 
+    /* 判断当前是否在载入 */
     public boolean isLoading() {
         return mLoading;
     }
@@ -88,14 +92,13 @@ public class PostListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PostItemHolder) {
             final PostItemHolder viewHolder = (PostItemHolder) holder;
-            final PostItem data = mData.get(position);
+            final PostItem data = mItems.get(position);
             viewHolder.mTitle.setText(data.title);
             viewHolder.mContent.setText(Html.fromHtml(data.content));
             viewHolder.mComment.setText(data.commentCount);
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    data.readn = true;
                     mOnItemClickListener.onItemClick(viewHolder, data);
                 }
             });
@@ -107,9 +110,23 @@ public class PostListAdapter extends RecyclerView.Adapter {
         }
     }
 
+    /*  将指定ID的文章设置成已读 */
+    public void setItemReadn(int id) {
+        for (int i = 0; i < mItems.size(); i++) {
+            PostItem item = mItems.get(i);
+            if (item.id == id) {
+                if (!item.readn) {
+                    item.readn = true;
+                    notifyItemChanged(i);
+                }
+                break;
+            }
+        }
+    }
+
     @Override
     public int getItemViewType(int position) {
-        if (position < mData.size()) {
+        if (position < mItems.size()) {
             return VIEW_TYPE_DEFAULT;
         }
         return VIEW_TYPE_LOADER;
@@ -117,7 +134,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mData.size() + (mLoading ? 1 : 0);
+        return mItems.size() + (mLoading ? 1 : 0);
     }
 
     public interface OnItemClickListener {

@@ -1,4 +1,4 @@
-package org.wiky.letscorp.view;
+package org.wiky.letscorp.listview;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -6,8 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
-import org.wiky.letscorp.adapter.PostListAdapter;
-import org.wiky.letscorp.animator.PostItemAnimator;
 import org.wiky.letscorp.api.API;
 import org.wiky.letscorp.data.db.PostItemHelper;
 import org.wiky.letscorp.data.model.PostItem;
@@ -16,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by wiky on 6/13/16.
+ * 文章列表控件，包含下滑载入和对Adapter方法的封装
  */
 public class PostListView extends RecyclerView {
     private PostListAdapter mAdapter;
@@ -37,7 +36,7 @@ public class PostListView extends RecyclerView {
 
             if (!mAdapter.isLoading() && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                 mAdapter.setLoading();
-                loadPage(++mPage);
+                loadMore();
             }
         }
     };
@@ -66,7 +65,7 @@ public class PostListView extends RecyclerView {
         setAdapter(mAdapter);
         setLayoutManager(mLayoutManager);
         setItemAnimator(new PostItemAnimator());
-        addItemDecoration(new CardItemDecoration(10));
+        addItemDecoration(new PostItemDecoration(10));
 
         addOnScrollListener(mOnScrollListener);
     }
@@ -75,10 +74,15 @@ public class PostListView extends RecyclerView {
         mAdapter.setOnItemClickListener(listener);
     }
 
+    public void setItemReadn(int id) {
+        mAdapter.setItemReadn(id);
+    }
+
+    /* 从数据库载入数据，载入成功返回true，否则返回false */
     public boolean loadLocal(int page, int count) {
         mPage = 1;
         List<PostItem> items = PostItemHelper.getPostItems(page, count);
-        mAdapter.resetPosts(items);
+        mAdapter.resetItems(items);
         return items.size() > 0;
     }
 
@@ -86,6 +90,7 @@ public class PostListView extends RecyclerView {
         return loadLocal(1, 15);
     }
 
+    /* 重置页面 */
     public void resetPage(API.HttpFinalHandler finalHandler) {
         mPage = 1;
         mReseting = true;
@@ -93,25 +98,26 @@ public class PostListView extends RecyclerView {
             @Override
             public void onSuccess(Object data) {
                 List<PostItem> items = (List<PostItem>) data;
-                mAdapter.resetPosts(items);
+                mAdapter.resetItems(items);
                 mReseting = false;
             }
         }, finalHandler);
     }
 
-    public void loadPage(int page, API.HttpFinalHandler finalHandler) {
-        API.getPostList(page, new API.ApiResponseHandler() {
+    /* 载入下一页 */
+    public void loadMore(API.HttpFinalHandler finalHandler) {
+        API.getPostList(++mPage, new API.ApiResponseHandler() {
             @Override
             public void onSuccess(Object data) {
                 List<PostItem> items = (List<PostItem>) data;
                 mAdapter.setLoaded();
-                mAdapter.addPosts(items);
+                mAdapter.addItems(items);
             }
         }, finalHandler);
     }
 
-    public void loadPage(int page) {
-        loadPage(page, null);
+    public void loadMore() {
+        loadMore(null);
     }
 
     @Override

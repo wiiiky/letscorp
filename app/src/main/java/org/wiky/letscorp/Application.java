@@ -11,21 +11,21 @@ import org.wiky.letscorp.data.db.DBHelper;
 /**
  * Created by wiky on 6/11/16.
  */
-public class LetscorpApplication extends android.app.Application {
+public class Application extends android.app.Application {
 
-    private static LetscorpApplication mApplication = null;
-    private static Handler mUIHandler = null;
+    private static Application mApplication = null;
+    private static Handler muiHandler = null;
     private static DBHelper mdbHelper = null;
 
-    public static LetscorpApplication getApplication() {
+    public static Application getApplication() {
         return mApplication;
     }
 
     public static Handler getUIHandler() {
-        if (mUIHandler == null) {
-            mUIHandler = new Handler(mApplication.getMainLooper());
+        if (muiHandler == null) {
+            muiHandler = new Handler(mApplication.getMainLooper());
         }
-        return mUIHandler;
+        return muiHandler;
     }
 
     public static DBHelper getDBHelper() {

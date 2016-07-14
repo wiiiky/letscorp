@@ -1,4 +1,4 @@
-package org.wiky.letscorp.view;
+package org.wiky.letscorp.listview;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
@@ -8,12 +8,13 @@ import org.wiky.letscorp.util.Util;
 
 /**
  * Created by wiky on 6/11/16.
+ * PostListView的装饰器，为每个item流出边缘
  */
-public class CardItemDecoration extends RecyclerView.ItemDecoration {
+public class PostItemDecoration extends RecyclerView.ItemDecoration {
 
     private final float mVerticalSpaceHeight;
 
-    public CardItemDecoration(int mVerticalSpaceHeight) {
+    public PostItemDecoration(int mVerticalSpaceHeight) {
         this.mVerticalSpaceHeight = Util.dp2px(mVerticalSpaceHeight);
     }
 

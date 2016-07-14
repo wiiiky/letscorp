@@ -18,6 +18,7 @@ public class Util {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
     }
 
+    /* 将字符串数组序列化为JSON数组，用于数据库保存 */
     public static String serializeStringList(List<String> list) {
         JSONArray array = new JSONArray();
         for (String s : list) {
@@ -26,6 +27,7 @@ public class Util {
         return array.toString();
     }
 
+    /* 将JSON数组的解析为字符串数组 */
     public static List<String> deserializeStringList(String data) {
         ArrayList<String> list = new ArrayList<>();
         try {

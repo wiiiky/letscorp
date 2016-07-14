@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <org.wiky.letscorp.view.PostListView
+        <org.wiky.letscorp.listview.PostListView
             android:id="@+id/post_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

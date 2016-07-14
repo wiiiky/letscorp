@@ -7,14 +7,16 @@ import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
-import org.wiky.letscorp.LetscorpApplication;
+import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
-import org.wiky.letscorp.adapter.PostListAdapter;
 import org.wiky.letscorp.api.API;
 import org.wiky.letscorp.data.model.PostItem;
-import org.wiky.letscorp.view.PostListView;
+import org.wiky.letscorp.listview.PostListAdapter;
+import org.wiky.letscorp.listview.PostListView;
 
 public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayout.OnRefreshListener {
+
+    private static int POST_ACTIVITY_REQUEST_CODE = 1;
 
     private PostListView mPostListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -31,7 +33,7 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
                     makeSceneTransitionAnimation(MainActivity.this,
                             Pair.create(shared, shared.getTransitionName())
                     );
-            startActivity(intent, options.toBundle());
+            startActivityForResult(intent, POST_ACTIVITY_REQUEST_CODE, options.toBundle());
         }
     };
 
@@ -49,7 +51,7 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
         startToolbarAnimation();
 
         if (!mPostListView.loadLocal()) {
-            LetscorpApplication.getUIHandler().postDelayed(new Runnable() {
+            Application.getUIHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     mSwipeRefreshLayout.setRefreshing(true);
@@ -69,4 +71,14 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == POST_ACTIVITY_REQUEST_CODE) {
+            if (resultCode > 0) {
+                mPostListView.setItemReadn(resultCode);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, intent);
+        }
+    }
 }

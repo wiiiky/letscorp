@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
-import org.wiky.letscorp.LetscorpApplication;
+import org.wiky.letscorp.Application;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.util.Util;
 
@@ -48,13 +48,13 @@ public class PostHelper implements BaseColumns {
     }
 
     public static boolean checkPost(String href) {
-        SQLiteDatabase db = LetscorpApplication.getDBHelper().getReadableDatabase();
+        SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, null, COLUMN_NAME_HREF + "=?", new String[]{href}, null, null, null);
         return c.moveToNext();
     }
 
     public static void savePost(Post post) {
-        SQLiteDatabase db = LetscorpApplication.getDBHelper().getWritableDatabase();
+        SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
         ContentValues values = getContentValues(post);
         if (checkPost(post.href)) {
             db.update(TABLE_NAME, values, COLUMN_NAME_HREF + "=?", new String[]{post.href});
@@ -75,7 +75,7 @@ public class PostHelper implements BaseColumns {
     }
 
     public static Post getPost(String href) {
-        SQLiteDatabase db = LetscorpApplication.getDBHelper().getReadableDatabase();
+        SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, null, COLUMN_NAME_HREF + "=?", new String[]{href}, null, null, null);
         if (c.moveToNext()) {
             return getPost(c);

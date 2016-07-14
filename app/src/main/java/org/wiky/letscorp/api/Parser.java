@@ -1,16 +1,20 @@
 package org.wiky.letscorp.api;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
  * Created by wiky on 6/11/16.
+ * 从HTML中解析文章信息，如果HTML结构变化只需要更改这里
  */
 public class Parser {
+    /* 解析列表中的文章信息 */
     public static PostItem parsePostItem(Element e) {
         Element _a = e.select("div.entry-title a").first();
         Element _img = e.select("img").first();
@@ -50,7 +54,20 @@ public class Parser {
         return new PostItem(Integer.parseInt(id), title, href, img, content, commentCount, date);
     }
 
-    public static Post parsePost(Element e, String href) {
+    public static List<PostItem> parsePostItems(Document doc) {
+        List<PostItem> items = new ArrayList<PostItem>();
+        for (Element post : doc.select("article.post")) {
+            PostItem item = parsePostItem(post);
+            if (item != null) {
+                items.add(item);
+            }
+        }
+        return items;
+    }
+
+    /* 解析文章详情 */
+    public static Post parsePost(Element doc, String href) {
+        Element e = doc.select("article.post").first();
         String title = e.select("div.entry-title > h2").text();
         String content = e.select("div.entry-content").html();
         ArrayList<String> tags = new ArrayList<>();

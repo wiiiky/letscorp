@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
-import org.wiky.letscorp.LetscorpApplication;
+import org.wiky.letscorp.Application;
 import org.wiky.letscorp.data.model.PostItem;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class PostItemHelper implements BaseColumns {
     }
 
     public static PostItem getPostItem(int id) {
-        SQLiteDatabase db = LetscorpApplication.getDBHelper().getReadableDatabase();
+        SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, null, COLUMN_NAME_ITEM_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
         if (c.moveToNext()) {
             return getPostItem(c);
@@ -73,7 +73,7 @@ public class PostItemHelper implements BaseColumns {
     }
 
     public static List<PostItem> getPostItems(int page, int count) {
-        SQLiteDatabase db = LetscorpApplication.getDBHelper().getReadableDatabase();
+        SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         String sql = String.format("SELECT *, IFNULL((SELECT 1 FROM %s AS `B` WHERE `A`.`%s`=`B`.`%s`), 0) AS `readn` FROM %s AS `A` ORDER BY %s DESC LIMIT %d OFFSET %d",
                 PostHelper.TABLE_NAME, COLUMN_NAME_HREF, PostHelper.COLUMN_NAME_HREF, TABLE_NAME, COLUMN_NAME_ITEM_ID, count, (page - 1) * count);
         Cursor c = db.rawQuery(sql, null);
@@ -85,13 +85,13 @@ public class PostItemHelper implements BaseColumns {
     }
 
     public static boolean checkPostItem(int id) {
-        SQLiteDatabase db = LetscorpApplication.getDBHelper().getReadableDatabase();
+        SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, null, COLUMN_NAME_ITEM_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
         return c.moveToNext();
     }
 
     public static void savePostItem(PostItem item) {
-        SQLiteDatabase db = LetscorpApplication.getDBHelper().getWritableDatabase();
+        SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
         ContentValues values = getContentValues(item);
         if (checkPostItem(item.id)) { /* 已存在 */
             db.update(TABLE_NAME, values, COLUMN_NAME_ITEM_ID + "=?", new String[]{String.valueOf(item.id)});
