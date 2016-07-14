@@ -3,9 +3,11 @@ package org.wiky.letscorp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.MenuItem;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.listview.PostListAdapter;
 import org.wiky.letscorp.listview.PostListView;
@@ -40,13 +42,13 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         startToolbarAnimation();
-        Signal.register(Signal.SIGNAL_POST_LIST_RESET_END, this);
+        Signal.register(Signal.SIGNAL_POST_RESET_START, this);
+        Signal.register(Signal.SIGNAL_POST_RESET_END, this);
 
         if (!mPostListView.loadLocal()) {
             Application.getUIHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mSwipeRefreshLayout.setRefreshing(true);
                     onRefresh();
                 }
             }, 200);
@@ -59,9 +61,30 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
     }
 
     @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_all:
+                Signal.trigger(Signal.SIGNAL_CATEGORY_CHANGE, Const.LETSCORP_CATEGORY_ALL);
+                mToolBar.setTitle(R.string.app_name);
+                break;
+            case R.id.menu_economics:
+                Signal.trigger(Signal.SIGNAL_CATEGORY_CHANGE, Const.LETSCORP_CATEGORY_ECONOMICS);
+                mToolBar.setTitle(R.string.drawer_menu_economics);
+                break;
+            case R.id.menu_news:
+                Signal.trigger(Signal.SIGNAL_CATEGORY_CHANGE, Const.LETSCORP_CATEGORY_NEWS);
+                mToolBar.setTitle(R.string.drawer_menu_news);
+                break;
+        }
+        return super.onNavigationItemSelected(item);
+    }
+
+    @Override
     public void handleSignal(String signal, Object data) {
-        if (Objects.equals(signal, Signal.SIGNAL_POST_LIST_RESET_END)) {
+        if (Objects.equals(signal, Signal.SIGNAL_POST_RESET_END)) {
             mSwipeRefreshLayout.setRefreshing(false);
+        } else if (Objects.equals(signal, Signal.SIGNAL_POST_RESET_START) && !mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(true);
         }
     }
 }

@@ -16,35 +16,39 @@ import java.util.Objects;
 public class Parser {
     /* 解析列表中的文章信息 */
     public static PostItem parsePostItem(Element e) {
-        Element _a = e.select("div.entry-title a").first();
-        Element _img = e.select("img").first();
-        Element _content = e.select("div.entry-content").first();
-        Element _comment = e.select("footer div.comments-link a").first();
-        Element _date = e.select("footer time.entry-date").first();
-        if (_a == null || _content == null) {
+        Element titleElement = e.select("div.entry-title a").first();
+        Element imgELement = e.select("img").first();
+        Element contentElement = e.select("div.entry-content").first();
+        Element commentElement = e.select("footer div.comments-link a").first();
+        Element dateElement = e.select("footer time.entry-date").first();
+        if (titleElement == null) {
             return null;
+        } else if (contentElement == null) {
+            if ((contentElement = e.select("div.entry-summary").first()) == null) {
+                return null;
+            }
         }
         String id, title, href, content, img = "", commentCount = "", date = "";
         id = e.id();
-        title = _a.text();
-        href = _a.attr("href");
-        if (_img != null && !_img.attr("data-original").isEmpty()) {
-            img = _img.attr("data-original");
+        title = titleElement.text();
+        href = titleElement.attr("href");
+        if (imgELement != null && !imgELement.attr("data-original").isEmpty()) {
+            img = imgELement.attr("data-original");
         }
-        for (Element t : _content.getAllElements()) { /* 删除多余的标签 */
+        for (Element t : contentElement.getAllElements()) { /* 删除多余的标签 */
             if (Objects.equals(t.tagName(), "a") || t.text().isEmpty()) {
                 t.remove();
             }
         }
-        content = _content.html();
-        if (_comment != null) {
-            commentCount = _comment.text();
+        content = contentElement.html();
+        if (commentElement != null) {
+            commentCount = commentElement.text();
             if (!commentCount.endsWith("条评论")) {
                 commentCount = "没有评论";
             }
         }
-        if (_date != null) {
-            date = _date.text();
+        if (dateElement != null) {
+            date = dateElement.text();
         }
 
         if (id.startsWith("post-")) {

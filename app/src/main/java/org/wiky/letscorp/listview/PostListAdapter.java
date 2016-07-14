@@ -143,8 +143,8 @@ public class PostListAdapter extends RecyclerView.Adapter implements SignalHandl
     }
 
     @Override
-    public void handleSignal(String name, Object data) {
-        if (Objects.equals(name, Signal.SIGNAL_POST_READN)) {
+    public void handleSignal(String signal, Object data) {
+        if (Objects.equals(signal, Signal.SIGNAL_POST_READN)) {
             setItemReadn((String) data);
         }
     }

@@ -7,8 +7,10 @@ import java.util.Map;
  * Created by wiky on 7/14/16.
  */
 public class Signal {
-    public final static String SIGNAL_POST_LIST_RESET_END = "post-list-reset-end";
+    public final static String SIGNAL_POST_RESET_START = "post-reset-start";
+    public final static String SIGNAL_POST_RESET_END = "post-reset-end";
     public final static String SIGNAL_POST_READN = "post-readn";
+    public final static String SIGNAL_CATEGORY_CHANGE = "category-change";
     public static Map<String, SignalHandler> mHandlers = new HashMap<>();
 
     public static void register(String signal, SignalHandler handler) {

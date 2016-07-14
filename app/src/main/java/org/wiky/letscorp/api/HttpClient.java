@@ -14,7 +14,7 @@ import okhttp3.Response;
  * 对HTTP请求的简单封装
  */
 public class HttpClient {
-    private static OkHttpClient mClient = new OkHttpClient();
+    private static OkHttpClient mClient = new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true).build();
 
     public static void get(String url, HttpResponseHandler hander) {
         Request request = new Request.Builder()

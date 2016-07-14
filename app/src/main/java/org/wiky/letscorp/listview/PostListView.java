@@ -7,20 +7,25 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import org.wiky.letscorp.api.API;
+import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.db.PostItemHelper;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.signal.Signal;
+import org.wiky.letscorp.signal.SignalHandler;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by wiky on 6/13/16.
  * 文章列表控件，包含下滑载入和对Adapter方法的封装
  */
-public class PostListView extends RecyclerView {
+public class PostListView extends RecyclerView implements SignalHandler {
     private PostListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private boolean mReseting;
+    private int mCategory = Const.LETSCORP_CATEGORY_ALL;
     private int mPage;
     /* 滚动事件监听 */
     private OnScrollListener mOnScrollListener = new OnScrollListener() {
@@ -45,7 +50,7 @@ public class PostListView extends RecyclerView {
     private API.HttpFinalHandler mAPIFinalHandler = new API.HttpFinalHandler() {
         @Override
         public void onFinally() {
-            Signal.trigger(Signal.SIGNAL_POST_LIST_RESET_END);
+            Signal.trigger(Signal.SIGNAL_POST_RESET_END);
         }
     };
 
@@ -76,6 +81,7 @@ public class PostListView extends RecyclerView {
         addItemDecoration(new PostItemDecoration(10));
 
         addOnScrollListener(mOnScrollListener);
+        Signal.register(Signal.SIGNAL_CATEGORY_CHANGE, this);
     }
 
     public void setOnItemClickListener(PostListAdapter.OnItemClickListener listener) {
@@ -98,7 +104,8 @@ public class PostListView extends RecyclerView {
     public void resetItems() {
         mPage = 1;
         mReseting = true;
-        API.getPostList(mPage, new API.ApiResponseHandler() {
+        Signal.trigger(Signal.SIGNAL_POST_RESET_START);
+        API.getPostList(mCategory, mPage, new API.ApiResponseHandler() {
             @Override
             public void onSuccess(Object data) {
                 List<PostItem> items = (List<PostItem>) data;
@@ -110,7 +117,7 @@ public class PostListView extends RecyclerView {
 
     /* 载入下一页 */
     public void loadMore(API.HttpFinalHandler finalHandler) {
-        API.getPostList(++mPage, new API.ApiResponseHandler() {
+        API.getPostList(mCategory, ++mPage, new API.ApiResponseHandler() {
             @Override
             public void onSuccess(Object data) {
                 List<PostItem> items = (List<PostItem>) data;
@@ -127,5 +134,15 @@ public class PostListView extends RecyclerView {
     @Override
     public boolean isInEditMode() {
         return true;
+    }
+
+    @Override
+    public void handleSignal(String signal, Object data) {
+        if (Objects.equals(signal, Signal.SIGNAL_CATEGORY_CHANGE)) {
+            mCategory = (int) data;
+            mAdapter.resetItems(new ArrayList<PostItem>());
+            /* TODO 先载入缓存数据，如果没有再请求网络 */
+            resetItems();
+        }
     }
 }

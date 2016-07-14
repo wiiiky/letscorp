@@ -1,5 +1,6 @@
 package org.wiky.letscorp.api;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
@@ -21,8 +22,8 @@ import java.util.List;
 public class API {
 
     /* 获取文章列表 */
-    public static void getPostList(int page, final ApiResponseHandler handler, HttpFinalHandler finalHandler) {
-        String url = Const.getPostListUrl(page);
+    public static void getPostList(int category, int page, final ApiResponseHandler handler, HttpFinalHandler finalHandler) {
+        String url = Const.getPostListUrl(category, page);
         HttpClient.get(url, new HttpResponseHandlerWrapper(finalHandler) {
             @Override
             public void onSuccess(String body) throws Exception {
