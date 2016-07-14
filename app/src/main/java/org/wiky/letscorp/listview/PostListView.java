@@ -82,10 +82,6 @@ public class PostListView extends RecyclerView {
         mAdapter.setOnItemClickListener(listener);
     }
 
-    public void setItemReadn(int id) {
-        mAdapter.setItemReadn(id);
-    }
-
     /* 从数据库载入数据，载入成功返回true，否则返回false */
     public boolean loadLocal(int page, int count) {
         mPage = 1;

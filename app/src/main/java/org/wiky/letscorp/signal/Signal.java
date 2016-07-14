@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public class Signal {
     public final static String SIGNAL_POST_LIST_RESET_END = "post-list-reset-end";
+    public final static String SIGNAL_POST_READN = "post-readn";
     public static Map<String, SignalHandler> mHandlers = new HashMap<>();
 
     public static void register(String signal, SignalHandler handler) {

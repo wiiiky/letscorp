@@ -1,10 +1,7 @@
 package org.wiky.letscorp.activity;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Html;
-import android.transition.Fade;
-import android.transition.Transition;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -16,12 +13,12 @@ import org.wiky.letscorp.api.API;
 import org.wiky.letscorp.data.db.PostHelper;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
+import org.wiky.letscorp.signal.Signal;
 import org.wiky.materialprogressbar.MaterialProgressBar;
 
 public class PostActivity extends BaseActivity {
 
     private Post mPostData;
-    private PostItem mItemData;
     private TextView mTitle;
     private TextView mAuthor;
     private MaterialProgressBar mProgressBar;
@@ -31,16 +28,18 @@ public class PostActivity extends BaseActivity {
     private API.ApiResponseHandler mApiHandler = new API.ApiResponseHandler() {
         @Override
         public void onSuccess(Object data) {
-            updatePost((Post) data);
+            updatePost((Post) data, true);
         }
     };
 
-    private void updatePost(Post data) {
+    private void updatePost(Post data, boolean animated) {
         mPostData = data;
         mAuthor.setText(mPostData.author + "发表于" + mPostData.date);
         mContent.setText(Html.fromHtml(mPostData.content));
-        mContent.setAlpha(0.0f);
-        mContent.animate().alpha(1.0f).setDuration(300).start();
+        if (animated) {
+            mContent.setAlpha(0.0f);
+            mContent.animate().alpha(1.0f).setDuration(300).start();
+        }
         Log.d("content", mPostData.content);
     }
 
@@ -49,11 +48,10 @@ public class PostActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setEnterTransition();
-
-        mItemData = getIntent().getParcelableExtra("data");
+        PostItem postItem = getIntent().getParcelableExtra("data");
+        Post post = PostHelper.getPost(postItem.href);
         setContentView(R.layout.activity_post);
-        setTitle(mItemData.title);
+        setTitle(postItem.title);
 
         mTitle = (TextView) findViewById(R.id.post_title);
         mAuthor = (TextView) findViewById(R.id.post_author);
@@ -63,63 +61,34 @@ public class PostActivity extends BaseActivity {
         mContent = (TextView) findViewById(R.id.post_content);
 
 
-        mTitle.setText(mItemData.title);
+        mTitle.setText(postItem.title);
+
+        if (post != null) {
+            mProgressBar.setVisibility(View.INVISIBLE);
+            updatePost(post, false);
+        } else {
+            getPostDetail(postItem.href);
+        }
     }
 
-    private void setEnterTransition() {
-        Transition fade = new Fade();
-        fade.excludeTarget(android.R.id.statusBarBackground, true);
-        fade.excludeTarget(android.R.id.navigationBarBackground, true);
-        fade.excludeTarget(R.id.appbar, true);
-        getWindow().setEnterTransition(fade);
-    }
-
-    private void onEnter() {
-        mScrollViewLayout.setAlpha(0.0f);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mScrollViewLayout.animate().alpha(1.0f).setDuration(300).start();
-                getPostDetail();
-            }
-        }, 300);
-    }
-
-    private void onExit() {
-        mScrollViewLayout.animate().alpha(0.0f).start();
-    }
-
-    @Override
-    public void onResume() {
-        onEnter();
-        super.onResume();
-    }
 
     @Override
     public void onBackPressed() {
-        onExit();
         if (mPostData != null) {    /* 如果已经下载了文章，则将文章ID返回，用户设置文章已读 */
-            setResult(mItemData.id);
-        } else {
-            setResult(0);
+            Signal.trigger(Signal.SIGNAL_POST_READN, mPostData.href);
         }
         super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
-    private void getPostDetail() {
-        Post data = PostHelper.getPost(mItemData.href);
-        if (data == null) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            API.getPostDetail(mItemData.href, mApiHandler, new API.HttpFinalHandler() {
-                @Override
-                public void onFinally() {
-                    mProgressBar.animate().alpha(0.0f).setDuration(250).start();
-                }
-            });
-        } else {
-            mProgressBar.setVisibility(View.INVISIBLE);
-            updatePost(data);
-        }
+    private void getPostDetail(String href) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        API.getPostDetail(href, mApiHandler, new API.HttpFinalHandler() {
+            @Override
+            public void onFinally() {
+                mProgressBar.animate().alpha(0.0f).setDuration(250).start();
+            }
+        });
     }
 
 }

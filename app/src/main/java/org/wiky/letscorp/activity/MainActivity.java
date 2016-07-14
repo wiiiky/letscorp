@@ -2,10 +2,7 @@ package org.wiky.letscorp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.View;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
@@ -19,8 +16,6 @@ import java.util.Objects;
 
 public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayout.OnRefreshListener, SignalHandler {
 
-    private static int POST_ACTIVITY_REQUEST_CODE = 1;
-
     private PostListView mPostListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private PostListAdapter.OnItemClickListener mOnItemClickListener = new PostListAdapter.OnItemClickListener() {
@@ -28,15 +23,8 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
         public void onItemClick(final PostListAdapter.PostItemHolder viewHolder, final PostItem data) {
             Intent intent = new Intent(MainActivity.this, PostActivity.class);
             intent.putExtra("data", data);
-
-
-            View shared = viewHolder.itemView;
-            shared.setTransitionName(getResources().getString(R.string.transition_shared));
-            ActivityOptionsCompat options = ActivityOptionsCompat.
-                    makeSceneTransitionAnimation(MainActivity.this,
-                            Pair.create(shared, shared.getTransitionName())
-                    );
-            startActivityForResult(intent, POST_ACTIVITY_REQUEST_CODE, options.toBundle());
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
         }
     };
 
@@ -68,17 +56,6 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
     @Override
     public void onRefresh() {
         mPostListView.resetItems();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == POST_ACTIVITY_REQUEST_CODE) {
-            if (resultCode > 0) {
-                mPostListView.setItemReadn(resultCode);
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, intent);
-        }
     }
 
     @Override

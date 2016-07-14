@@ -12,14 +12,18 @@ import android.widget.TextView;
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.model.PostItem;
+import org.wiky.letscorp.signal.Signal;
+import org.wiky.letscorp.signal.SignalHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by wiky on 6/14/16.
+ * 文章列表适配器
  */
-public class PostListAdapter extends RecyclerView.Adapter {
+public class PostListAdapter extends RecyclerView.Adapter implements SignalHandler {
 
     public static final int VIEW_TYPE_DEFAULT = 1;
     public static final int VIEW_TYPE_LOADER = 2;
@@ -31,6 +35,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
     public PostListAdapter() {
         mItems = new ArrayList<>();
         mLoading = false;
+        Signal.register(Signal.SIGNAL_POST_READN, this);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -111,10 +116,10 @@ public class PostListAdapter extends RecyclerView.Adapter {
     }
 
     /*  将指定ID的文章设置成已读 */
-    public void setItemReadn(int id) {
+    public void setItemReadn(String href) {
         for (int i = 0; i < mItems.size(); i++) {
             PostItem item = mItems.get(i);
-            if (item.id == id) {
+            if (Objects.equals(item.href, href)) {
                 if (!item.readn) {
                     item.readn = true;
                     notifyItemChanged(i);
@@ -135,6 +140,13 @@ public class PostListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return mItems.size() + (mLoading ? 1 : 0);
+    }
+
+    @Override
+    public void handleSignal(String name, Object data) {
+        if (Objects.equals(name, Signal.SIGNAL_POST_READN)) {
+            setItemReadn((String) data);
+        }
     }
 
     public interface OnItemClickListener {
