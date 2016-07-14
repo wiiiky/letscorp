@@ -9,12 +9,15 @@ import android.view.View;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
-import org.wiky.letscorp.api.API;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.listview.PostListAdapter;
 import org.wiky.letscorp.listview.PostListView;
+import org.wiky.letscorp.signal.Signal;
+import org.wiky.letscorp.signal.SignalHandler;
 
-public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayout.OnRefreshListener {
+import java.util.Objects;
+
+public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayout.OnRefreshListener, SignalHandler {
 
     private static int POST_ACTIVITY_REQUEST_CODE = 1;
 
@@ -49,6 +52,7 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         startToolbarAnimation();
+        Signal.register(Signal.SIGNAL_POST_LIST_RESET_END, this);
 
         if (!mPostListView.loadLocal()) {
             Application.getUIHandler().postDelayed(new Runnable() {
@@ -63,12 +67,7 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
 
     @Override
     public void onRefresh() {
-        mPostListView.resetPage(new API.HttpFinalHandler() {
-            @Override
-            public void onFinally() {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        mPostListView.resetItems();
     }
 
     @Override
@@ -79,6 +78,13 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
             }
         } else {
             super.onActivityResult(requestCode, resultCode, intent);
+        }
+    }
+
+    @Override
+    public void handleSignal(String signal, Object data) {
+        if (Objects.equals(signal, Signal.SIGNAL_POST_LIST_RESET_END)) {
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 }

@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import org.wiky.letscorp.api.API;
 import org.wiky.letscorp.data.db.PostItemHelper;
 import org.wiky.letscorp.data.model.PostItem;
+import org.wiky.letscorp.signal.Signal;
 
 import java.util.List;
 
@@ -38,6 +39,13 @@ public class PostListView extends RecyclerView {
                 mAdapter.setLoading();
                 loadMore();
             }
+        }
+    };
+
+    private API.HttpFinalHandler mAPIFinalHandler = new API.HttpFinalHandler() {
+        @Override
+        public void onFinally() {
+            Signal.trigger(Signal.SIGNAL_POST_LIST_RESET_END);
         }
     };
 
@@ -91,7 +99,7 @@ public class PostListView extends RecyclerView {
     }
 
     /* 重置页面 */
-    public void resetPage(API.HttpFinalHandler finalHandler) {
+    public void resetItems() {
         mPage = 1;
         mReseting = true;
         API.getPostList(mPage, new API.ApiResponseHandler() {
@@ -101,7 +109,7 @@ public class PostListView extends RecyclerView {
                 mAdapter.resetItems(items);
                 mReseting = false;
             }
-        }, finalHandler);
+        }, mAPIFinalHandler);
     }
 
     /* 载入下一页 */
