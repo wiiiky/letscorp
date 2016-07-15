@@ -58,43 +58,36 @@
                 android:textSize="26sp" />
 
             <TextView
-                android:id="@+id/post.author"
+                android:id="@+id/post.category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/post.title"
                 android:layout_centerHorizontal="false"
                 android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:text="" />
 
+            <TextView
+                android:id="@+id/post.author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/post.category"
+                android:layout_centerHorizontal="false"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:text="" />
 
             <org.wiky.letscorp.view.PostContent
                 android:id="@+id/post.content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/post.author"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="25dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp" />
-
-            <!--<LinearLayout-->
-            <!--android:id="@+id/post.content_layout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@id/post.author"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:layout_marginRight="15dp"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:orientation="vertical">-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/post.content"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content" />-->
-
-            <!--</LinearLayout>-->
 
         </RelativeLayout>
 

@@ -41,4 +41,18 @@ public class Util {
         return list;
     }
 
+    public static String joinString(List<String> strings) {
+        StringBuilder s = new StringBuilder();
+        int size = strings.size();
+        for (int i = 0; i < size; i++) {
+            if (i < size - 1) {
+                s.append(strings.get(i));
+                s.append(",");
+            } else {
+                s.append(strings.get(i));
+            }
+        }
+        return s.toString();
+    }
+
 }
