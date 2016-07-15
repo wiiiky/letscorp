@@ -20,7 +20,6 @@
         </activity>
         <activity
             android:name=".activity.PostActivity"
-            android:label="@string/title_activity_post"
             android:theme="@style/AppTheme.PostDetail" />
     </application>
 
