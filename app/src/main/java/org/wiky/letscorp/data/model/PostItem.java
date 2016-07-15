@@ -3,6 +3,8 @@ package org.wiky.letscorp.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.wiky.letscorp.api.Const;
+
 /**
  * Created by wiky on 6/11/16.
  */
@@ -26,6 +28,7 @@ public class PostItem implements Parcelable {
     public String commentCount;
     public String date;
     public boolean readn;
+    public int category;
 
 
     public PostItem(int id, String title, String href, String img, String content, String ccount, String date) {
@@ -37,6 +40,12 @@ public class PostItem implements Parcelable {
         this.commentCount = ccount;
         this.date = date;
         readn = false;
+        category = Const.LETSCORP_CATEGORY_ALL;
+    }
+
+    public PostItem(int id, String title, String href, String img, String content, String ccount, String date, int cate) {
+        this(id, title, href, img, content, ccount, date);
+        category = cate;
     }
 
     protected PostItem(Parcel in) {
@@ -47,6 +56,8 @@ public class PostItem implements Parcelable {
         content = in.readString();
         commentCount = in.readString();
         date = in.readString();
+        readn = in.readInt() > 0;
+        category = in.readInt();
     }
 
     @Override
@@ -63,5 +74,7 @@ public class PostItem implements Parcelable {
         dest.writeString(content);
         dest.writeString(commentCount);
         dest.writeString(date);
+        dest.writeInt(readn ? 1 : 0);
+        dest.writeInt(category);
     }
 }

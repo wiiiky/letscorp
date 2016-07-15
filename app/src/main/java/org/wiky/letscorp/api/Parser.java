@@ -15,7 +15,7 @@ import java.util.Objects;
  */
 public class Parser {
     /* 解析列表中的文章信息 */
-    public static PostItem parsePostItem(Element e) {
+    public static PostItem parsePostItem(Element e, int category) {
         Element titleElement = e.select("div.entry-title a").first();
         Element imgELement = e.select("img").first();
         Element contentElement = e.select("div.entry-content").first();
@@ -55,13 +55,13 @@ public class Parser {
             id = id.substring(5);
         }
 
-        return new PostItem(Integer.parseInt(id), title, href, img, content, commentCount, date);
+        return new PostItem(Integer.parseInt(id), title, href, img, content, commentCount, date, category);
     }
 
-    public static List<PostItem> parsePostItems(Document doc) {
+    public static List<PostItem> parsePostItems(Document doc, int category) {
         List<PostItem> items = new ArrayList<PostItem>();
         for (Element post : doc.select("article.post")) {
-            PostItem item = parsePostItem(post);
+            PostItem item = parsePostItem(post, category);
             if (item != null) {
                 items.add(item);
             }

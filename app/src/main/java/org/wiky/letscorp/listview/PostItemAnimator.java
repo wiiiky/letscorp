@@ -83,7 +83,7 @@ public class PostItemAnimator extends DefaultItemAnimator {
         int height = Application.getScreenHeight();
         holder.itemView.setClickable(false);
         holder.itemView.animate()
-                .translationY(-height / 2.0f)
+                .translationY(-height / 3.0f)
                 .alpha(0.0f)
                 .setInterpolator(new AccelerateInterpolator())
                 .setDuration(250)

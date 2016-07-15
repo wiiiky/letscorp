@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 import org.wiky.letscorp.Application;
+import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.model.PostItem;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class PostItemHelper implements BaseColumns {
     public static final String COLUMN_NAME_CONTENT = "content";
     public static final String COLUMN_NAME_COMMENT_COUNT = "comment_count";
     public static final String COLUMN_NAME_DATE = "date";
+    public static final String COLUMN_NAME_CATEGORY = "category";
 
     public static final String SQL_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
             COLUMN_NAME_ITEM_ID + " INTEGER PRIMARY KEY, " +
@@ -32,7 +34,8 @@ public class PostItemHelper implements BaseColumns {
             COLUMN_NAME_IMG + " TEXT," +
             COLUMN_NAME_CONTENT + " TEXT," +
             COLUMN_NAME_COMMENT_COUNT + " TEXT," +
-            COLUMN_NAME_DATE + " TEXT" +
+            COLUMN_NAME_DATE + " TEXT," +
+            COLUMN_NAME_CATEGORY + " INTEGER" +
             ")";
     public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
@@ -45,6 +48,7 @@ public class PostItemHelper implements BaseColumns {
         values.put(COLUMN_NAME_CONTENT, item.content);
         values.put(COLUMN_NAME_COMMENT_COUNT, item.commentCount);
         values.put(COLUMN_NAME_DATE, item.date);
+        values.put(COLUMN_NAME_CATEGORY, item.category);
         return values;
     }
 
@@ -56,7 +60,8 @@ public class PostItemHelper implements BaseColumns {
         String content = c.getString(c.getColumnIndex(COLUMN_NAME_CONTENT));
         String commentCount = c.getString(c.getColumnIndex(COLUMN_NAME_COMMENT_COUNT));
         String date = c.getString(c.getColumnIndex(COLUMN_NAME_DATE));
-        PostItem p = new PostItem(id, title, href, img, content, commentCount, date);
+        int category = c.getInt(c.getColumnIndex(COLUMN_NAME_CATEGORY));
+        PostItem p = new PostItem(id, title, href, img, content, commentCount, date, category);
         if (c.getColumnIndex("readn") >= 0) {
             p.readn = c.getInt(c.getColumnIndex("readn")) != 0;
         }
@@ -73,9 +78,22 @@ public class PostItemHelper implements BaseColumns {
     }
 
     public static List<PostItem> getPostItems(int page, int count) {
-        SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         String sql = String.format("SELECT *, IFNULL((SELECT 1 FROM %s AS `B` WHERE `A`.`%s`=`B`.`%s`), 0) AS `readn` FROM %s AS `A` ORDER BY %s DESC LIMIT %d OFFSET %d",
                 PostHelper.TABLE_NAME, COLUMN_NAME_HREF, PostHelper.COLUMN_NAME_HREF, TABLE_NAME, COLUMN_NAME_ITEM_ID, count, (page - 1) * count);
+        return getPostItems(sql);
+    }
+
+    public static List<PostItem> getPostItems(int category, int page, int count) {
+        if (category == Const.LETSCORP_CATEGORY_ALL) {
+            return getPostItems(page, count);
+        }
+        String sql = String.format("SELECT *, IFNULL((SELECT 1 FROM %s AS `B` WHERE `A`.`%s`=`B`.`%s`), 0) AS `readn` FROM %s AS `A` WHERE `A`.`%s`=%s ORDER BY %s DESC LIMIT %d OFFSET %d",
+                PostHelper.TABLE_NAME, COLUMN_NAME_HREF, PostHelper.COLUMN_NAME_HREF, TABLE_NAME, COLUMN_NAME_CATEGORY, category, COLUMN_NAME_ITEM_ID, count, (page - 1) * count);
+        return getPostItems(sql);
+    }
+
+    private static List<PostItem> getPostItems(String sql) {
+        SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         Cursor c = db.rawQuery(sql, null);
         ArrayList<PostItem> items = new ArrayList<>();
         while (c.moveToNext()) {

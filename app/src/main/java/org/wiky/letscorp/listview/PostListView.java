@@ -22,11 +22,13 @@ import java.util.Objects;
  * 文章列表控件，包含下滑载入和对Adapter方法的封装
  */
 public class PostListView extends RecyclerView implements SignalHandler {
+    private final int mPageCount = 15;
     private PostListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private boolean mReseting;
     private int mCategory = Const.LETSCORP_CATEGORY_ALL;
     private int mPage;
+    private boolean mLocal;
     /* 滚动事件监听 */
     private OnScrollListener mOnScrollListener = new OnScrollListener() {
         @Override
@@ -91,19 +93,21 @@ public class PostListView extends RecyclerView implements SignalHandler {
     /* 从数据库载入数据，载入成功返回true，否则返回false */
     public boolean loadLocal(int page, int count) {
         mPage = 1;
-        List<PostItem> items = PostItemHelper.getPostItems(page, count);
+        List<PostItem> items = PostItemHelper.getPostItems(mCategory, page, count);
         mAdapter.resetItems(items);
-        return items.size() > 0;
+        mLocal = items.size() > 0;
+        return mLocal;
     }
 
     public boolean loadLocal() {
-        return loadLocal(1, 15);
+        return loadLocal(1, mPageCount);
     }
 
     /* 重置页面 */
     public void resetItems() {
         mPage = 1;
         mReseting = true;
+        mLocal = false;
         Signal.trigger(Signal.SIGNAL_POST_RESET_START);
         API.getPostList(mCategory, mPage, new API.ApiResponseHandler() {
             @Override
@@ -117,14 +121,20 @@ public class PostListView extends RecyclerView implements SignalHandler {
 
     /* 载入下一页 */
     public void loadMore(API.HttpFinalHandler finalHandler) {
-        API.getPostList(mCategory, ++mPage, new API.ApiResponseHandler() {
-            @Override
-            public void onSuccess(Object data) {
-                List<PostItem> items = (List<PostItem>) data;
-                mAdapter.setLoaded();
-                mAdapter.addItems(items);
-            }
-        }, finalHandler);
+        if (mLocal) {
+            List<PostItem> items = PostItemHelper.getPostItems(mCategory, ++mPage, mPageCount);
+            mAdapter.setLoaded();
+            mAdapter.addItems(items);
+        } else {
+            API.getPostList(mCategory, ++mPage, new API.ApiResponseHandler() {
+                @Override
+                public void onSuccess(Object data) {
+                    List<PostItem> items = (List<PostItem>) data;
+                    mAdapter.setLoaded();
+                    mAdapter.addItems(items);
+                }
+            }, finalHandler);
+        }
     }
 
     public void loadMore() {
@@ -140,9 +150,10 @@ public class PostListView extends RecyclerView implements SignalHandler {
     public void handleSignal(String signal, Object data) {
         if (Objects.equals(signal, Signal.SIGNAL_CATEGORY_CHANGE)) {
             mCategory = (int) data;
-            mAdapter.resetItems(new ArrayList<PostItem>());
-            /* TODO 先载入缓存数据，如果没有再请求网络 */
-            resetItems();
+            if (!loadLocal()) {
+                mAdapter.resetItems(new ArrayList<PostItem>());
+                resetItems();
+            }
         }
     }
 }

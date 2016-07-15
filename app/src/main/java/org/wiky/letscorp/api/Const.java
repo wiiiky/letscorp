@@ -17,11 +17,22 @@ public final class Const {
 
     static {
         mCategoryURL.put(LETSCORP_CATEGORY_ALL, LETSCORP_HOST + "/page/");
-        mCategoryURL.put(LETSCORP_CATEGORY_ECONOMICS, getCategoryURL("economics"));
-        mCategoryURL.put(LETSCORP_CATEGORY_NEWS, getCategoryURL("news"));
+        mCategoryURL.put(LETSCORP_CATEGORY_ECONOMICS, getCategoryURL(LETSCORP_CATEGORY_ECONOMICS));
+        mCategoryURL.put(LETSCORP_CATEGORY_NEWS, getCategoryURL(LETSCORP_CATEGORY_NEWS));
     }
 
-    private static String getCategoryURL(String name) {
+    public static String getCategoryName(int category) {
+        switch (category) {
+            case LETSCORP_CATEGORY_ECONOMICS:
+                return "economics";
+            case LETSCORP_CATEGORY_NEWS:
+                return "news";
+        }
+        return "";
+    }
+
+    private static String getCategoryURL(int category) {
+        String name = getCategoryName(category);
         return LETSCORP_HOST + "/archives/category/" + name + "/page/";
     }
 
