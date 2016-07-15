@@ -1,10 +1,7 @@
 package org.wiky.letscorp.activity;
 
 import android.os.Bundle;
-import android.text.Html;
-import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,6 +11,7 @@ import org.wiky.letscorp.data.db.PostHelper;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.signal.Signal;
+import org.wiky.letscorp.view.PostContent;
 import org.wiky.materialprogressbar.MaterialProgressBar;
 
 public class PostActivity extends BaseActivity {
@@ -22,8 +20,7 @@ public class PostActivity extends BaseActivity {
     private TextView mTitle;
     private TextView mAuthor;
     private MaterialProgressBar mProgressBar;
-    private LinearLayout mContentLayout;
-    private TextView mContent;
+    private PostContent mContent;
     private RelativeLayout mScrollViewLayout;
     private API.ApiResponseHandler mApiHandler = new API.ApiResponseHandler() {
         @Override
@@ -35,12 +32,11 @@ public class PostActivity extends BaseActivity {
     private void updatePost(Post data, boolean animated) {
         mPostData = data;
         mAuthor.setText(mPostData.author + "发表于" + mPostData.date);
-        mContent.setText(Html.fromHtml(mPostData.content));
+        mContent.setContent(mPostData.content);
         if (animated) {
             mContent.setAlpha(0.0f);
             mContent.animate().alpha(1.0f).setDuration(300).start();
         }
-        Log.d("content", mPostData.content);
     }
 
 
@@ -57,8 +53,7 @@ public class PostActivity extends BaseActivity {
         mAuthor = (TextView) findViewById(R.id.post_author);
         mProgressBar = (MaterialProgressBar) findViewById(R.id.post_loading);
         mScrollViewLayout = (RelativeLayout) findViewById(R.id.post_scrollview_layout);
-        mContentLayout = (LinearLayout) findViewById(R.id.post_content_layout);
-        mContent = (TextView) findViewById(R.id.post_content);
+        mContent = (PostContent) findViewById(R.id.post_content);
 
 
         mTitle.setText(postItem.title);
