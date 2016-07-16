@@ -3,6 +3,7 @@ package org.wiky.letscorp.data.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by wiky on 7/13/16.
@@ -18,6 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.d("SQL", PostItemHelper.SQL_CREATE_TABLE);
         db.execSQL(PostItemHelper.SQL_CREATE_TABLE);
         db.execSQL(PostHelper.SQL_CREATE_TABLE);
     }

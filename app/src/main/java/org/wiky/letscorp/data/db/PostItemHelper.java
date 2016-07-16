@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.api.Const;
@@ -28,7 +29,7 @@ public class PostItemHelper implements BaseColumns {
     public static final String COLUMN_NAME_CATEGORY = "category";
 
     public static final String SQL_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            COLUMN_NAME_ITEM_ID + " INTEGER PRIMARY KEY, " +
+            COLUMN_NAME_ITEM_ID + " INTEGER," +
             COLUMN_NAME_TITLE + " TEXT," +
             COLUMN_NAME_HREF + " TEXT," +
             COLUMN_NAME_IMG + " TEXT," +
@@ -77,16 +78,7 @@ public class PostItemHelper implements BaseColumns {
         return null;
     }
 
-    public static List<PostItem> getPostItems(int page, int count) {
-        String sql = String.format("SELECT *, IFNULL((SELECT 1 FROM %s AS `B` WHERE `A`.`%s`=`B`.`%s`), 0) AS `readn` FROM %s AS `A` ORDER BY %s DESC LIMIT %d OFFSET %d",
-                PostHelper.TABLE_NAME, COLUMN_NAME_HREF, PostHelper.COLUMN_NAME_HREF, TABLE_NAME, COLUMN_NAME_ITEM_ID, count, (page - 1) * count);
-        return getPostItems(sql);
-    }
-
     public static List<PostItem> getPostItems(int category, int page, int count) {
-        if (category == Const.LETSCORP_CATEGORY_ALL) {
-            return getPostItems(page, count);
-        }
         String sql = String.format("SELECT *, IFNULL((SELECT 1 FROM %s AS `B` WHERE `A`.`%s`=`B`.`%s`), 0) AS `readn` FROM %s AS `A` WHERE `A`.`%s`=%s ORDER BY %s DESC LIMIT %d OFFSET %d",
                 PostHelper.TABLE_NAME, COLUMN_NAME_HREF, PostHelper.COLUMN_NAME_HREF, TABLE_NAME, COLUMN_NAME_CATEGORY, category, COLUMN_NAME_ITEM_ID, count, (page - 1) * count);
         return getPostItems(sql);
@@ -96,23 +88,28 @@ public class PostItemHelper implements BaseColumns {
         SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         Cursor c = db.rawQuery(sql, null);
         ArrayList<PostItem> items = new ArrayList<>();
+        Log.d("sql", sql);
         while (c.moveToNext()) {
-            items.add(getPostItem(c));
+            PostItem item=getPostItem(c);
+            Log.d("item", "" + item.id + "," +item.title);
+            items.add(item);
         }
         return items;
     }
 
-    public static boolean checkPostItem(int id) {
+    public static boolean checkPostItem(int category, int id) {
         SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
-        Cursor c = db.query(TABLE_NAME, null, COLUMN_NAME_ITEM_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
+        Cursor c = db.query(TABLE_NAME, null, COLUMN_NAME_ITEM_ID + "=? AND " + COLUMN_NAME_CATEGORY + "=?",
+                new String[]{String.valueOf(id),String.valueOf(category)}, null, null, null);
         return c.moveToNext();
     }
 
     public static void savePostItem(PostItem item) {
         SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
         ContentValues values = getContentValues(item);
-        if (checkPostItem(item.id)) { /* 已存在 */
-            db.update(TABLE_NAME, values, COLUMN_NAME_ITEM_ID + "=?", new String[]{String.valueOf(item.id)});
+        if (checkPostItem(item.category,item.id)) { /* 已存在 */
+            db.update(TABLE_NAME, values, COLUMN_NAME_ITEM_ID + "=? & " + COLUMN_NAME_CATEGORY + "=?",
+                    new String[]{String.valueOf(item.id),String.valueOf(item.category)});
         } else {
             db.insert(TABLE_NAME, null, values);
         }

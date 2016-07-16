@@ -2,6 +2,7 @@ package org.wiky.letscorp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MenuItem;
 
@@ -45,13 +46,13 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
         Signal.register(Signal.SIGNAL_POST_RESET_START, this);
         Signal.register(Signal.SIGNAL_POST_RESET_END, this);
 
-        if (!mPostListView.loadLocal()) {
+        if(!mPostListView.loadLocal()){
             Application.getUIHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     onRefresh();
                 }
-            }, 200);
+            },200);
         }
     }
 
