@@ -4,10 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 import org.wiky.letscorp.Application;
-import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.model.PostItem;
 
 import java.util.ArrayList;
@@ -36,7 +34,8 @@ public class PostItemHelper implements BaseColumns {
             COLUMN_NAME_CONTENT + " TEXT," +
             COLUMN_NAME_COMMENT_COUNT + " TEXT," +
             COLUMN_NAME_DATE + " TEXT," +
-            COLUMN_NAME_CATEGORY + " INTEGER" +
+            COLUMN_NAME_CATEGORY + " INTEGER," +
+            "PRIMARY KEY(" + COLUMN_NAME_ITEM_ID + "," + COLUMN_NAME_CATEGORY + ")" +
             ")";
     public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
@@ -88,10 +87,8 @@ public class PostItemHelper implements BaseColumns {
         SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         Cursor c = db.rawQuery(sql, null);
         ArrayList<PostItem> items = new ArrayList<>();
-        Log.d("sql", sql);
         while (c.moveToNext()) {
             PostItem item=getPostItem(c);
-            Log.d("item", "" + item.id + "," +item.title);
             items.add(item);
         }
         return items;

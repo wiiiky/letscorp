@@ -1,5 +1,6 @@
 package org.wiky.letscorp.activity;
 
+import android.animation.Animator;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class PostActivity extends BaseActivity {
         @Override
         public void onSuccess(Object data) {
             updatePost((Post) data, true);
+            Signal.trigger(Signal.SIGNAL_POST_READN, mPostData.href);
         }
     };
 
@@ -60,7 +62,7 @@ public class PostActivity extends BaseActivity {
         mTitle.setText(postItem.title);
 
         if (post != null) {
-            mProgressBar.setVisibility(View.INVISIBLE);
+            mProgressBar.setVisibility(View.GONE);
             updatePost(post, false);
         } else {
             getPostDetail(postItem.href);
@@ -70,9 +72,6 @@ public class PostActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (mPostData != null) {    /* 如果已经下载了文章，则将文章ID返回，用户设置文章已读 */
-            Signal.trigger(Signal.SIGNAL_POST_READN, mPostData.href);
-        }
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
@@ -82,9 +81,37 @@ public class PostActivity extends BaseActivity {
         API.getPostDetail(href, mApiHandler, new API.HttpFinalHandler() {
             @Override
             public void onFinally() {
-                mProgressBar.animate().alpha(0.0f).setDuration(250).start();
+                hideProgressBar();
             }
         });
+    }
+
+    private void hideProgressBar() {
+        mProgressBar.animate()
+                .alpha(0.0f)
+                .setDuration(250)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                })
+                .start();
     }
 
 }

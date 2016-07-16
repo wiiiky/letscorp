@@ -1,6 +1,6 @@
 package org.wiky.letscorp.activity;
 
-import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -11,8 +11,8 @@ import org.wiky.letscorp.util.Util;
  * Created by wiky on 6/11/16.
  */
 public class BaseActivity extends AppCompatActivity {
-    @Nullable
     protected Toolbar mToolBar;
+    protected AppBarLayout mAppBar;
 
     @Override
     public void setContentView(int layoutResID) {
@@ -21,14 +21,14 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void bindViews() {
+        mToolBar = (Toolbar) findViewById(R.id.toolbar);
+        mAppBar = (AppBarLayout) findViewById(R.id.appbar);
         setupToolbar();
     }
 
     protected void setupToolbar() {
-        mToolBar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
-//            mToolBar.setNavigationIcon(R.mipmap.ic_menu_white);
         }
     }
 
