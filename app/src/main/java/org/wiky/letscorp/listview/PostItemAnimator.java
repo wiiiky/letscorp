@@ -45,13 +45,17 @@ public class PostItemAnimator extends DefaultItemAnimator {
 
     private void runEnterAnimation(final RecyclerView.ViewHolder holder) {
         int height = Application.getScreenHeight();
-        holder.itemView.setTranslationY(height / 2.0f);
+        holder.itemView.setTranslationY(height / 3.0f);
         holder.itemView.setAlpha(0.0f);
+        holder.itemView.setScaleX(0.9f);
+        holder.itemView.setScaleY(0.9f);
         holder.itemView.animate()
                 .translationY(0)
                 .alpha(1.0f)
+                .scaleX(1.0f)
+                .scaleY(1.0f)
                 .setInterpolator(new DecelerateInterpolator())
-                .setDuration(300)
+                .setDuration(250)
                 .setStartDelay(100 * Math.min(holder.getLayoutPosition(), 5))
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
@@ -85,13 +89,17 @@ public class PostItemAnimator extends DefaultItemAnimator {
         holder.itemView.animate()
                 .translationY(-height / 3.0f)
                 .alpha(0.0f)
+                .scaleX(0.9f)
+                .scaleY(0.9f)
                 .setInterpolator(new AccelerateInterpolator())
-                .setDuration(250)
+                .setDuration(200)
                 .setListener(new AnimatorListenerAdapter() {
                     private void end() {
                         holder.itemView.setTranslationY(0.0f);
                         holder.itemView.setAlpha(1.0f);
                         holder.itemView.setClickable(true);
+                        holder.itemView.setScaleX(1.0f);
+                        holder.itemView.setScaleY(1.0f);
                         dispatchAddFinished(holder);
                     }
                     @Override

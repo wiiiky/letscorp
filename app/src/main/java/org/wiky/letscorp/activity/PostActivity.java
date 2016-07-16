@@ -2,7 +2,6 @@ package org.wiky.letscorp.activity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.wiky.letscorp.R;
@@ -11,6 +10,7 @@ import org.wiky.letscorp.data.db.PostHelper;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.signal.Signal;
+import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.PostContent;
 import org.wiky.materialprogressbar.MaterialProgressBar;
 
@@ -19,9 +19,9 @@ public class PostActivity extends BaseActivity {
     private Post mPostData;
     private TextView mTitle;
     private TextView mAuthor;
+    private TextView mCategory;
     private MaterialProgressBar mProgressBar;
     private PostContent mContent;
-    private RelativeLayout mScrollViewLayout;
     private API.ApiResponseHandler mApiHandler = new API.ApiResponseHandler() {
         @Override
         public void onSuccess(Object data) {
@@ -32,6 +32,7 @@ public class PostActivity extends BaseActivity {
     private void updatePost(Post data, boolean animated) {
         mPostData = data;
         mAuthor.setText(mPostData.author + "发表于" + mPostData.date);
+        mCategory.setText(Util.joinString(mPostData.categories));
         mContent.setContent(mPostData.content);
         if (animated) {
             mContent.setAlpha(0.0f);
@@ -51,8 +52,8 @@ public class PostActivity extends BaseActivity {
 
         mTitle = (TextView) findViewById(R.id.post_title);
         mAuthor = (TextView) findViewById(R.id.post_author);
+        mCategory = (TextView) findViewById(R.id.post_category);
         mProgressBar = (MaterialProgressBar) findViewById(R.id.post_loading);
-        mScrollViewLayout = (RelativeLayout) findViewById(R.id.post_scrollview_layout);
         mContent = (PostContent) findViewById(R.id.post_content);
 
 

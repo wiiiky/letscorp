@@ -76,6 +76,30 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
                 Signal.trigger(Signal.SIGNAL_CATEGORY_CHANGE, Const.LETSCORP_CATEGORY_NEWS);
                 mToolBar.setTitle(R.string.drawer_menu_news);
                 break;
+            case R.id.menu_view:
+                Signal.trigger(Signal.SIGNAL_CATEGORY_CHANGE, Const.LETSCORP_CATEGORY_VIEW);
+                mToolBar.setTitle(R.string.drawer_menu_view);
+                break;
+            case R.id.menu_politics:
+                Signal.trigger(Signal.SIGNAL_CATEGORY_CHANGE, Const.LETSCORP_CATEGORY_POLITICS);
+                mToolBar.setTitle(R.string.drawer_menu_politics);
+                break;
+            case R.id.menu_gallery:
+                Signal.trigger(Signal.SIGNAL_CATEGORY_CHANGE, Const.LETSCORP_CATEGORY_GALLERY);
+                mToolBar.setTitle(R.string.drawer_menu_gallery);
+                break;
+            case R.id.menu_rumor:
+                Signal.trigger(Signal.SIGNAL_CATEGORY_CHANGE, Const.LETSCORP_CATEGORY_RUMOR);
+                mToolBar.setTitle(R.string.drawer_menu_rumor);
+                break;
+            case R.id.menu_tech:
+                Signal.trigger(Signal.SIGNAL_CATEGORY_CHANGE, Const.LETSCORP_CATEGORY_TECH);
+                mToolBar.setTitle(R.string.drawer_menu_tech);
+                break;
+            case R.id.menu_history:
+                Signal.trigger(Signal.SIGNAL_CATEGORY_CHANGE, Const.LETSCORP_CATEGORY_HISTORY);
+                mToolBar.setTitle(R.string.drawer_menu_history);
+                break;
         }
         return super.onNavigationItemSelected(item);
     }
