@@ -1,7 +1,9 @@
 package org.wiky.letscorp.view;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,10 @@ import android.widget.TextView;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.wiky.letscorp.R;
+import org.wiky.letscorp.util.Util;
+
+import java.util.Objects;
 
 /**
  * Created by wiky on 7/15/16.
@@ -44,23 +50,31 @@ public class PostContent extends LinearLayout {
         setOrientation(VERTICAL);
     }
 
-    private View createText(String text) {
+    private View createText(String text, String tag) {
         TextView tv = new TextView(getContext());
-        tv.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        tv.setTextColor(Color.BLACK);
-        tv.setText("\u3000\u3000" + text);
+        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.topMargin = (int) Util.dp2px(4);
+        tv.setLayoutParams(layoutParams);
+        tv.setText(text);
+        if (Objects.equals(tag, "blockquote")) {
+            tv.setPadding((int) Util.dp2px(20), getPaddingTop(), getPaddingRight(), getPaddingBottom());
+            tv.setBackgroundResource(R.drawable.blockquote);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            tv.setTypeface(null, Typeface.ITALIC);
+        }
         return tv;
     }
 
-    private void addText(String text) {
-        addView(createText(text));
+    private void addText(String text, String tag) {
+        addView(createText(text, tag));
     }
 
-    private View createImage(String url) {
+    private View createImage(String url, String tag) {
         ImageViewer imageViewer = new ImageViewer(getContext());
 
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        layoutParams.topMargin = (int) Util.dp2px(4);
         imageViewer.setLayoutParams(layoutParams);
         imageViewer.setURL(url);
         imageViewer.setTransitionName("image");
@@ -68,11 +82,11 @@ public class PostContent extends LinearLayout {
         return imageViewer;
     }
 
-    private void addImage(String url) {
+    private void addImage(String url, String tag) {
         if (url.isEmpty()) {
             return;
         }
-        addView(createImage(url));
+        addView(createImage(url, tag));
     }
 
     public void setContent(String content) {
@@ -83,10 +97,10 @@ public class PostContent extends LinearLayout {
             String tag = e.tagName();
             String text = e.text();
             if (!text.isEmpty()) {
-                addText(text);
+                addText(text, tag);
             } else {
                 for (Element img : e.select("img")) {
-                    addImage(img.attr("src"));
+                    addImage(img.attr("src"), tag);
                 }
             }
         }

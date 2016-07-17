@@ -2,6 +2,8 @@ package org.wiky.letscorp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewTreeObserver;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
@@ -28,6 +30,20 @@ public class ImageActivity extends BaseActivity {
         photoView.getLayoutParams().height = height;
         photoView.setURL(url);
         setTitle(title);
+
+        // finished its layout.
+        // http://stackoverflow.com/questions/26600263/how-do-i-prevent-the-status-bar-and-navigation-bar-from-animating-during-an-acti
+        postponeEnterTransition();
+
+        final View decor = getWindow().getDecorView();
+        decor.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                decor.getViewTreeObserver().removeOnPreDrawListener(this);
+                startPostponedEnterTransition();
+                return true;
+            }
+        });
     }
 
     @Override

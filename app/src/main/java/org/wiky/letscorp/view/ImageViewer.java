@@ -1,6 +1,7 @@
 package org.wiky.letscorp.view;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -14,20 +15,28 @@ import org.wiky.letscorp.Application;
 public class ImageViewer extends ImageView {
 
     protected String mURL;
+    protected Drawable mLoadingDrawable;
     public ImageViewer(Context context) {
         super(context);
+        initialize(context);
     }
 
     public ImageViewer(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initialize(context);
     }
 
     public ImageViewer(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initialize(context);
     }
 
     public ImageViewer(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        initialize(context);
+    }
+
+    private void initialize(Context context) {
     }
 
     public String getURL() {
@@ -40,6 +49,8 @@ public class ImageViewer extends ImageView {
             this.setImageDrawable(null);
             return;
         }
-        Picasso.with(Application.getApplication()).load(mURL).into(this);
+        Picasso.with(Application.getApplication())
+                .load(mURL)
+                .into(this);
     }
 }

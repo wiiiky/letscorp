@@ -22,7 +22,6 @@
 
     <style name="AppTheme.ImageActivity" parent="AppTheme.NoActionBar">
         <item name="android:windowBackground">@color/colorPrimaryDark</item>
-        <item name="android:windowSharedElementsUseOverlay">false</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -42,7 +41,7 @@
     </style>
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/black_overlay</item>
+        <item name="android:background">@color/blackOverlay</item>
     </style>
 
     <style name="Widget.MaterialProgressBar.ProgressBar.Horizontal" parent="android:Widget.ProgressBar.Horizontal">

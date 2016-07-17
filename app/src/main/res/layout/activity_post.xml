@@ -70,7 +70,7 @@
                 android:layout_marginBottom="25dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="6dp" />
 
         </RelativeLayout>
 
@@ -87,4 +87,6 @@
         app:mpb_progressStyle="horizontal"
         app:mpb_showTrack="false"
         app:mpb_useIntrinsicPadding="false" />
+
+
 </RelativeLayout>
