@@ -20,10 +20,26 @@ import java.util.List;
  */
 public class API {
 
+    private static int mApiID = 0;
+
+    public static List<PostItem> loadPostItems(int category, int page, int count) {
+        mApiID++;
+        return PostItemHelper.getPostItems(category, page, count);
+    }
+
+    public static Post loadPostDetail(String href) {
+        return PostHelper.getPost(href);
+    }
+
     /* 获取文章列表 */
-    public static void getPostList(final int category, int page, final ApiResponseHandler handler, HttpFinalHandler finalHandler) {
+    public static void fetchPostItems(final int category, int page, final ApiResponseHandler handler, HttpFinalHandler finalHandler) {
         String url = Const.getPostListUrl(category, page);
-        HttpClient.get(url, new HttpResponseHandlerWrapper(finalHandler) {
+        HttpClient.get(url, new HttpResponseHandlerWrapper(++mApiID, finalHandler) {
+            @Override
+            public boolean isLive(int _id) {
+                return _id == mApiID;
+            }
+
             @Override
             public void onSuccess(String body) throws Exception {
                 Document doc = Jsoup.parse(body);
@@ -45,8 +61,14 @@ public class API {
     /*
      * 获取文章详细内容
      */
-    public static void getPostDetail(final String url, final ApiResponseHandler handler, HttpFinalHandler finalHandler) {
-        HttpClient.get(url, new HttpResponseHandlerWrapper(finalHandler) {
+    public static void fetchPostDetail(final String url, final ApiResponseHandler handler, HttpFinalHandler finalHandler) {
+        final int id = ++mApiID;
+        HttpClient.get(url, new HttpResponseHandlerWrapper(id, finalHandler) {
+            @Override
+            public boolean isLive(int _id) {
+                return mApiID == _id;
+            }
+
             @Override
             public void onSuccess(String body) throws Exception {
                 Document doc = Jsoup.parse(body);
@@ -73,9 +95,11 @@ public class API {
     private static abstract class HttpResponseHandlerWrapper implements HttpClient.HttpResponseHandler {
 
         private HttpFinalHandler mFinalHandler;
+        private int mID;
 
-        public HttpResponseHandlerWrapper(HttpFinalHandler finalHandler) {
+        public HttpResponseHandlerWrapper(int id, HttpFinalHandler finalHandler) {
             mFinalHandler = finalHandler;
+            mID = id;
         }
 
         private void onFinally() {
@@ -86,6 +110,9 @@ public class API {
 
         @Override
         public void onError(final IOException e) {
+            if (!isLive(mID)) {
+                return;
+            }
             Application.getUIHandler().post(new Runnable() {
                 @Override
                 public void run() {
@@ -99,6 +126,9 @@ public class API {
 
         @Override
         public void onFailure(final int statusCode) {
+            if (!isLive(mID)) {
+                return;
+            }
             Application.getUIHandler().post(new Runnable() {
                 @Override
                 public void run() {
@@ -111,6 +141,9 @@ public class API {
 
         @Override
         public void onSuccess(byte[] body) {
+            if (!isLive(mID)) {
+                return;
+            }
             try {
                 this.onSuccess(new String(body));
             } catch (Exception e) {
@@ -125,6 +158,8 @@ public class API {
                 });
             }
         }
+
+        public abstract boolean isLive(int _id);
 
         public abstract void onSuccess(String body) throws Exception;
     }

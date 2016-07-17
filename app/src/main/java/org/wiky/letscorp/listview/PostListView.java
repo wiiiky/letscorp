@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 
 import org.wiky.letscorp.api.API;
 import org.wiky.letscorp.api.Const;
-import org.wiky.letscorp.data.db.PostItemHelper;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.signal.SignalHandler;
@@ -92,8 +91,8 @@ public class PostListView extends RecyclerView implements SignalHandler {
 
     /* 从数据库载入数据，载入成功返回true，否则返回false */
     public boolean loadLocal(int page, int count) {
-        mPage = 1;
-        List<PostItem> items = PostItemHelper.getPostItems(mCategory, page, count);
+        mPage = page;
+        List<PostItem> items = API.loadPostItems(mCategory, page, count);
         mAdapter.resetItems(items);
         mLocal = items.size() > 0;
         return mLocal;
@@ -109,7 +108,8 @@ public class PostListView extends RecyclerView implements SignalHandler {
         mReseting = true;
         mLocal = false;
         Signal.trigger(Signal.SIGNAL_POST_RESET_START);
-        API.getPostList(mCategory, mPage, new API.ApiResponseHandler() {
+
+        API.fetchPostItems(mCategory, mPage, new API.ApiResponseHandler() {
             @Override
             public void onSuccess(Object data) {
                 List<PostItem> items = (List<PostItem>) data;
@@ -122,11 +122,11 @@ public class PostListView extends RecyclerView implements SignalHandler {
     /* 载入下一页 */
     public void loadMore(API.HttpFinalHandler finalHandler) {
         if (mLocal) {
-            List<PostItem> items = PostItemHelper.getPostItems(mCategory, ++mPage, mPageCount);
+            List<PostItem> items = API.loadPostItems(mCategory, ++mPage, mPageCount);
             mAdapter.setLoaded();
             mAdapter.addItems(items);
         } else {
-            API.getPostList(mCategory, ++mPage, new API.ApiResponseHandler() {
+            API.fetchPostItems(mCategory, ++mPage, new API.ApiResponseHandler() {
                 @Override
                 public void onSuccess(Object data) {
                     List<PostItem> items = (List<PostItem>) data;
@@ -153,6 +153,8 @@ public class PostListView extends RecyclerView implements SignalHandler {
             if (!loadLocal()) {
                 mAdapter.resetItems(new ArrayList<PostItem>());
                 resetItems();
+            } else {
+                Signal.trigger(Signal.SIGNAL_POST_RESET_END);
             }
         }
     }

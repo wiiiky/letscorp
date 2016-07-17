@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.API;
-import org.wiky.letscorp.data.db.PostHelper;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.signal.Signal;
@@ -48,7 +47,7 @@ public class PostActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         PostItem postItem = getIntent().getParcelableExtra("data");
-        Post post = PostHelper.getPost(postItem.href);
+        Post post = API.loadPostDetail(postItem.href);
         setContentView(R.layout.activity_post);
         setTitle(postItem.title);
 
@@ -78,7 +77,7 @@ public class PostActivity extends BaseActivity {
 
     private void getPostDetail(String href) {
         mProgressBar.setVisibility(View.VISIBLE);
-        API.getPostDetail(href, mApiHandler, new API.HttpFinalHandler() {
+        API.fetchPostDetail(href, mApiHandler, new API.HttpFinalHandler() {
             @Override
             public void onFinally() {
                 hideProgressBar();
