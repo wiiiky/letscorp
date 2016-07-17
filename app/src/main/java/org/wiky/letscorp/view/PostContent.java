@@ -2,6 +2,8 @@ package org.wiky.letscorp.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ import org.jsoup.nodes.Element;
 public class PostContent extends LinearLayout {
 
     private String mContent;
+    private OnClickListener mOnImageClickListener;
 
     public PostContent(Context context) {
         super(context);
@@ -41,7 +44,7 @@ public class PostContent extends LinearLayout {
         setOrientation(VERTICAL);
     }
 
-    private TextView createText(String text) {
+    private View createText(String text) {
         TextView tv = new TextView(getContext());
         tv.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 //        tv.setTextColor(Color.BLACK);
@@ -53,10 +56,15 @@ public class PostContent extends LinearLayout {
         addView(createText(text));
     }
 
-    private ImageViewer createImage(String url) {
+    private View createImage(String url) {
         ImageViewer imageViewer = new ImageViewer(getContext());
-        imageViewer.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        imageViewer.setLayoutParams(layoutParams);
         imageViewer.setURL(url);
+        imageViewer.setTransitionName("image");
+        imageViewer.setOnClickListener(mOnImageClickListener);
         return imageViewer;
     }
 
@@ -80,6 +88,16 @@ public class PostContent extends LinearLayout {
                 for (Element img : e.select("img")) {
                     addImage(img.attr("src"));
                 }
+            }
+        }
+    }
+
+    public void setOnImageClickListener(OnClickListener listener) {
+        mOnImageClickListener = listener;
+        for (int i = 0; i < getChildCount(); i++) {
+            View v = getChildAt(i);
+            if (v instanceof ImageViewer) {
+                v.setOnClickListener(mOnImageClickListener);
             }
         }
     }

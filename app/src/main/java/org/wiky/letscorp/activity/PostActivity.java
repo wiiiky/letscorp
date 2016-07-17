@@ -1,8 +1,12 @@
 package org.wiky.letscorp.activity;
 
 import android.animation.Animator;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import org.wiky.letscorp.R;
@@ -11,10 +15,14 @@ import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.util.Util;
+import org.wiky.letscorp.view.ImageViewer;
 import org.wiky.letscorp.view.PostContent;
 import org.wiky.materialprogressbar.MaterialProgressBar;
 
-public class PostActivity extends BaseActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class PostActivity extends BaseActivity implements View.OnClickListener {
 
     private Post mPostData;
     private TextView mTitle;
@@ -57,8 +65,9 @@ public class PostActivity extends BaseActivity {
         mProgressBar = (MaterialProgressBar) findViewById(R.id.post_loading);
         mContent = (PostContent) findViewById(R.id.post_content);
 
-
         mTitle.setText(postItem.title);
+
+        mContent.setOnImageClickListener(this);
 
         if (post != null) {
             mProgressBar.setVisibility(View.GONE);
@@ -113,4 +122,28 @@ public class PostActivity extends BaseActivity {
                 .start();
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v instanceof ImageViewer) {
+            ImageViewer imageViewer = (ImageViewer) v;
+            Intent intent = new Intent(this, ImageActivity.class);
+            intent.putExtra("url", imageViewer.getURL());
+            intent.putExtra("width", imageViewer.getDrawable().getIntrinsicWidth());
+            intent.putExtra("height", imageViewer.getDrawable().getIntrinsicHeight());
+            intent.putExtra("title", getTitle());
+
+            View statusBar = findViewById(android.R.id.statusBarBackground);
+            View navigationBar = findViewById(android.R.id.navigationBarBackground);
+
+            List<Pair<View, String>> pairs = new ArrayList<>();
+            pairs.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            pairs.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+            pairs.add(Pair.create((View) imageViewer, imageViewer.getTransitionName()));
+            pairs.add(Pair.create((View) mAppBar, mAppBar.getTransitionName()));
+
+            Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                    pairs.toArray(new Pair[pairs.size()])).toBundle();
+            startActivity(intent, options);
+        }
+    }
 }
