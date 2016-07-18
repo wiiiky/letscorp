@@ -10,7 +10,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import org.wiky.letscorp.R;
-import org.wiky.letscorp.api.API;
+import org.wiky.letscorp.api.Api;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.signal.Signal;
@@ -30,13 +30,6 @@ public class PostActivity extends BaseActivity implements View.OnClickListener {
     private TextView mCategory;
     private MaterialProgressBar mProgressBar;
     private PostContent mContent;
-    private API.ApiResponseHandler mApiHandler = new API.ApiResponseHandler() {
-        @Override
-        public void onSuccess(Object data) {
-            updatePost((Post) data, true);
-            Signal.trigger(Signal.SIGNAL_POST_READN, mPostData.href);
-        }
-    };
 
     private void updatePost(Post data, boolean animated) {
         mPostData = data;
@@ -55,7 +48,7 @@ public class PostActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         PostItem postItem = getIntent().getParcelableExtra("data");
-        Post post = API.loadPostDetail(postItem.href);
+        Post post = Api.loadPostDetail(postItem.href);
         setContentView(R.layout.activity_post);
         setTitle(postItem.title);
 
@@ -86,7 +79,13 @@ public class PostActivity extends BaseActivity implements View.OnClickListener {
 
     private void getPostDetail(String href) {
         mProgressBar.setVisibility(View.VISIBLE);
-        API.fetchPostDetail(href, mApiHandler, new API.HttpFinalHandler() {
+        Api.fetchPostDetail(href, new Api.ApiHandler() {
+            @Override
+            public void onSuccess(Object data) {
+                updatePost((Post) data, true);
+                Signal.trigger(Signal.SIGNAL_POST_READN, mPostData.href);
+            }
+
             @Override
             public void onFinally() {
                 hideProgressBar();
