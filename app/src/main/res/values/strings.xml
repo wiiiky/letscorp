@@ -14,14 +14,16 @@
     <string name="drawer_menu_tech">TECH</string>
     <string name="drawer_menu_history">HISTORY</string>
     <string name="action_settings">Settings</string>
-    <string name="post_activity_title">Article</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
     <string name="app_description">网络热门话题追踪</string>
     <string name="clear_cache">Clear Cache</string>
-    <string name="developer_statement"><![CDATA[墙外楼的非官方APP，基于<a href=\"https//m.letscorp.net\">m.letscorp.net</a>开发；<a href=\"https://play.google.com/store/apps/details?id=net.letscorp.anbound\">墙外楼的官方APP</a>非常简单粗暴；因此我自己开发了这个APP。没有使用官方APP的接口，通过下载m.letscorp.net的页面并解析HTML来获取文章信息，因此并不能省多少流量。业余时间开发，会一直完善，但不保证速度。]]></string>
+    <string name="developer_statement"><![CDATA[墙外楼的非官方APP，基于<a href=\"https//m.letscorp.net\">m.letscorp.net</a>开发；<a href=\"https://play.google.com/store/apps/details?id=net.letscorp.anbound\">墙外楼的官方APP</a>非常简单粗暴。这个APP没有使用官方的接口，通过下载m.letscorp.net的页面并解析HTML来获取文章信息，因此并不能省多少流量。业余时间开发，会一直完善，但不保证速度。]]></string>
     <string name="app_statement"><![CDATA[Unofficial! Powered By <a href=\"https://m.letscorp.net\">m.letscorp.net</a>]]></string>
     <string name="settings_about_summary">about this app</string>
     <string name="settings_clear_cache">delete cache</string>
     <string name="toast_cache_deleted">cache deleted</string>
+    <string name="ok">OK</string>
+    <string name="key_clear_cache" translatable="false">clear_cache</string>
+    <string name="key_about" translatable="false">about</string>
 </resources>

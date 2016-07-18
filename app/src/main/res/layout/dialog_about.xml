@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="org.wiky.letscorp.activity.AboutActivity">
-
-    <include
-        android:id="@+id/appbar"
-        layout="@layout/toolbar" />
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/appbar"
+        android:layout_height="wrap_content"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
+
 
         <ImageView
             android:id="@+id/about.icon"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:src="@mipmap/ic_launcher" />
 
         <TextView
@@ -94,16 +89,17 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="25dp" />
 
-
-        <TextView
-            android:id="@+id/about.power"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="3dp"
-            android:text="Powered by http://m.letscorp.net" />
-
     </RelativeLayout>
 
-</RelativeLayout>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/about.ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="@string/ok"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
+
+
+</LinearLayout>

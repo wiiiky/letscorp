@@ -103,10 +103,6 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
-//            case R.id.menu_about:
-//                Intent intent = new Intent(this, AboutActivity.class);
-//                startActivity(intent);
-//                return true;
         }
         return super.onNavigationItemSelected(item);
     }
