@@ -25,6 +25,7 @@
             android:name=".activity.ImageActivity"
             android:theme="@style/AppTheme.ImageActivity" />
         <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.SettingsActivity"></activity>
     </application>
 
 </manifest>

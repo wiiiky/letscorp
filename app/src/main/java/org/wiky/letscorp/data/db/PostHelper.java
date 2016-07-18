@@ -63,6 +63,11 @@ public class PostHelper implements BaseColumns {
         }
     }
 
+    public static void deletePosts() {
+        SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
+        db.delete(TABLE_NAME, null, null);
+    }
+
     private static Post getPost(Cursor c) {
         String href = c.getString(c.getColumnIndex(COLUMN_NAME_HREF));
         String title = c.getString(c.getColumnIndex(COLUMN_NAME_TITLE));

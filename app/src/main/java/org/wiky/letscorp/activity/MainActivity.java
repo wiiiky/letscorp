@@ -100,11 +100,13 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
                 mToolBar.setTitle(R.string.drawer_menu_history);
                 break;
             case R.id.menu_settings:
-                break;
-            case R.id.menu_about:
-                Intent intent = new Intent(this, AboutActivity.class);
+                Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
+//            case R.id.menu_about:
+//                Intent intent = new Intent(this, AboutActivity.class);
+//                startActivity(intent);
+//                return true;
         }
         return super.onNavigationItemSelected(item);
     }

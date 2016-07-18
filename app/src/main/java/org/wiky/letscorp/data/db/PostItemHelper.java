@@ -77,6 +77,11 @@ public class PostItemHelper implements BaseColumns {
         return null;
     }
 
+    public static void deletePostItems() {
+        SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
+        db.delete(TABLE_NAME, null, null);
+    }
+
     public static List<PostItem> getPostItems(int category, int page, int count) {
         String sql = String.format("SELECT *, IFNULL((SELECT 1 FROM %s AS `B` WHERE `A`.`%s`=`B`.`%s`), 0) AS `readn` FROM %s AS `A` WHERE `A`.`%s`=%s ORDER BY %s DESC LIMIT %d OFFSET %d",
                 PostHelper.TABLE_NAME, COLUMN_NAME_HREF, PostHelper.COLUMN_NAME_HREF, TABLE_NAME, COLUMN_NAME_CATEGORY, category, COLUMN_NAME_ITEM_ID, count, (page - 1) * count);
