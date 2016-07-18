@@ -1,10 +1,13 @@
 package org.wiky.letscorp.util;
 
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.util.TypedValue;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.wiky.letscorp.Application;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,4 +58,11 @@ public class Util {
         return s.toString();
     }
 
+    public static void openBrowser(String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent();
+        intent.setData(uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Application.getApplication().startActivity(intent);
+    }
 }

@@ -33,9 +33,9 @@
     <group android:id="@+id/menu_group_2">
         <item
             android:id="@+id/menu_settings"
-            android:title="Settings" />
+            android:title="@string/settings" />
         <item
             android:id="@+id/menu_about"
-            android:title="About" />
+            android:title="@string/about" />
     </group>
 </menu>

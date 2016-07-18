@@ -16,4 +16,7 @@
     <string name="action_settings">设置</string>
     <string name="navigation_drawer_close">关闭侧边栏</string>
     <string name="navigation_drawer_open">打开侧边栏</string>
+    <string name="settings">设置</string>
+    <string name="about">关于</string>
+    <string name="app_description">网络热门话题追踪</string>
 </resources>

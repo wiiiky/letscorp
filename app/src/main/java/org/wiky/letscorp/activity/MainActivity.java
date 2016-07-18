@@ -2,7 +2,6 @@ package org.wiky.letscorp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MenuItem;
 
@@ -100,6 +99,12 @@ public class MainActivity extends BaseDrawerActivity implements SwipeRefreshLayo
                 Signal.trigger(Signal.SIGNAL_CATEGORY_CHANGE, Const.LETSCORP_CATEGORY_HISTORY);
                 mToolBar.setTitle(R.string.drawer_menu_history);
                 break;
+            case R.id.menu_settings:
+                break;
+            case R.id.menu_about:
+                Intent intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                return true;
         }
         return super.onNavigationItemSelected(item);
     }
