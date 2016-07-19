@@ -1,38 +1,49 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/menu_group_1"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/menu_all"
             android:checked="true"
+            android:icon="@mipmap/ic_all_inclusive"
             android:title="@string/drawer_menu_all" />
+        <item
+            android:id="@+id/menu_news"
+            android:icon="@mipmap/ic_info"
+            android:title="@string/drawer_menu_news" />
+        <item
+            android:id="@+id/menu_view"
+            android:icon="@mipmap/ic_chat"
+            android:title="@string/drawer_menu_view" />
+        <item
+            android:id="@+id/menu_politics"
+            android:icon="@mipmap/ic_people"
+            android:title="@string/drawer_menu_politics" />
         <item
             android:id="@+id/menu_economics"
             android:icon="@mipmap/ic_attach_money_black"
             android:title="@string/drawer_menu_economics" />
         <item
-            android:id="@+id/menu_news"
-            android:title="@string/drawer_menu_news" />
-        <item
-            android:id="@+id/menu_view"
-            android:title="@string/drawer_menu_view" />
-        <item
-            android:id="@+id/menu_politics"
-            android:title="@string/drawer_menu_politics" />
-        <item
-            android:id="@+id/menu_gallery"
-            android:title="@string/drawer_menu_gallery" />
-        <item
             android:id="@+id/menu_rumor"
+            android:icon="@mipmap/ic_hearing"
             android:title="@string/drawer_menu_rumor" />
         <item
             android:id="@+id/menu_tech"
+            android:icon="@mipmap/ic_computer"
             android:title="@string/drawer_menu_tech" />
         <item
             android:id="@+id/menu_history"
+            android:icon="@mipmap/ic_timeline"
             android:title="@string/drawer_menu_history" />
+        <item
+            android:id="@+id/menu_gallery"
+            android:icon="@mipmap/ic_collections"
+            android:title="@string/drawer_menu_gallery" />
     </group>
     <group android:id="@+id/menu_group_2">
         <item
             android:id="@+id/menu_settings"
+            android:icon="@mipmap/ic_settings"
             android:title="@string/settings" />
     </group>
 </menu>

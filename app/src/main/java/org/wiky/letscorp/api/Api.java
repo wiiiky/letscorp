@@ -23,6 +23,8 @@ public class Api {
 
     private static final int CALL_POST_ITEMS = 1;
     private static final int CALL_POST_DETAIL = 2;
+
+    /* 全局记录当前调用，用于取消 */
     private static Map<Integer, Call> mCalls = new HashMap<>();
 
     public static List<PostItem> loadPostItems(int category, int page, int count) {

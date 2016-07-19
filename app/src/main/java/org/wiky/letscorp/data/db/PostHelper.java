@@ -50,7 +50,9 @@ public class PostHelper implements BaseColumns {
     public static boolean checkPost(String href) {
         SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, null, COLUMN_NAME_HREF + "=?", new String[]{href}, null, null, null);
-        return c.moveToNext();
+        boolean exists = c.moveToNext();
+        c.close();
+        return exists;
     }
 
     public static void savePost(Post post) {
@@ -82,9 +84,11 @@ public class PostHelper implements BaseColumns {
     public static Post getPost(String href) {
         SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, null, COLUMN_NAME_HREF + "=?", new String[]{href}, null, null, null);
+        Post post = null;
         if (c.moveToNext()) {
-            return getPost(c);
+            post = getPost(c);
         }
-        return null;
+        c.close();
+        return post;
     }
 }

@@ -68,15 +68,6 @@ public class PostItemHelper implements BaseColumns {
         return p;
     }
 
-    public static PostItem getPostItem(int id) {
-        SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
-        Cursor c = db.query(TABLE_NAME, null, COLUMN_NAME_ITEM_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
-        if (c.moveToNext()) {
-            return getPostItem(c);
-        }
-        return null;
-    }
-
     public static void deletePostItems() {
         SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
@@ -96,6 +87,7 @@ public class PostItemHelper implements BaseColumns {
             PostItem item=getPostItem(c);
             items.add(item);
         }
+        c.close();
         return items;
     }
 
@@ -103,7 +95,9 @@ public class PostItemHelper implements BaseColumns {
         SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, null, COLUMN_NAME_ITEM_ID + "=? AND " + COLUMN_NAME_CATEGORY + "=?",
                 new String[]{String.valueOf(id),String.valueOf(category)}, null, null, null);
-        return c.moveToNext();
+        boolean exists = c.moveToNext();
+        c.close();
+        return exists;
     }
 
     public static void savePostItem(PostItem item) {
