@@ -33,7 +33,7 @@ public class PostActivity extends BaseActivity implements View.OnClickListener {
 
     private void updatePost(Post data, boolean animated) {
         mPostData = data;
-        mAuthor.setText(mPostData.author + "发表于" + mPostData.date);
+        mAuthor.setText(String.format("%s%s%s", mPostData.author, getString(R.string.published_on), mPostData.date));
         mCategory.setText(Util.joinString(mPostData.categories));
         mContent.setContent(mPostData.content);
         if (animated) {
@@ -41,7 +41,6 @@ public class PostActivity extends BaseActivity implements View.OnClickListener {
             mContent.animate().alpha(1.0f).setDuration(300).start();
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +78,11 @@ public class PostActivity extends BaseActivity implements View.OnClickListener {
 
     private void getPostDetail(String href) {
         mProgressBar.setVisibility(View.VISIBLE);
-        Api.fetchPostDetail(href, new Api.ApiHandler() {
+        Api.fetchPostDetail(href, new Api.ApiHandler<Post>() {
             @Override
-            public void onSuccess(Object data) {
-                updatePost((Post) data, true);
-                Signal.trigger(Signal.SIGNAL_POST_READN, mPostData.href);
+            public void onSuccess(Post post) {
+                updatePost(post, true);
+                Signal.trigger(Signal.SIGINT_ITEM_READN, post);
             }
 
             @Override
