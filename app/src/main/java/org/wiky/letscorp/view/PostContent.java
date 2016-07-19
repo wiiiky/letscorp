@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -70,16 +69,18 @@ public class PostContent extends LinearLayout {
     }
 
     private View createImage(String url, String tag) {
-        ImageViewer imageViewer = new ImageViewer(getContext());
+        PhotoView photoView = new PhotoView(getContext());
 
-        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         layoutParams.topMargin = (int) Util.dp2px(4);
-        imageViewer.setLayoutParams(layoutParams);
-        imageViewer.setURL(url);
-        imageViewer.setTransitionName("image");
-        imageViewer.setOnClickListener(mOnImageClickListener);
-        return imageViewer;
+        photoView.setLayoutParams(layoutParams);
+        photoView.setZoomable(false);
+        photoView.setUrl(url);
+        photoView.setTransitionName("image");
+        photoView.setOnClickListener(mOnImageClickListener);
+
+        return photoView;
     }
 
     private void addImage(String url, String tag) {

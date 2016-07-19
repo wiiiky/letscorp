@@ -5,26 +5,12 @@
     android:layout_height="match_parent"
     tools:context="org.wiky.letscorp.activity.ImageActivity">
 
-    <org.wiky.letscorp.view.OverScrollView
+
+    <org.wiky.letscorp.view.PhotoView
+        android:id="@+id/photo_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-
-            <org.wiky.letscorp.view.PhotoView
-                android:id="@+id/photo_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:transitionName="image" />
-
-        </RelativeLayout>
-
-    </org.wiky.letscorp.view.OverScrollView>
+        android:layout_height="match_parent"
+        android:transitionName="image" />
 
     <include
         android:id="@+id/appbar"

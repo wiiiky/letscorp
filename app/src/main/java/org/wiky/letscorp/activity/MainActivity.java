@@ -37,7 +37,7 @@ public class MainActivity extends BaseActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private SectionsPagerAdapter mPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -50,10 +50,10 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_name);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);

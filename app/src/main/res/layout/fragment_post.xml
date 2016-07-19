@@ -1,26 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<org.wiky.letscorp.view.OverScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ddfdfdfd"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    tools:context="org.wiky.letscorp.activity.PostActivity">
-
-
-    <include
-        android:id="@+id/appbar"
-        layout="@layout/toolbar" />
-
-    <org.wiky.letscorp.view.OverScrollView
         android:id="@+id/post.scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/appbar"
         android:background="@color/md_white_1000"
-        android:overScrollMode="never">
+    android:overScrollMode="never"
+    android:scrollbars="none"
+    tools:context=".activity.PostActivity$PostFragment">
 
         <RelativeLayout
             android:id="@+id/post.scrollview_layout"
@@ -35,7 +22,7 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
                 android:layout_marginTop="20dp"
-                android:text="标题"
+                android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/md_black_1000"
                 android:textSize="26sp" />
@@ -44,10 +31,10 @@
                 android:id="@+id/post.category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_below="@id/post.title"
                 android:layout_centerHorizontal="false"
-                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginTop="8dp"
                 android:text="" />
 
@@ -55,10 +42,10 @@
                 android:id="@+id/post.author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_below="@id/post.category"
                 android:layout_centerHorizontal="false"
-                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginTop="5dp"
                 android:text="" />
 
@@ -75,18 +62,3 @@
         </RelativeLayout>
 
     </org.wiky.letscorp.view.OverScrollView>
-
-    <org.wiky.materialprogressbar.MaterialProgressBar
-        android:id="@+id/post.loading"
-        style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/appbar"
-        android:indeterminate="true"
-        android:visibility="invisible"
-        app:mpb_progressStyle="horizontal"
-        app:mpb_showTrack="false"
-        app:mpb_useIntrinsicPadding="false" />
-
-
-</RelativeLayout>

@@ -11,5 +11,5 @@
     <color name="refresh_progress_1">@color/colorAccent</color>
     <color name="refresh_progress_2">@color/colorAccent2</color>
     <color name="refresh_progress_3">@color/colorPrimary</color>
-    <color name="blackOverlay">#66000000</color>
+    <color name="colorFuzzy">#EEFFFFFF</color>
 </resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".activity.PostActivity">
+
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/toolbar" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <org.wiky.materialprogressbar.MaterialProgressBar
+        android:id="@+id/post.loading"
+        style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:mpb_progressStyle="horizontal"
+        app:mpb_showTrack="false"
+        app:mpb_useIntrinsicPadding="false" />
+
+</android.support.design.widget.CoordinatorLayout>
