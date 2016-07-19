@@ -9,18 +9,14 @@ import android.util.AttributeSet;
 import org.wiky.letscorp.api.Api;
 import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.model.PostItem;
-import org.wiky.letscorp.signal.Signal;
-import org.wiky.letscorp.signal.SignalHandler;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by wiky on 6/13/16.
  * 文章列表控件，包含下滑载入和对Adapter方法的封装
  */
-public class PostListView extends RecyclerView implements SignalHandler {
+public class PostListView extends RecyclerView {
     private final int mPageCount = 15;
     private PostListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -46,23 +42,24 @@ public class PostListView extends RecyclerView implements SignalHandler {
             }
         }
     };
+    private OnRefreshListener mOnRefreshListener = null;
 
     public PostListView(Context context) {
         super(context);
-        init(context);
+        initialize(context);
     }
 
     public PostListView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        initialize(context);
     }
 
     public PostListView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(context);
+        initialize(context);
     }
 
-    private void init(Context context) {
+    private void initialize(Context context) {
         mAdapter = new PostListAdapter();
         mLayoutManager = new LinearLayoutManager(context);
         mPage = 1;
@@ -74,11 +71,18 @@ public class PostListView extends RecyclerView implements SignalHandler {
         addItemDecoration(new PostItemDecoration(10));
 
         addOnScrollListener(mOnScrollListener);
-        Signal.register(Signal.SIGNAL_CATEGORY_CHANGE, this);
     }
 
     public void setOnItemClickListener(PostListAdapter.OnItemClickListener listener) {
         mAdapter.setOnItemClickListener(listener);
+    }
+
+    public void setItemReadn(String href) {
+        mAdapter.setItemReadn(href);
+    }
+
+    public void setCategory(int category) {
+        mCategory = category;
     }
 
     /* 从数据库载入数据，载入成功返回true，否则返回false */
@@ -99,12 +103,11 @@ public class PostListView extends RecyclerView implements SignalHandler {
         mPage = 1;
         mReseting = true;
         mLocal = false;
-        Signal.trigger(Signal.SIGNAL_POST_RESET_START);
+        onRefresh(true);
 
-        Api.fetchPostItems(mCategory, mPage, new Api.ApiHandler() {
+        Api.fetchPostItems(mCategory, mPage, new Api.ApiHandler<List<PostItem>>() {
             @Override
-            public void onSuccess(Object data) {
-                List<PostItem> items = (List<PostItem>) data;
+            public void onSuccess(List<PostItem> items) {
                 mAdapter.resetItems(items);
                 mReseting = false;
             }
@@ -112,7 +115,7 @@ public class PostListView extends RecyclerView implements SignalHandler {
             @Override
             public void onFinally() {
                 if (!mReseting) {
-                    Signal.trigger(Signal.SIGNAL_POST_RESET_END);
+                    onRefresh(false);
                 }
             }
         });
@@ -126,10 +129,9 @@ public class PostListView extends RecyclerView implements SignalHandler {
             mAdapter.setLoaded();
             mAdapter.addItems(items);
         } else {
-            Api.fetchPostItems(mCategory, ++mPage, new Api.ApiHandler() {
+            Api.fetchPostItems(mCategory, ++mPage, new Api.ApiHandler<List<PostItem>>() {
                 @Override
-                public void onSuccess(Object data) {
-                    List<PostItem> items = (List<PostItem>) data;
+                public void onSuccess(List<PostItem> items) {
                     mAdapter.setLoaded();
                     mAdapter.addItems(items);
                 }
@@ -146,16 +148,17 @@ public class PostListView extends RecyclerView implements SignalHandler {
         return true;
     }
 
-    @Override
-    public void handleSignal(String signal, Object data) {
-        if (Objects.equals(signal, Signal.SIGNAL_CATEGORY_CHANGE)) {
-            mCategory = (int) data;
-            if (!loadLocal()) {
-                mAdapter.resetItems(new ArrayList<PostItem>());
-                resetItems();
-            } else {
-                Signal.trigger(Signal.SIGNAL_POST_RESET_END);
-            }
+    private void onRefresh(boolean r) {
+        if (mOnRefreshListener != null) {
+            mOnRefreshListener.onRefresh(r);
         }
+    }
+
+    public void setOnRefreshListener(OnRefreshListener listener) {
+        mOnRefreshListener = listener;
+    }
+
+    public interface OnRefreshListener {
+        void onRefresh(boolean r);
     }
 }

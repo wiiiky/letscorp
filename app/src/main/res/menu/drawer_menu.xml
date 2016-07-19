@@ -6,39 +6,39 @@
             android:id="@+id/menu_all"
             android:checked="true"
             android:icon="@mipmap/ic_all_inclusive"
-            android:title="@string/drawer_menu_all" />
+            android:title="@string/category_all" />
         <item
             android:id="@+id/menu_news"
             android:icon="@mipmap/ic_info"
-            android:title="@string/drawer_menu_news" />
+            android:title="@string/category_news" />
         <item
             android:id="@+id/menu_view"
             android:icon="@mipmap/ic_chat"
-            android:title="@string/drawer_menu_view" />
+            android:title="@string/category_view" />
         <item
             android:id="@+id/menu_politics"
             android:icon="@mipmap/ic_people"
-            android:title="@string/drawer_menu_politics" />
+            android:title="@string/category_politics" />
         <item
             android:id="@+id/menu_economics"
-            android:icon="@mipmap/ic_attach_money_black"
-            android:title="@string/drawer_menu_economics" />
+            android:icon="@mipmap/ic_money"
+            android:title="@string/category_economics" />
         <item
             android:id="@+id/menu_rumor"
             android:icon="@mipmap/ic_hearing"
-            android:title="@string/drawer_menu_rumor" />
+            android:title="@string/category_rumor" />
         <item
             android:id="@+id/menu_tech"
             android:icon="@mipmap/ic_computer"
-            android:title="@string/drawer_menu_tech" />
+            android:title="@string/category_tech" />
         <item
             android:id="@+id/menu_history"
             android:icon="@mipmap/ic_timeline"
-            android:title="@string/drawer_menu_history" />
+            android:title="@string/category_history" />
         <item
             android:id="@+id/menu_gallery"
             android:icon="@mipmap/ic_collections"
-            android:title="@string/drawer_menu_gallery" />
+            android:title="@string/category_gallery" />
     </group>
     <group android:id="@+id/menu_group_2">
         <item

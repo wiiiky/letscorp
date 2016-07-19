@@ -9,30 +9,14 @@ import org.wiky.letscorp.data.db.PostItemHelper;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import okhttp3.Call;
 
 /**
  * Created by wiky on 7/18/16.
  */
 public class Api {
 
-
-    private static final int CALL_POST_ITEMS = 1;
-    private static final int CALL_POST_DETAIL = 2;
-
-    /* 全局记录当前调用，用于取消 */
-    private static Map<Integer, Call> mCalls = new HashMap<>();
-
     public static List<PostItem> loadPostItems(int category, int page, int count) {
-        Call call = mCalls.get(CALL_POST_ITEMS);
-        if (call != null && !call.isCanceled()) {
-            call.cancel();
-        }
-        mCalls.put(CALL_POST_ITEMS, null);
         return PostItemHelper.getPostItems(category, page, count);
     }
 
@@ -41,13 +25,9 @@ public class Api {
     }
 
     /* 获取文章列表 */
-    public static void fetchPostItems(final int category, int page, final ApiHandler apiHandler) {
+    public static void fetchPostItems(final int category, int page, final ApiHandler<List<PostItem>> apiHandler) {
         String url = Const.getPostListUrl(category, page);
-        Call call = mCalls.get(CALL_POST_ITEMS);
-        if (call != null && !call.isCanceled()) {
-            call.cancel();
-        }
-        call = Request.get(url, new Request.Callback() {
+        Request.get(url, new Request.Callback() {
             @Override
             public void onSuccess(Document doc) {
                 List<PostItem> items = Parser.parsePostItems(doc, category);
@@ -72,15 +52,10 @@ public class Api {
                 apiHandler.onFinally();
             }
         });
-        mCalls.put(CALL_POST_ITEMS, call);
     }
 
-    public static void fetchPostDetail(final String url, final ApiHandler apiHandler) {
-        Call call = mCalls.get(CALL_POST_DETAIL);
-        if (call != null && !call.isCanceled()) {
-            call.cancel();
-        }
-        call = Request.get(url, new Request.Callback() {
+    public static void fetchPostDetail(final String url, final ApiHandler<Post> apiHandler) {
+        Request.get(url, new Request.Callback() {
             @Override
             public void onSuccess(Document doc) {
                 Post post = Parser.parsePost(doc, url);
@@ -102,11 +77,10 @@ public class Api {
                 apiHandler.onFinally();
             }
         });
-        mCalls.put(CALL_POST_DETAIL, call);
     }
 
-    public interface ApiHandler {
-        void onSuccess(Object data);
+    public interface ApiHandler<T> {
+        void onSuccess(T data);
 
         void onFinally();
     }
