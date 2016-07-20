@@ -21,8 +21,9 @@ public class PostHelper implements BaseColumns {
     public static final String COLUMN_NAME_CONTENT = "content";
     public static final String COLUMN_NAME_TAGS = "tags";
     public static final String COLUMN_NAME_CATEGORIES = "categories";
-    public static final String COLUMN_NAME_DATE = "date";
+    public static final String COLUMN_NAME_DATETIME = "datetime";
     public static final String COLUMN_NAME_AUTHOR = "author";
+    public static final String COLUMN_NAME_COMMENTS = "comments";
 
     public static final String SQL_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
             COLUMN_NAME_HREF + " TEXT PRIMARY KEY, " +
@@ -30,8 +31,9 @@ public class PostHelper implements BaseColumns {
             COLUMN_NAME_CONTENT + " TEXT," +
             COLUMN_NAME_TAGS + " TEXT," +
             COLUMN_NAME_CATEGORIES + " TEXT," +
-            COLUMN_NAME_DATE + " TEXT," +
-            COLUMN_NAME_AUTHOR + " TEXT" +
+            COLUMN_NAME_DATETIME + " TEXT," +
+            COLUMN_NAME_AUTHOR + " TEXT," +
+            COLUMN_NAME_COMMENTS + " TEXT" +
             ")";
     public static final String SQL_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
@@ -42,8 +44,9 @@ public class PostHelper implements BaseColumns {
         values.put(COLUMN_NAME_CONTENT, post.content);
         values.put(COLUMN_NAME_TAGS, Util.serializeStringList(post.tags));
         values.put(COLUMN_NAME_CATEGORIES, Util.serializeStringList(post.categories));
-        values.put(COLUMN_NAME_DATE, post.date);
+        values.put(COLUMN_NAME_DATETIME, post.date);
         values.put(COLUMN_NAME_AUTHOR, post.author);
+        values.put(COLUMN_NAME_COMMENTS, post.comments());
         return values;
     }
 
@@ -76,9 +79,10 @@ public class PostHelper implements BaseColumns {
         String content = c.getString(c.getColumnIndex(COLUMN_NAME_CONTENT));
         List<String> tags = Util.deserializeStringList(c.getString(c.getColumnIndex(COLUMN_NAME_TAGS)));
         List<String> categories = Util.deserializeStringList(c.getString(c.getColumnIndex(COLUMN_NAME_CATEGORIES)));
-        String date = c.getString(c.getColumnIndex(COLUMN_NAME_DATE));
+        String date = c.getString(c.getColumnIndex(COLUMN_NAME_DATETIME));
         String author = c.getString(c.getColumnIndex(COLUMN_NAME_AUTHOR));
-        return new Post(href, title, content, tags, categories, date, author);
+        String commentData = c.getString(c.getColumnIndex(COLUMN_NAME_COMMENTS));
+        return new Post(href, title, content, tags, categories, date, author, Post.parseComments(commentData));
     }
 
     public static Post getPost(String href) {

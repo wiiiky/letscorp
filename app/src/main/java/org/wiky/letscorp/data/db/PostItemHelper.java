@@ -17,7 +17,7 @@ import java.util.List;
 public class PostItemHelper implements BaseColumns {
 
     public static final String TABLE_NAME = "post_item";
-    public static final String COLUMN_NAME_ITEM_ID = "itemid";
+    public static final String COLUMN_NAME_ITEM_ID = "id";
     public static final String COLUMN_NAME_TITLE = "title";
     public static final String COLUMN_NAME_HREF = "href";
     public static final String COLUMN_NAME_IMG = "img";

@@ -2,6 +2,7 @@ package org.wiky.letscorp.api;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 
@@ -59,7 +60,7 @@ public class Parser {
     }
 
     public static List<PostItem> parsePostItems(Document doc, int category) {
-        List<PostItem> items = new ArrayList<PostItem>();
+        List<PostItem> items = new ArrayList<>();
         for (Element post : doc.select("article.post")) {
             PostItem item = parsePostItem(post, category);
             if (item != null) {
@@ -69,21 +70,62 @@ public class Parser {
         return items;
     }
 
+    public static Comment.ReplyComment parseReplyComment(Element e) {
+        try {
+            String id = e.attr("cite").substring(1);
+            String username = e.select("p a").first().ownText();
+            String content = e.select("p").first().ownText();
+            return new Comment.ReplyComment(id, username, content);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Comment parsePostComment(Element e) {
+        try {
+            Element article = e.select(">article").first();
+            String id = article.attr("id").substring(4);
+            String avator = article.select("div.vcard > img").first().attr("data-original");
+            String username = article.select("div.vcard > b.fn").first().text();
+            String datetime = article.select("time").first().text();
+            String content = article.select("div.comment-content > p").outerHtml();
+            Comment.ReplyComment replyComment = null;
+            Element blockquote = article.select("blockquote").first();
+            if (blockquote != null) {
+                replyComment = parseReplyComment(blockquote);
+            }
+            return new Comment(id, username, avator, datetime, content, replyComment);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
     /* 解析文章详情 */
     public static Post parsePost(Element doc, String href) {
-        Element e = doc.select("article.post").first();
-        String title = e.select("div.entry-title > h2").text();
-        String content = e.select("div.entry-content").html();
+        Element p = doc.select("article.post").first();
+        String title = p.select("div.entry-title > h2").text();
+        String content = p.select("div.entry-content").html();
         ArrayList<String> tags = new ArrayList<>();
-        for (Element t : e.select("p.tags > a")) {
+        for (Element t : p.select("p.tags > a")) {
             tags.add(t.text());
         }
         ArrayList<String> categories = new ArrayList<>();
-        for (Element t : e.select("p.categories > a")) {
+        for (Element t : p.select("p.categories > a")) {
             categories.add(t.text());
         }
-        String date = e.select("p.date time.entry-date").text();
-        String author = e.select("p.date a[rel=author]").text();
-        return new Post(href, title, content, tags, categories, date, author);
+        String date = p.select("p.date time.entry-date").text();
+        String author = p.select("p.date a[rel=author]").text();
+
+        List<Comment> comments = new ArrayList<>();
+
+        for (Element c : doc.select("div.comments-area > ol.comment-list > li.comment")) {
+            Comment comment = parsePostComment(c);
+            if (comment != null) {
+                comments.add(comment);
+            }
+        }
+        return new Post(href, title, content, tags, categories, date, author, comments);
     }
 }

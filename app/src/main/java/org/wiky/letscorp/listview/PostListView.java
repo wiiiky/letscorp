@@ -114,9 +114,7 @@ public class PostListView extends RecyclerView {
 
             @Override
             public void onFinally() {
-                if (!mReseting) {
-                    onRefresh(false);
-                }
+                onRefresh(false);
             }
         });
     }

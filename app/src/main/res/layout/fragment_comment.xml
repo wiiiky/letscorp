@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.wiky.letscorp.view.OverScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/post.scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@id/appbar"
-    android:background="@color/md_white_1000"
-    android:overScrollMode="never"
-    android:scrollbars="none"
     tools:context=".activity.PostActivity$PostFragment">
 
-    <RelativeLayout
+    <org.wiky.letscorp.listview.CommentListView
+        android:id="@+id/post.comment_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/md_white_1000">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="comments"
-            android:textSize="30sp" />
-
-    </RelativeLayout>
-</org.wiky.letscorp.view.OverScrollView>
+        android:background="@color/md_white_1000" />
+</RelativeLayout>

@@ -18,8 +18,10 @@ import android.widget.TextView;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.Api;
+import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
+import org.wiky.letscorp.listview.CommentListView;
 import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.PhotoView;
@@ -28,8 +30,6 @@ import org.wiky.materialprogressbar.MaterialProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class PostActivity extends BaseActivity {
 
@@ -50,7 +50,7 @@ public class PostActivity extends BaseActivity {
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-        OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
+//        OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
         mProgressBar = (MaterialProgressBar) findViewById(R.id.post_loading);
         mViewPager.setAdapter(mPagerAdapter);
 
@@ -122,7 +122,7 @@ public class PostActivity extends BaseActivity {
 
         private static final String ARG_POST_ITEM = "item";
 
-        private Post mPost;
+        private Post mData;
         private TextView mTitle;
         private TextView mAuthor;
         private TextView mCategory;
@@ -155,15 +155,15 @@ public class PostActivity extends BaseActivity {
 
             assert item != null;
             mTitle.setText(item.title);
-            if (mPost != null) {
-                update(mPost, false);
+            if (mData != null) {
+                update(mData, false);
             }
             return rootView;
         }
 
         public void updateData(Post post) {
             if (!isAdded() || mAuthor == null) {
-                mPost = post;
+                mData = post;
             } else {
                 update(post, true);
             }
@@ -208,6 +208,9 @@ public class PostActivity extends BaseActivity {
     public static class PostCommentFragment extends Fragment {
         private static final String ARG_COMMENTS = "comments";
 
+        private CommentListView mCommentList;
+        private List<Comment> mData;
+
         public PostCommentFragment() {
         }
 
@@ -223,10 +226,19 @@ public class PostActivity extends BaseActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_comment, container, false);
+            mCommentList = (CommentListView) rootView.findViewById(R.id.post_comment_list);
+            if (mData != null) {
+                mCommentList.setComments(mData);
+            }
             return rootView;
         }
 
-        public void updateData() {
+        public void updateData(List<Comment> comments) {
+            if (isAdded() && mCommentList != null) {
+                mCommentList.setComments(comments);
+            } else {
+                mData = comments;
+            }
         }
     }
 
@@ -244,7 +256,7 @@ public class PostActivity extends BaseActivity {
 
         public void update(Post post) {
             mPostFragment.updateData(post);
-            mCommentFragment.updateData();
+            mCommentFragment.updateData(post.comments);
         }
 
         @Override
