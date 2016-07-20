@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.model.Comment;
+import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.CircleImageView;
 
 import java.util.List;
@@ -37,7 +38,14 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         viewHolder.avatar.setUrl(data.avatar, R.drawable.none);
         viewHolder.username.setText(data.username);
         viewHolder.datetime.setText(data.datetime);
-        viewHolder.content.setText(Html.fromHtml(data.content));
+        viewHolder.content.setText(Util.trim(Html.fromHtml(data.content)));
+        if (data.reply != null) {
+            viewHolder.replyLayout.setVisibility(View.VISIBLE);
+            viewHolder.replyUsername.setText(data.reply.username);
+            viewHolder.replyContent.setText(Util.trim(Html.fromHtml(data.reply.content)));
+        } else {
+            viewHolder.replyLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -56,6 +64,9 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         public TextView username;
         public TextView datetime;
         public CircleImageView avatar;
+        public ViewGroup replyLayout;
+        public TextView replyUsername;
+        public TextView replyContent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -63,6 +74,9 @@ public class CommentListAdapter extends RecyclerView.Adapter {
             username = (TextView) itemView.findViewById(R.id.comment_username);
             datetime = (TextView) itemView.findViewById(R.id.comment_datetime);
             content = (TextView) itemView.findViewById(R.id.comment_content);
+            replyLayout = (ViewGroup) itemView.findViewById(R.id.comment_reply);
+            replyUsername = (TextView) itemView.findViewById(R.id.comment_reply_username);
+            replyContent = (TextView) itemView.findViewById(R.id.comment_reply_content);
         }
     }
 }

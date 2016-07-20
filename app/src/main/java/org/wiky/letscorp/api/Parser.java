@@ -73,8 +73,12 @@ public class Parser {
     public static Comment.ReplyComment parseReplyComment(Element e) {
         try {
             String id = e.attr("cite").substring(1);
-            String username = e.select("p a").first().ownText();
-            String content = e.select("p").first().ownText();
+            String username = e.select("p:first-child strong a").first().ownText();
+
+            e = e.clone();
+            e.select("p:first-child strong").remove();
+            e.select("p:first-child br").remove();
+            String content = e.select("p").outerHtml();
             return new Comment.ReplyComment(id, username, content);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -86,7 +90,7 @@ public class Parser {
         try {
             Element article = e.select(">article").first();
             String id = article.attr("id").substring(4);
-            String avator = article.select("div.vcard > img").first().attr("data-original");
+            String avatar = article.select("div.vcard > img").first().attr("data-original");
             String username = article.select("div.vcard > b.fn").first().text();
             String datetime = article.select("time").first().text();
             String content = article.select("div.comment-content > p").outerHtml();
@@ -95,7 +99,7 @@ public class Parser {
             if (blockquote != null) {
                 replyComment = parseReplyComment(blockquote);
             }
-            return new Comment(id, username, avator, datetime, content, replyComment);
+            return new Comment(id, username, avatar, datetime, content, replyComment);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

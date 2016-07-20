@@ -17,7 +17,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_toRightOf="@id/comment.avatar">
+            android:layout_toRightOf="@id/comment.avatar"
+            android:clipToPadding="false"
+            android:padding="4dp"
+            android:paddingTop="0dp">
 
             <TextView
                 android:id="@+id/comment.username"
@@ -39,6 +42,42 @@
                 android:layout_below="@id/comment.username"
                 android:layout_marginTop="15dp"
                 android:textColor="@color/colorPrimaryText" />
+
+            <RelativeLayout
+                android:id="@+id/comment.reply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/comment.content"
+                android:layout_marginTop="10dp"
+                android:background="@color/md_grey_100"
+                android:elevation="2dp"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/comment.reply.reply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="回复"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/comment.reply.username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_toEndOf="@id/comment.reply.reply"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/comment.reply.content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/comment.reply.username"
+                    android:layout_marginStart="3dp"
+                    android:layout_toEndOf="@id/comment.reply.reply"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
