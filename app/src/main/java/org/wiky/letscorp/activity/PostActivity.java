@@ -32,11 +32,12 @@ import java.util.List;
 
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class PostActivity extends BaseActivity {
+public class PostActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     private PageAdapter mPagerAdapter;
     private MaterialProgressBar mProgressBar;
     private ViewPager mViewPager;
+    private PostItem mPostitem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,24 +45,23 @@ public class PostActivity extends BaseActivity {
 
         setContentView(R.layout.activity_post);
 
-        PostItem postItem = getIntent().getParcelableExtra("data");
-        setTitle(postItem.title);
+        mPostitem = getIntent().getParcelableExtra("data");
+        setTitle(mPostitem.title);
 
-        mPagerAdapter = new PageAdapter(getSupportFragmentManager(), postItem);
+        mPagerAdapter = new PageAdapter(getSupportFragmentManager(), mPostitem);
 
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-//        OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
         mProgressBar = (MaterialProgressBar) findViewById(R.id.post_loading);
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.addOnPageChangeListener(this);
 
-        Post post = Api.loadPostDetail(postItem.href);
+        Post post = Api.loadPostDetail(mPostitem.href);
 
         if (post != null) {
             mProgressBar.setVisibility(View.GONE);
             mPagerAdapter.update(post);
         } else {
-            getPostDetail(postItem.href);
+            getPostDetail(mPostitem.href);
         }
     }
 
@@ -114,6 +114,30 @@ public class PostActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(0, R.anim.slide_out_right);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if (position == 0 && positionOffset < 0.5f) {
+            setTitle(mPostitem.title);
+            mToolBar.setAlpha((0.5f - positionOffset) * 2);
+        } else if (position == 0 && positionOffset >= 0.5f) {
+            setTitle(R.string.title_comment);
+            mToolBar.setAlpha((positionOffset - 0.5f) * 2);
+        } else if (position == 1) {
+            setTitle(R.string.title_comment);
+            mToolBar.setAlpha(1.0f);
+        }
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 
     /**

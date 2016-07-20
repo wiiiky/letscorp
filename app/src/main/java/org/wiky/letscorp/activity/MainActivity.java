@@ -37,7 +37,7 @@ public class MainActivity extends BaseActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    private SectionsPagerAdapter mPagerAdapter;
+    private PageAdapter mPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_name);
 
-        mPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mPagerAdapter = new PageAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mPagerAdapter);
@@ -164,11 +164,11 @@ public class MainActivity extends BaseActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private class PageAdapter extends FragmentPagerAdapter {
 
         private List<CategoryInfo> mCategories = new ArrayList<>();
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        public PageAdapter(FragmentManager fm) {
             super(fm);
             mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_ALL, getString(R.string.category_all)));
             mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_NEWS, getString(R.string.category_news)));
