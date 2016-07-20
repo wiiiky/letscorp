@@ -7,6 +7,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.wiky.letscorp.Application;
+import org.wiky.letscorp.R;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -41,6 +42,8 @@ public class PhotoView extends uk.co.senab.photoview.PhotoView {
         }
         Picasso.with(Application.getApplication())
                 .load(url)
+                .placeholder(R.mipmap.ic_photo)
+                .error(R.mipmap.ic_photo)
                 .into(this, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -49,7 +52,6 @@ public class PhotoView extends uk.co.senab.photoview.PhotoView {
 
                     @Override
                     public void onError() {
-
                     }
                 });
     }

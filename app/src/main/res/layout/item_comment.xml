@@ -1,18 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <org.wiky.letscorp.view.CircleImageView
-        android:id="@+id/comment.avatar"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
-
-    <TextView
-        android:id="@+id/comment.content"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/comment.avatar" />
+        android:padding="10dp">
 
-</RelativeLayout>
+        <org.wiky.letscorp.view.CircleImageView
+            android:id="@+id/comment.avatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_toRightOf="@id/comment.avatar">
+
+            <TextView
+                android:id="@+id/comment.username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorSecondaryText" />
+
+            <TextView
+                android:id="@+id/comment.datetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/comment.content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/comment.username"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/colorPrimaryText" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

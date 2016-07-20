@@ -39,6 +39,7 @@ public class CommentListView extends RecyclerView {
         setLayoutManager(new LinearLayoutManager(context));
         mAdapter = new CommentListAdapter(new ArrayList<Comment>());
         setAdapter(mAdapter);
+        addItemDecoration(new CardItemDecoration(8));
 
         new VerticalOverScrollBounceEffectDecorator(new RecyclerViewOverScrollDecorAdapter(this));
     }

@@ -34,8 +34,10 @@ public class CommentListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
         Comment data = mData.get(position);
+        viewHolder.avatar.setUrl(data.avatar, R.drawable.none);
+        viewHolder.username.setText(data.username);
+        viewHolder.datetime.setText(data.datetime);
         viewHolder.content.setText(Html.fromHtml(data.content));
-        viewHolder.avatar.setUrl(data.avatar);
     }
 
     @Override
@@ -51,11 +53,15 @@ public class CommentListAdapter extends RecyclerView.Adapter {
     private class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView content;
+        public TextView username;
+        public TextView datetime;
         public CircleImageView avatar;
 
         public ViewHolder(View itemView) {
             super(itemView);
             avatar = (CircleImageView) itemView.findViewById(R.id.comment_avatar);
+            username = (TextView) itemView.findViewById(R.id.comment_username);
+            datetime = (TextView) itemView.findViewById(R.id.comment_datetime);
             content = (TextView) itemView.findViewById(R.id.comment_content);
         }
     }

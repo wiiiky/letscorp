@@ -24,8 +24,16 @@ public class CircleImageView extends de.hdodenhof.circleimageview.CircleImageVie
     }
 
     public void setUrl(String url) {
+        setUrl(url, 0);
+    }
+
+    public void setUrl(String url, int resid) {
+        if (url.isEmpty()) {
+            return;
+        }
         Picasso.with(Application.getApplication())
                 .load(url)
+                .placeholder(resid)
                 .into(this);
     }
 }

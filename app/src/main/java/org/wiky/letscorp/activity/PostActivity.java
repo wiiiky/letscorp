@@ -112,8 +112,12 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(0, R.anim.slide_out_right);
+        if (mViewPager.getCurrentItem() == 1) {
+            mViewPager.setCurrentItem(0, true);
+        } else {
+            super.onBackPressed();
+            overridePendingTransition(0, R.anim.slide_out_right);
+        }
     }
 
     @Override
@@ -139,6 +143,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
     public void onPageScrollStateChanged(int state) {
 
     }
+
 
     /**
      * A placeholder fragment containing a simple view.

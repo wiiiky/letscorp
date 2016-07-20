@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.util.Util;
 
@@ -54,6 +56,7 @@ public class PostContent extends LinearLayout {
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.topMargin = (int) Util.dp2px(4);
         tv.setLayoutParams(layoutParams);
+        tv.setTextColor(getResources().getColor(R.color.colorPrimaryText));
         tv.setText(text);
         if (Objects.equals(tag, "blockquote")) {
             tv.setPadding((int) Util.dp2px(20), getPaddingTop(), getPaddingRight(), getPaddingBottom());
@@ -68,11 +71,10 @@ public class PostContent extends LinearLayout {
         addView(createText(text, tag));
     }
 
-    private View createImage(String url, String tag) {
+    private View createImage(String url) {
         PhotoView photoView = new PhotoView(getContext());
 
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         layoutParams.topMargin = (int) Util.dp2px(4);
         photoView.setLayoutParams(layoutParams);
         photoView.setZoomable(false);
@@ -83,11 +85,11 @@ public class PostContent extends LinearLayout {
         return photoView;
     }
 
-    private void addImage(String url, String tag) {
+    private void addImage(String url) {
         if (url.isEmpty()) {
             return;
         }
-        addView(createImage(url, tag));
+        addView(createImage(url));
     }
 
     public void setContent(String content) {
@@ -96,13 +98,21 @@ public class PostContent extends LinearLayout {
         Document doc = Jsoup.parseBodyFragment(mContent);
         for (Element e : doc.body().children()) {
             String tag = e.tagName();
-            String text = e.text();
-            if (!text.isEmpty()) {
-                addText(text, tag);
-            } else {
-                for (Element img : e.select("img")) {
-                    addImage(img.attr("src"), tag);
+            if (Objects.equals(tag, "p")) {
+                Elements imgs = e.select(">a>img");
+                if (!imgs.isEmpty()) {
+                    for (Element img : imgs) {
+                        addImage(img.attr("data-original"));
+                    }
+                } else {
+                    addText(e.ownText(), tag);
                 }
+            } else if (Objects.equals(tag, "blockquote")) {
+                for (Element p : e.select(">p")) {
+                    addText(p.ownText(), tag);
+                }
+            } else {
+                Toast.makeText(getContext(), String.format("unknown tag %s", tag), Toast.LENGTH_SHORT).show();
             }
         }
     }

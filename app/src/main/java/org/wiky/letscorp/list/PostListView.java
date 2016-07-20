@@ -68,7 +68,7 @@ public class PostListView extends RecyclerView {
         setAdapter(mAdapter);
         setLayoutManager(mLayoutManager);
         setItemAnimator(new PostItemAnimator());
-        addItemDecoration(new PostItemDecoration(10));
+        addItemDecoration(new CardItemDecoration(10));
 
         addOnScrollListener(mOnScrollListener);
     }
