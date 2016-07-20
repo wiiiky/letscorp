@@ -21,15 +21,16 @@ import org.wiky.letscorp.api.Api;
 import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
-import org.wiky.letscorp.listview.CommentListView;
+import org.wiky.letscorp.list.CommentListView;
 import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.PhotoView;
 import org.wiky.letscorp.view.PostContent;
-import org.wiky.materialprogressbar.MaterialProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 public class PostActivity extends BaseActivity {
 
@@ -41,7 +42,7 @@ public class PostActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_post2);
+        setContentView(R.layout.activity_post);
 
         PostItem postItem = getIntent().getParcelableExtra("data");
         setTitle(postItem.title);

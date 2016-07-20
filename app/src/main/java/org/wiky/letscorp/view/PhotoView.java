@@ -7,9 +7,10 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.wiky.letscorp.Application;
-import org.wiky.photoview.PhotoViewAttacher;
 
-public class PhotoView extends org.wiky.photoview.PhotoView {
+import uk.co.senab.photoview.PhotoViewAttacher;
+
+public class PhotoView extends uk.co.senab.photoview.PhotoView {
 
     private PhotoViewAttacher mAttacher;
     private String mUrl;

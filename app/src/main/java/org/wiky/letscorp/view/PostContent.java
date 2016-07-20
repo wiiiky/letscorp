@@ -111,7 +111,7 @@ public class PostContent extends LinearLayout {
         mOnImageClickListener = listener;
         for (int i = 0; i < getChildCount(); i++) {
             View v = getChildAt(i);
-            if (v instanceof ImageViewer) {
+            if (v instanceof PhotoView) {
                 v.setOnClickListener(mOnImageClickListener);
             }
         }

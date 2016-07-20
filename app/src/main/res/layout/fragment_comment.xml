@@ -7,7 +7,7 @@
     android:layout_below="@id/appbar"
     tools:context=".activity.PostActivity$PostFragment">
 
-    <org.wiky.letscorp.listview.CommentListView
+    <org.wiky.letscorp.list.CommentListView
         android:id="@+id/post.comment_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

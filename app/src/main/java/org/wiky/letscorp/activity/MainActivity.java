@@ -19,8 +19,8 @@ import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
-import org.wiky.letscorp.listview.PostListAdapter;
-import org.wiky.letscorp.listview.PostListView;
+import org.wiky.letscorp.list.PostListAdapter;
+import org.wiky.letscorp.list.PostListView;
 import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.view.AboutDialogHelper;
 
