@@ -37,49 +37,49 @@
                 android:layout_alignParentEnd="true"
                 android:textColor="@color/colorAccent" />
 
+            <RelativeLayout
+                android:id="@+id/comment.cite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/comment.username"
+                android:layout_marginTop="10dp"
+                android:background="@color/md_grey_50"
+                android:elevation="0dp"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/comment.cite.cite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/comment_cite"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/comment.cite.username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_toEndOf="@id/comment.cite.cite"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/comment.cite.content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/comment.cite.username"
+                    android:layout_marginStart="3dp"
+                    android:layout_toEndOf="@id/comment.cite.cite"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
             <TextView
                 android:id="@+id/comment.content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/comment.username"
-                android:layout_marginTop="15dp"
-                android:textColor="@color/colorPrimaryText" />
-
-            <RelativeLayout
-                android:id="@+id/comment.reply"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/comment.content"
+                android:layout_below="@id/comment.cite"
                 android:layout_marginTop="10dp"
-                android:background="@color/md_grey_100"
-                android:elevation="2dp"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/comment.reply.reply"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/comment_reply"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/comment.reply.username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:layout_toEndOf="@id/comment.reply.reply"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/comment.reply.content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/comment.reply.username"
-                    android:layout_marginStart="3dp"
-                    android:layout_toEndOf="@id/comment.reply.reply"
-                    android:textSize="12sp" />
-
-            </RelativeLayout>
+                android:textColor="@color/colorPrimaryText" />
 
         </RelativeLayout>
 

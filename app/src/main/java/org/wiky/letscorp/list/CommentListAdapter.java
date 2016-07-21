@@ -33,17 +33,17 @@ public class CommentListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
-        Comment data = mData.get(position);
-        viewHolder.avatar.setUrl(data.avatar, R.drawable.none);
+        final Comment data = mData.get(position);
+        viewHolder.avatar.setImageResource(R.mipmap.ic_face);
         viewHolder.username.setText(data.username);
         viewHolder.datetime.setText(data.datetime);
         viewHolder.content.setText(Util.trim(Html.fromHtml(data.content)));
-        if (data.reply != null) {
-            viewHolder.replyLayout.setVisibility(View.VISIBLE);
-            viewHolder.replyUsername.setText(data.reply.username);
-            viewHolder.replyContent.setText(Util.trim(Html.fromHtml(data.reply.content)));
+        if (data.cite != null) {
+            viewHolder.citeLayout.setVisibility(View.VISIBLE);
+            viewHolder.citeUsername.setText(data.cite.username);
+            viewHolder.citeContent.setText(Util.trim(Html.fromHtml(data.cite.content)));
         } else {
-            viewHolder.replyLayout.setVisibility(View.GONE);
+            viewHolder.citeLayout.setVisibility(View.GONE);
         }
     }
 
@@ -71,9 +71,9 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         public TextView username;
         public TextView datetime;
         public CircleImageView avatar;
-        public ViewGroup replyLayout;
-        public TextView replyUsername;
-        public TextView replyContent;
+        public ViewGroup citeLayout;
+        public TextView citeUsername;
+        public TextView citeContent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -81,9 +81,9 @@ public class CommentListAdapter extends RecyclerView.Adapter {
             username = (TextView) itemView.findViewById(R.id.comment_username);
             datetime = (TextView) itemView.findViewById(R.id.comment_datetime);
             content = (TextView) itemView.findViewById(R.id.comment_content);
-            replyLayout = (ViewGroup) itemView.findViewById(R.id.comment_reply);
-            replyUsername = (TextView) itemView.findViewById(R.id.comment_reply_username);
-            replyContent = (TextView) itemView.findViewById(R.id.comment_reply_content);
+            citeLayout = (ViewGroup) itemView.findViewById(R.id.comment_cite);
+            citeUsername = (TextView) itemView.findViewById(R.id.comment_cite_username);
+            citeContent = (TextView) itemView.findViewById(R.id.comment_cite_content);
         }
     }
 }

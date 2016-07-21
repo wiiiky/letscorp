@@ -98,7 +98,7 @@ public class PostItemAnimator extends DefaultItemAnimator {
                     private void end() {
                         holder.itemView.setTranslationY(0.0f);
                         holder.itemView.setAlpha(1.0f);
-                        holder.itemView.setClickable(true);
+//                        holder.itemView.setClickable(true);
                         holder.itemView.setScaleX(1.0f);
                         holder.itemView.setScaleY(1.0f);
                         dispatchAddFinished(holder);

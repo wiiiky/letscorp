@@ -1,8 +1,9 @@
 package org.wiky.letscorp.data.model;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,26 +38,14 @@ public class Post {
     }
 
     public static List<Comment> parseComments(String data) {
-        List<Comment> comments = new ArrayList<>();
-        try {
-            JSONArray array = new JSONArray(data);
-            for (int i = 0; i < array.length(); i++) {
-                Comment comment = Comment.fromJSON(array.getJSONObject(i));
-                if (comment != null) {
-                    comments.add(comment);
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return comments;
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<Comment>>() {
+        }.getType();
+        return gson.fromJson(data, listType);
     }
 
     public String comments() {
-        JSONArray array = new JSONArray();
-        for (Comment c : comments) {
-            array.put(c.toJSON());
-        }
-        return array.toString();
+        Gson gson = new Gson();
+        return gson.toJson(comments);
     }
 }

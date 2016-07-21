@@ -70,7 +70,8 @@ public class Parser {
         return items;
     }
 
-    public static Comment.ReplyComment parseReplyComment(Element e) {
+    /* 解析评论的引用 */
+    public static Comment.CommentCite parseCommentCite(Element e) {
         try {
             String id = e.attr("cite").substring(1);
             String username = e.select("p:first-child strong a").first().ownText();
@@ -79,14 +80,15 @@ public class Parser {
             e.select("p:first-child strong").remove();
             e.select("p:first-child br").remove();
             String content = e.select("p").outerHtml();
-            return new Comment.ReplyComment(id, username, content);
+            return new Comment.CommentCite(id, username, content);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
     }
 
-    public static Comment parsePostComment(Element e) {
+    /* 解析评论 */
+    public static Comment parseComment(Element e) {
         try {
             Element article = e.select(">article").first();
             String id = article.attr("id").substring(4);
@@ -94,12 +96,12 @@ public class Parser {
             String username = article.select("div.vcard > b.fn").first().text();
             String datetime = article.select("time").first().text();
             String content = article.select("div.comment-content > p").outerHtml();
-            Comment.ReplyComment replyComment = null;
+            Comment.CommentCite commentCite = null;
             Element blockquote = article.select("blockquote").first();
             if (blockquote != null) {
-                replyComment = parseReplyComment(blockquote);
+                commentCite = parseCommentCite(blockquote);
             }
-            return new Comment(id, username, avatar, datetime, content, replyComment);
+            return new Comment(id, username, avatar, datetime, content, commentCite);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -125,7 +127,7 @@ public class Parser {
         List<Comment> comments = new ArrayList<>();
 
         for (Element c : doc.select("div.comments-area > ol.comment-list > li.comment")) {
-            Comment comment = parsePostComment(c);
+            Comment comment = parseComment(c);
             if (comment != null) {
                 comments.add(comment);
             }
