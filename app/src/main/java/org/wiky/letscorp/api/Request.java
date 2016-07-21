@@ -5,6 +5,7 @@ import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.wiky.letscorp.util.Util;
 
 import java.io.IOException;
 
@@ -16,12 +17,11 @@ import okhttp3.Response;
  * Created by wiky on 7/18/16.
  */
 public class Request {
-    private static final String USER_AGENT = "Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0";
     private static OkHttpClient mClient = new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true).build();
 
     public static Call get(String url, Callback callback) {
         okhttp3.Request request = new okhttp3.Request.Builder()
-                .addHeader("User-Agent", USER_AGENT)
+                .addHeader("User-Agent", Util.HTTP_USER_AGENT)
                 .url(url)
                 .build();
         Call call = mClient.newCall(request);

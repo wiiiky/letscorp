@@ -1,5 +1,6 @@
 package org.wiky.letscorp.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -27,7 +28,7 @@ import org.wiky.letscorp.view.AboutDialogHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -50,7 +51,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_name);
 
-        mPagerAdapter = new PageAdapter(getSupportFragmentManager());
+        mPagerAdapter = new PageAdapter(this, getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mPagerAdapter);
@@ -58,6 +59,7 @@ public class MainActivity extends BaseActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.addOnTabSelectedListener(this);
 
         startToolbarAnimation();
     }
@@ -83,6 +85,24 @@ public class MainActivity extends BaseActivity {
         return true;
     }
 
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+        PostListFragment page = (PostListFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
+        if (page != null) {
+            page.scrollToTop();
+        }
+    }
+
     public static class PostListFragment extends Fragment implements PostListAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, PostListView.OnRefreshListener, Signal.SignalListener {
         private static final String ARG_CATEGORY = "category";
         private PostListView mPostList;
@@ -98,6 +118,10 @@ public class MainActivity extends BaseActivity {
             args.putInt(ARG_CATEGORY, sectionNumber);
             fragment.setArguments(args);
             return fragment;
+        }
+
+        public void scrollToTop() {
+            mPostList.smoothScrollToPosition(0);
         }
 
         @Override
@@ -164,21 +188,21 @@ public class MainActivity extends BaseActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    private class PageAdapter extends FragmentPagerAdapter {
+    private static class PageAdapter extends FragmentPagerAdapter {
 
         private List<CategoryInfo> mCategories = new ArrayList<>();
 
-        public PageAdapter(FragmentManager fm) {
+        public PageAdapter(Context context, FragmentManager fm) {
             super(fm);
-            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_ALL, getString(R.string.category_all)));
-            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_NEWS, getString(R.string.category_news)));
-            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_VIEW, getString(R.string.category_view)));
-            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_POLITICS, getString(R.string.category_politics)));
-            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_ECONOMICS, getString(R.string.category_economics)));
-            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_RUMOR, getString(R.string.category_rumor)));
-            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_TECH, getString(R.string.category_tech)));
-            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_HISTORY, getString(R.string.category_history)));
-            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_GALLERY, getString(R.string.category_gallery)));
+            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_ALL, context.getString(R.string.category_all)));
+            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_NEWS, context.getString(R.string.category_news)));
+            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_VIEW, context.getString(R.string.category_view)));
+            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_POLITICS, context.getString(R.string.category_politics)));
+            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_ECONOMICS, context.getString(R.string.category_economics)));
+            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_RUMOR, context.getString(R.string.category_rumor)));
+            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_TECH, context.getString(R.string.category_tech)));
+            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_HISTORY, context.getString(R.string.category_history)));
+            mCategories.add(new CategoryInfo(Const.LETSCORP_CATEGORY_GALLERY, context.getString(R.string.category_gallery)));
         }
 
         @Override

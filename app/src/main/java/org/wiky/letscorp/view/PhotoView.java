@@ -2,19 +2,20 @@ package org.wiky.letscorp.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
+import com.bumptech.glide.BitmapTypeRequest;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+import com.bumptech.glide.request.target.Target;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
-
-import uk.co.senab.photoview.PhotoViewAttacher;
+import org.wiky.letscorp.util.Util;
 
 public class PhotoView extends uk.co.senab.photoview.PhotoView {
 
-    private PhotoViewAttacher mAttacher;
     private String mUrl;
 
     public PhotoView(Context context, AttributeSet attr) {
@@ -28,8 +29,7 @@ public class PhotoView extends uk.co.senab.photoview.PhotoView {
     }
 
     private void initialize() {
-        mAttacher = new PhotoViewAttacher(this);
-        mAttacher.setScaleType(ScaleType.FIT_CENTER);
+        setScaleType(ScaleType.FIT_CENTER);
     }
 
     public String getUrl() {
@@ -45,26 +45,18 @@ public class PhotoView extends uk.co.senab.photoview.PhotoView {
         if (mUrl.isEmpty()) {
             return;
         }
-        RequestCreator req = Picasso.with(Application.getApplication())
-                .load(url);
+
+        Log.d("url", mUrl);
+        GlideUrl glideUrl = new GlideUrl(mUrl, new LazyHeaders.Builder()
+                .addHeader("User-Agent", Util.HTTP_USER_AGENT)
+                .build());
+        BitmapTypeRequest req = Glide.with(Application.getApplication()).load(glideUrl).asBitmap();
         if (loading) {
             req.placeholder(R.mipmap.ic_photo);
         }
         req.error(R.mipmap.ic_photo)
-                .into(this, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        mAttacher.update();
-                    }
-
-                    @Override
-                    public void onError() {
-                    }
-                });
-    }
-
-    @Override
-    public void setZoomable(boolean zoomable) {
-        mAttacher.setZoomable(zoomable);
+                .fitCenter()
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .into(this);
     }
 }

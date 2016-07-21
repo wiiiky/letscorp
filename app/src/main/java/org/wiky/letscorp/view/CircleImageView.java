@@ -3,7 +3,7 @@ package org.wiky.letscorp.view;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import org.wiky.letscorp.Application;
 
@@ -31,7 +31,7 @@ public class CircleImageView extends de.hdodenhof.circleimageview.CircleImageVie
         if (url.isEmpty()) {
             return;
         }
-        Picasso.with(Application.getApplication())
+        Glide.with(Application.getApplication())
                 .load(url)
                 .placeholder(resid)
                 .into(this);
