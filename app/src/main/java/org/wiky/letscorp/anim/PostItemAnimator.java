@@ -1,4 +1,4 @@
-package org.wiky.letscorp.list;
+package org.wiky.letscorp.anim;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -9,6 +9,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import org.wiky.letscorp.Application;
+import org.wiky.letscorp.list.PostListAdapter;
 
 import java.util.List;
 

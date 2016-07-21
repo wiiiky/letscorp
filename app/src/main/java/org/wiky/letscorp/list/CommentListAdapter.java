@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.util.Util;
@@ -14,9 +15,7 @@ import org.wiky.letscorp.view.CircleImageView;
 
 import java.util.List;
 
-/**
- * Created by wiky on 7/20/16.
- */
+
 public class CommentListAdapter extends RecyclerView.Adapter {
 
     private List<Comment> mData;
@@ -53,9 +52,17 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         return mData.size();
     }
 
-    public void setComments(List<Comment> comments) {
-        mData = comments;
-        notifyDataSetChanged();
+    public void setComments(final List<Comment> comments) {
+        int count = mData.size();
+        mData.clear();
+        notifyItemRangeRemoved(0, count);
+        Application.getUIHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mData.addAll(comments);
+                notifyItemRangeInserted(0, mData.size());
+            }
+        }, 300);
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {

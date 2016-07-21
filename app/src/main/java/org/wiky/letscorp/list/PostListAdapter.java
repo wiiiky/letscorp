@@ -58,7 +58,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
                 mItems.addAll(data);
                 notifyItemRangeInserted(0, mItems.size());
             }
-        }, 400);
+        }, 250);
     }
 
     /* 设置当前状态为载入更多 */

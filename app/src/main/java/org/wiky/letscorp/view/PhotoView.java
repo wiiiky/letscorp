@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
@@ -36,14 +37,20 @@ public class PhotoView extends uk.co.senab.photoview.PhotoView {
     }
 
     public void setUrl(String url) {
+        setUrl(url, false);
+    }
+
+    public void setUrl(String url, boolean loading) {
         mUrl = url;
         if (mUrl.isEmpty()) {
             return;
         }
-        Picasso.with(Application.getApplication())
-                .load(url)
-                .placeholder(R.mipmap.ic_photo)
-                .error(R.mipmap.ic_photo)
+        RequestCreator req = Picasso.with(Application.getApplication())
+                .load(url);
+        if (loading) {
+            req.placeholder(R.mipmap.ic_photo);
+        }
+        req.error(R.mipmap.ic_photo)
                 .into(this, new Callback() {
                     @Override
                     public void onSuccess() {

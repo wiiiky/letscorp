@@ -19,9 +19,6 @@ import org.wiky.letscorp.util.Util;
 
 import java.util.Objects;
 
-/**
- * Created by wiky on 7/15/16.
- */
 public class PostContent extends LinearLayout {
 
     private String mContent;
@@ -78,7 +75,7 @@ public class PostContent extends LinearLayout {
         layoutParams.topMargin = (int) Util.dp2px(4);
         photoView.setLayoutParams(layoutParams);
         photoView.setZoomable(false);
-        photoView.setUrl(url);
+        photoView.setUrl(url, true);
         photoView.setTransitionName("image");
         photoView.setOnClickListener(mOnImageClickListener);
 

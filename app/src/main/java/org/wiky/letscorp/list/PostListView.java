@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import org.wiky.letscorp.anim.PostItemAnimator;
 import org.wiky.letscorp.api.Api;
 import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.model.PostItem;

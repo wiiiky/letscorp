@@ -258,17 +258,21 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             View rootView = inflater.inflate(R.layout.fragment_comment, container, false);
             mCommentList = (CommentListView) rootView.findViewById(R.id.post_comment_list);
             if (mData != null) {
-                mCommentList.setComments(mData);
+                update(mData);
             }
             return rootView;
         }
 
         public void updateData(List<Comment> comments) {
             if (isAdded() && mCommentList != null) {
-                mCommentList.setComments(comments);
+                update(comments);
             } else {
                 mData = comments;
             }
+        }
+
+        private void update(List<Comment> comments) {
+            mCommentList.setComments(comments);
         }
     }
 
