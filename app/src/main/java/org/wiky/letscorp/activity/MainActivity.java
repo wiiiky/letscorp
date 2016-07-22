@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
@@ -25,26 +28,16 @@ import org.wiky.letscorp.list.PostListView;
 import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.AboutDialogHelper;
+import org.wiky.letscorp.view.SearchView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
+public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, SearchView.OnSearchListener {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private PageAdapter mPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
+    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +56,15 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         tabLayout.addOnTabSelectedListener(this);
 
         startToolbarAnimation();
+
+        mSearchView = new SearchView(this);
+        mToolBar.post(new Runnable() {
+            @Override
+            public void run() {
+                mSearchView.attach(MainActivity.this, findViewById(R.id.action_search));
+                mSearchView.setOnSearchListener(MainActivity.this);
+            }
+        });
     }
 
     @Override
@@ -75,7 +77,9 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_browser) {
+        if (id == R.id.action_search) {
+            mSearchView.show();
+        } else if (id == R.id.action_browser) {
             Util.openBrowser(Const.LETSCORP_HOST);
         } else if (id == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
@@ -104,6 +108,32 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         if (page != null) {
             page.scrollToTop();
         }
+    }
+
+    @Override
+    public void onSearch(String query) {
+
+    }
+
+    @Override
+    public void onQueryChanged(String query) {
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra("query", query);
+
+        View statusBar = findViewById(android.R.id.statusBarBackground);
+        View navigationBar = findViewById(android.R.id.navigationBarBackground);
+        View appBar = findViewById(R.id.appbar);
+
+        List<Pair<View, String>> pairs = new ArrayList<>();
+        pairs.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+        pairs.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+        pairs.add(Pair.create(appBar, appBar.getTransitionName()));
+//        pairs.add(Pair.create((View)mSearchView, mSearchView.getTransitionName()));
+
+        Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                pairs.toArray(new Pair[pairs.size()])).toBundle();
+        startActivity(intent, options);
+//        startActivity(intent);
     }
 
     public static class PostListFragment extends Fragment implements PostListAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, PostListView.OnRefreshListener, Signal.SignalListener {

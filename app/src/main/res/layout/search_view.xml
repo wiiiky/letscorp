@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_margin="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/search_view.back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="Search"
+            android:padding="12dp"
+            android:src="@mipmap/ic_back_am_alpha" />
+
+        <EditText
+            android:id="@+id/search_view.edit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#fff"
+            android:gravity="center_vertical"
+            android:hint="Search"
+            android:imeOptions="actionSearch"
+            android:inputType="textCapWords"
+            android:paddingEnd="8dp"
+            android:paddingStart="12dp"
+            android:singleLine="true" />
+
+        <ImageView
+            android:id="@+id/search_view.clear"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="Cancel"
+            android:padding="12dp"
+            android:src="@mipmap/ic_clear_alpha"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.util.TypedValue;
+import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,5 +83,18 @@ public class Util {
         }
 
         return s.subSequence(start, end);
+    }
+
+    public static int[] getScreenLocation(View v) {
+        int[] location = new int[2];
+        v.getLocationOnScreen(location);
+        return location;
+    }
+
+    public static int[] getViewCenterOnScreen(View v) {
+        int[] location = getScreenLocation(v);
+        location[0] += v.getWidth() / 2;
+        location[1] += v.getHeight() / 2;
+        return location;
     }
 }

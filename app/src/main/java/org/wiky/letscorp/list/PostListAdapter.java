@@ -84,7 +84,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
             holder = new PostItemHolder(v);
         } else {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_loader, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_loader, parent, false);
             holder = new LoaderHolder(v);
         }
         return holder;

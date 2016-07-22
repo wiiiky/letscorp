@@ -25,6 +25,7 @@
         <activity
             android:name=".activity.PostActivity"
             android:theme="@style/AppTheme.PostActivity" />
+        <activity android:name=".activity.SearchActivity" />
     </application>
 
 </manifest>
