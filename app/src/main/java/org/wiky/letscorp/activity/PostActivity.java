@@ -10,7 +10,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -109,7 +111,6 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
                 .start();
     }
 
-
     @Override
     public void onBackPressed() {
         if (mViewPager.getCurrentItem() == 1) {
@@ -143,7 +144,6 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
     public void onPageScrollStateChanged(int state) {
 
     }
-
 
     /**
      * 文章详情页面
@@ -280,6 +280,28 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         }
     }
 
+    class MyGestureDetector extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                               float velocityY) {
+            try {
+                float slope = (e1.getY() - e2.getY()) / (e1.getX() - e2.getX());
+                float angle = (float) Math.atan(slope);
+                float angleInDegree = (float) Math.toDegrees(angle);
+                // left to right
+                if (e1.getX() - e2.getX() > 20 && Math.abs(velocityX) > 20) {
+                    if ((angleInDegree < 45 && angleInDegree > -45)) {
+                        onBackPressed();
+                    }
+                    // right to left fling
+                }
+                return true;
+            } catch (Exception e) {
+                // nothing
+            }
+            return false;
+        }
+    }
 
     public class PageAdapter extends FragmentPagerAdapter {
 

@@ -52,9 +52,9 @@ public class PhotoView extends uk.co.senab.photoview.PhotoView {
                 .build());
         BitmapTypeRequest req = Glide.with(Application.getApplication()).load(glideUrl).asBitmap();
         if (loading) {
-            req.placeholder(R.mipmap.ic_photo);
+            req.placeholder(R.mipmap.ic_photo_black);
         }
-        req.error(R.mipmap.ic_photo)
+        req.error(R.mipmap.ic_photo_black)
                 .fitCenter()
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .into(this);

@@ -52,7 +52,7 @@
             android:id="@+id/about.twitter"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@mipmap/ic_twitter" />
+            android:src="@mipmap/ic_twitter_black" />
 
         <ImageView
             android:id="@+id/about.gplus"
@@ -60,7 +60,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@id/about.twitter"
-            android:src="@mipmap/ic_gplus" />
+            android:src="@mipmap/ic_gplus_black" />
 
         <ImageView
             android:id="@+id/about.github"
@@ -68,7 +68,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@id/about.gplus"
-            android:src="@mipmap/ic_github" />
+            android:src="@mipmap/ic_github_black" />
 
     </RelativeLayout>
 

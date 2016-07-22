@@ -25,4 +25,6 @@
     <string name="published_on">published on</string>
     <string name="title_comment">Comment</string>
     <string name="comment_cite">Cite</string>
+    <string name="open_with_browser">Open with Browser</string>
+    <string name="search">Search</string>
 </resources>

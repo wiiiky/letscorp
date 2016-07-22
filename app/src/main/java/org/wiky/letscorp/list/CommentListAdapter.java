@@ -34,7 +34,7 @@ public class CommentListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
         final Comment data = mData.get(position);
-        viewHolder.avatar.setImageResource(R.mipmap.ic_face);
+        viewHolder.avatar.setImageResource(R.mipmap.ic_face_black);
         viewHolder.username.setText(data.username);
         viewHolder.datetime.setText(data.datetime);
         viewHolder.content.setText(Util.trim(Html.fromHtml(data.content)));

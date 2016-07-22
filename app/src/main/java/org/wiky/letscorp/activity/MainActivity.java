@@ -23,6 +23,7 @@ import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.list.PostListAdapter;
 import org.wiky.letscorp.list.PostListView;
 import org.wiky.letscorp.signal.Signal;
+import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.AboutDialogHelper;
 
 import java.util.ArrayList;
@@ -74,7 +75,9 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_browser) {
+            Util.openBrowser(Const.LETSCORP_HOST);
+        } else if (id == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.action_about) {
