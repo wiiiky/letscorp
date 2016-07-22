@@ -98,6 +98,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
             viewHolder.mTitle.setText(data.title);
             viewHolder.mContent.setText(Html.fromHtml(data.content));
             viewHolder.mComment.setText(data.commentCount);
+            viewHolder.mDate.setText(data.date);
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -148,13 +149,14 @@ public class PostListAdapter extends RecyclerView.Adapter {
         public TextView mTitle;
         public TextView mContent;
         public TextView mComment;
+        public TextView mDate;
 
         public PostItemHolder(View itemView) {
             super(itemView);
             mTitle = (TextView) itemView.findViewById(R.id.item_title);
             mContent = (TextView) itemView.findViewById(R.id.item_content);
             mComment = (TextView) itemView.findViewById(R.id.item_comment);
-
+            mDate = (TextView) itemView.findViewById(R.id.item_date);
         }
 
     }

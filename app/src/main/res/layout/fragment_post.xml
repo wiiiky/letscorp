@@ -35,15 +35,25 @@
                 android:layout_below="@id/post.title"
                 android:layout_centerHorizontal="false"
                 android:layout_marginEnd="15dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:text="" />
+
+            <TextView
+                android:id="@+id/post.tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/post.category"
+                android:layout_centerHorizontal="false"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="2dp" />
 
             <TextView
                 android:id="@+id/post.author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@id/post.category"
+                android:layout_below="@id/post.tag"
                 android:layout_centerHorizontal="false"
                 android:layout_marginEnd="15dp"
                 android:layout_marginTop="5dp"

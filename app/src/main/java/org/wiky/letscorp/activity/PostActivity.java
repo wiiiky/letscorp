@@ -146,7 +146,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
 
 
     /**
-     * A placeholder fragment containing a simple view.
+     * 文章详情页面
      */
     public static class PostFragment extends Fragment implements View.OnClickListener {
 
@@ -156,6 +156,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         private TextView mTitle;
         private TextView mAuthor;
         private TextView mCategory;
+        private TextView mTag;
         private PostContent mContent;
 
         public PostFragment() {
@@ -178,6 +179,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             mAuthor = (TextView) rootView.findViewById(R.id.post_author);
             mCategory = (TextView) rootView.findViewById(R.id.post_category);
             mContent = (PostContent) rootView.findViewById(R.id.post_content);
+            mTag = (TextView) rootView.findViewById(R.id.post_tag);
 
             mContent.setOnImageClickListener(this);
 
@@ -201,7 +203,8 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
 
         private void update(Post post, boolean animated) {
             mAuthor.setText(String.format("%s %s %s", post.author, getString(R.string.published_on), post.date));
-            mCategory.setText(Util.joinString(post.categories));
+            mCategory.setText(String.format("分类：%s", Util.joinString(post.categories)));
+            mTag.setText(String.format("标签：%s", Util.joinString(post.tags)));
             mContent.setContent(post.content);
             if (animated) {
                 mContent.setAlpha(0.0f);
@@ -235,6 +238,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         }
     }
 
+    /* 文章评论页面 */
     public static class PostCommentFragment extends Fragment {
         private static final String ARG_COMMENTS = "comments";
 
