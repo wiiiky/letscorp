@@ -30,8 +30,7 @@ import org.wiky.letscorp.util.Util;
  */
 public class SearchView extends FrameLayout implements View.OnClickListener, TextWatcher, View.OnKeyListener {
 
-    private Activity mActivity;
-    private View mAttachedView;
+//    private View mAttachedView;
     private ImageView mBackImage;
     private ImageView mClearImage;
     private EditText mSearchBox;
@@ -71,82 +70,83 @@ public class SearchView extends FrameLayout implements View.OnClickListener, Tex
         mSearchBox.setOnKeyListener(this);
         mBackImage.setOnClickListener(this);
         mClearImage.setOnClickListener(this);
-
-        setTransitionName("transition-search-view");
     }
 
-    @Override
-    public boolean dispatchKeyEvent(final KeyEvent event) {
-        if (mActivity != null && event.getAction() == KeyEvent.ACTION_UP &&
-                event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            hide();
-            return true;
-        }
-        return super.dispatchKeyEvent(event);
-    }
 
-    public void hide() {
-        if (mActivity == null || getVisibility() != VISIBLE) {
-            return;
-        }
-        int[] viewPos = Util.getViewCenterOnScreen(mAttachedView);
+//    public void hide() {
+//        if (mActivity == null || getVisibility() != VISIBLE) {
+//            return;
+//        }
+//        int[] viewPos = Util.getViewCenterOnScreen(mAttachedView);
+//        int[] pos = Util.getScreenLocation(this);
+//        int cx = viewPos[0] - pos[0];
+//        int cy = viewPos[1] - pos[1];
+//        Animator animator = ViewAnimationUtils.createCircularReveal(this, cx, cy, (float) Math.hypot(getWidth(), getHeight()), 0);
+//        animator.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                super.onAnimationEnd(animation);
+//                setVisibility(View.GONE);
+//            }
+//
+//        });
+//        animator.setDuration(300);
+//        animator.start();
+//    }
+
+    public void show(int cx, int cy) {
         int[] pos = Util.getScreenLocation(this);
-        int cx = viewPos[0] - pos[0];
-        int cy = viewPos[1] - pos[1];
+        cx -= pos[0];
+        cy -= pos[1];
+        Animator animator = ViewAnimationUtils.createCircularReveal(this, cx, cy, 0, (float) Math.hypot(getWidth(), getHeight()));
+        animator.setDuration(300);
+        setVisibility(VISIBLE);
+        animator.start();
+    }
+
+    public void hide(int cx, int cy) {
+        int[] pos = Util.getScreenLocation(this);
+        cx -= pos[0];
+        cy -= pos[1];
         Animator animator = ViewAnimationUtils.createCircularReveal(this, cx, cy, (float) Math.hypot(getWidth(), getHeight()), 0);
+        animator.setDuration(300);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                setVisibility(View.GONE);
+                setVisibility(INVISIBLE);
             }
-
         });
-        animator.setDuration(300);
-        animator.start();
-    }
-
-    public void show() {
-        if (mActivity == null || getVisibility() == VISIBLE) {
-            return;
-        }
-        int[] viewPos = Util.getViewCenterOnScreen(mAttachedView);
-        int[] pos = Util.getScreenLocation(this);
-        int cx = viewPos[0] - pos[0];
-        int cy = viewPos[1] - pos[1];
-        setVisibility(VISIBLE);
-        Animator animator = ViewAnimationUtils.createCircularReveal(this, cx, cy, 0, (float) Math.hypot(getWidth(), getHeight()));
-        animator.setDuration(300);
         animator.start();
     }
 
     /* 将SearchView绑定到Activity */
-    public void attach(Activity activity, View view) {
-        if (mActivity != null) {
-            return;
-        }
-        mActivity = activity;
-        mAttachedView = view;
-        Rect rect = new Rect();
-        Window window = mActivity.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(rect);
-        int statusBarHeight = rect.top;
-
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                rect.right /* This ensures we don't go under the navigation bar in landscape */,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                PixelFormat.TRANSLUCENT);
-
-        params.gravity = Gravity.TOP | Gravity.START;
-        params.x = 0;
-        params.y = statusBarHeight;
-
-        WindowManager windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.addView(this, params);
-        setVisibility(GONE);
-    }
+//    public void attach(Activity activity, View view) {
+//        if (mActivity != null) {
+//            return;
+//        }
+//        mActivity = activity;
+//        mAttachedView = view;
+//        Rect rect = new Rect();
+//        Window window = mActivity.getWindow();
+//        window.getDecorView().getWindowVisibleDisplayFrame(rect);
+//        int statusBarHeight = rect.top;
+//
+//        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+//                rect.right /* This ensures we don't go under the navigation bar in landscape */,
+//                WindowManager.LayoutParams.WRAP_CONTENT,
+//                WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+//                PixelFormat.TRANSLUCENT);
+//
+//        params.gravity = Gravity.TOP | Gravity.START;
+//        params.x = 0;
+//        params.y = statusBarHeight;
+//
+//        WindowManager windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+//        windowManager.addView(this, params);
+//        setVisibility(GONE);
+//    }
 
     public void setQuery(String query) {
         mSearchBox.setText(query);
@@ -157,7 +157,6 @@ public class SearchView extends FrameLayout implements View.OnClickListener, Tex
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.search_view_back) {
-            hide();
         } else if (id == R.id.search_view_clear) {
             mSearchBox.setText("");
             mClearImage.setVisibility(INVISIBLE);

@@ -33,11 +33,11 @@ import org.wiky.letscorp.view.SearchView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, SearchView.OnSearchListener {
+public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectedListener{
 
     private PageAdapter mPagerAdapter;
     private ViewPager mViewPager;
-    private SearchView mSearchView;
+//    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +57,14 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
 
         startToolbarAnimation();
 
-        mSearchView = new SearchView(this);
-        mToolBar.post(new Runnable() {
-            @Override
-            public void run() {
-                mSearchView.attach(MainActivity.this, findViewById(R.id.action_search));
-                mSearchView.setOnSearchListener(MainActivity.this);
-            }
-        });
+//        mSearchView = new SearchView(this);
+//        mToolBar.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                mSearchView.attach(MainActivity.this, findViewById(R.id.action_search));
+//                mSearchView.setOnSearchListener(MainActivity.this);
+//            }
+//        });
     }
 
     @Override
@@ -78,7 +78,8 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         int id = item.getItemId();
 
         if (id == R.id.action_search) {
-            mSearchView.show();
+//            mSearchView.show();
+            onSearch();
         } else if (id == R.id.action_browser) {
             Util.openBrowser(Const.LETSCORP_HOST);
         } else if (id == R.id.action_settings) {
@@ -110,25 +111,21 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         }
     }
 
-    @Override
-    public void onSearch(String query) {
 
-    }
-
-    @Override
-    public void onQueryChanged(String query) {
+    public void onSearch() {
         Intent intent = new Intent(this, SearchActivity.class);
-        intent.putExtra("query", query);
+        int[] pos=Util.getViewCenterOnScreen(findViewById(R.id.action_search));
+        intent.putExtra("cx", pos[0]);
+        intent.putExtra("cy", pos[1]);
 
         View statusBar = findViewById(android.R.id.statusBarBackground);
         View navigationBar = findViewById(android.R.id.navigationBarBackground);
-        View appBar = findViewById(R.id.appbar);
+//        View appBar = findViewById(R.id.appbar);
 
         List<Pair<View, String>> pairs = new ArrayList<>();
         pairs.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
         pairs.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-        pairs.add(Pair.create(appBar, appBar.getTransitionName()));
-//        pairs.add(Pair.create((View)mSearchView, mSearchView.getTransitionName()));
+        pairs.add(Pair.create((View) mAppBar, mAppBar.getTransitionName()));
 
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                 pairs.toArray(new Pair[pairs.size()])).toBundle();
