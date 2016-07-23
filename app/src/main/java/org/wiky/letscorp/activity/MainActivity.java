@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +27,7 @@ import org.wiky.letscorp.list.PostListView;
 import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.AboutDialogHelper;
-import org.wiky.letscorp.view.SearchView;
+import org.wiky.letscorp.view.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,6 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
 
     private PageAdapter mPagerAdapter;
     private ViewPager mViewPager;
-//    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +54,6 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         tabLayout.addOnTabSelectedListener(this);
 
         startToolbarAnimation();
-
-//        mSearchView = new SearchView(this);
-//        mToolBar.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                mSearchView.attach(MainActivity.this, findViewById(R.id.action_search));
-//                mSearchView.setOnSearchListener(MainActivity.this);
-//            }
-//        });
     }
 
     @Override
@@ -78,7 +67,6 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         int id = item.getItemId();
 
         if (id == R.id.action_search) {
-//            mSearchView.show();
             onSearch();
         } else if (id == R.id.action_browser) {
             Util.openBrowser(Const.LETSCORP_HOST);
@@ -120,7 +108,6 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
 
         View statusBar = findViewById(android.R.id.statusBarBackground);
         View navigationBar = findViewById(android.R.id.navigationBarBackground);
-//        View appBar = findViewById(R.id.appbar);
 
         List<Pair<View, String>> pairs = new ArrayList<>();
         pairs.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
@@ -130,7 +117,6 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                 pairs.toArray(new Pair[pairs.size()])).toBundle();
         startActivity(intent, options);
-//        startActivity(intent);
     }
 
     public static class PostListFragment extends Fragment implements PostListAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, PostListView.OnRefreshListener, Signal.SignalListener {
@@ -175,7 +161,6 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
             }
 
             mRefreshLayout.setOnRefreshListener(this);
-            mRefreshLayout.setColorSchemeResources(R.color.refresh_progress_1, R.color.refresh_progress_2, R.color.refresh_progress_3);
 
             Signal.register(Signal.SIGINT_ITEM_READN, this);
             return rootView;

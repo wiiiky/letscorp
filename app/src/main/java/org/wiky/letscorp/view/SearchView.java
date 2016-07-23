@@ -2,22 +2,16 @@ package org.wiky.letscorp.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -63,6 +57,9 @@ public class SearchView extends FrameLayout implements View.OnClickListener, Tex
         mSearchBox = (EditText) findViewById(R.id.search_view_edit);
         mBackImage = (ImageView) findViewById(R.id.search_view_back);
         mClearImage = (ImageView) findViewById(R.id.search_view_clear);
+        if (mSearchBox == null) {
+            return;
+        }
         mBackImage.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
         mClearImage.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
@@ -72,27 +69,6 @@ public class SearchView extends FrameLayout implements View.OnClickListener, Tex
         mClearImage.setOnClickListener(this);
     }
 
-
-//    public void hide() {
-//        if (mActivity == null || getVisibility() != VISIBLE) {
-//            return;
-//        }
-//        int[] viewPos = Util.getViewCenterOnScreen(mAttachedView);
-//        int[] pos = Util.getScreenLocation(this);
-//        int cx = viewPos[0] - pos[0];
-//        int cy = viewPos[1] - pos[1];
-//        Animator animator = ViewAnimationUtils.createCircularReveal(this, cx, cy, (float) Math.hypot(getWidth(), getHeight()), 0);
-//        animator.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                super.onAnimationEnd(animation);
-//                setVisibility(View.GONE);
-//            }
-//
-//        });
-//        animator.setDuration(300);
-//        animator.start();
-//    }
 
     public void show(int cx, int cy) {
         int[] pos = Util.getScreenLocation(this);
@@ -120,34 +96,6 @@ public class SearchView extends FrameLayout implements View.OnClickListener, Tex
         animator.start();
     }
 
-    /* 将SearchView绑定到Activity */
-//    public void attach(Activity activity, View view) {
-//        if (mActivity != null) {
-//            return;
-//        }
-//        mActivity = activity;
-//        mAttachedView = view;
-//        Rect rect = new Rect();
-//        Window window = mActivity.getWindow();
-//        window.getDecorView().getWindowVisibleDisplayFrame(rect);
-//        int statusBarHeight = rect.top;
-//
-//        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-//                rect.right /* This ensures we don't go under the navigation bar in landscape */,
-//                WindowManager.LayoutParams.WRAP_CONTENT,
-//                WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
-//                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-//                PixelFormat.TRANSLUCENT);
-//
-//        params.gravity = Gravity.TOP | Gravity.START;
-//        params.x = 0;
-//        params.y = statusBarHeight;
-//
-//        WindowManager windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
-//        windowManager.addView(this, params);
-//        setVisibility(GONE);
-//    }
-
     public void setQuery(String query) {
         mSearchBox.setText(query);
         mSearchBox.setSelection(query.length());
@@ -157,9 +105,15 @@ public class SearchView extends FrameLayout implements View.OnClickListener, Tex
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.search_view_back) {
+            if (mOnSearchListener != null) {
+                mOnSearchListener.onSearchBack();
+            }
         } else if (id == R.id.search_view_clear) {
             mSearchBox.setText("");
             mClearImage.setVisibility(INVISIBLE);
+            if (mOnSearchListener != null) {
+                mOnSearchListener.onQueryChanged("");
+            }
         }
     }
 
@@ -194,7 +148,7 @@ public class SearchView extends FrameLayout implements View.OnClickListener, Tex
         if ((keyEvent.getAction() == KeyEvent.ACTION_UP) &&
                 (keyCode == KeyEvent.KEYCODE_ENTER ||
                         keyCode == KeyEvent.KEYCODE_SEARCH)) {
-            final String query = getSearchQuery();
+            String query = getSearchQuery();
             if (!TextUtils.isEmpty(query) && mOnSearchListener != null) {
                 mOnSearchListener.onSearch(query);
             }
@@ -214,7 +168,8 @@ public class SearchView extends FrameLayout implements View.OnClickListener, Tex
 
     public interface OnSearchListener {
         void onSearch(String query);
-
         void onQueryChanged(String query);
+
+        void onSearchBack();
     }
 }
