@@ -16,21 +16,21 @@ import java.util.Objects;
  */
 public class Parser {
     /* 解析列表中的文章信息 */
-    public static PostItem parsePostItem(Element e, int category) {
-        Element titleElement = e.select("div.entry-title a").first();
-        Element imgELement = e.select("img").first();
-        Element contentElement = e.select("div.entry-content").first();
-        Element commentElement = e.select("footer div.comments-link a").first();
-        Element dateElement = e.select("footer time.entry-date").first();
+    public static PostItem parsePostItem(Element root, int category) {
+        Element titleElement = root.select("div.entry-title a").first();
+        Element imgELement = root.select("img").first();
+        Element contentElement = root.select("div.entry-content").first();
+        Element commentElement = root.select("footer div.comments-link a").first();
+        Element dateElement = root.select("footer time.entry-date").first();
         if (titleElement == null) {
             return null;
         } else if (contentElement == null) {
-            if ((contentElement = e.select("div.entry-summary").first()) == null) {
+            if ((contentElement = root.select("div.entry-summary").first()) == null) {
                 return null;
             }
         }
         String id, title, href, content, img = "", commentCount = "", date = "";
-        id = e.id();
+        id = root.id();
         title = titleElement.text();
         href = titleElement.attr("href");
         if (imgELement != null && !imgELement.attr("data-original").isEmpty()) {
@@ -59,10 +59,35 @@ public class Parser {
         return new PostItem(Integer.parseInt(id), title, href, img, content, commentCount, date, category);
     }
 
+    /* 解析文章列表 */
     public static List<PostItem> parsePostItems(Document doc, int category) {
         List<PostItem> items = new ArrayList<>();
         for (Element post : doc.select("article.post")) {
             PostItem item = parsePostItem(post, category);
+            if (item != null) {
+                items.add(item);
+            }
+        }
+        return items;
+    }
+
+    public static PostItem parseSearchItem(Element root) {
+        try {
+            int id = Integer.parseInt(root.attr("id").substring(5));
+            String title = root.select("div.entry-title > h3").text();
+            String href = root.select("a.search-entry").attr("href");
+            String content = root.select("div.entry-summary").html();
+            return new PostItem(id, title, href, "", content, "", "", Const.LETSCORP_CATEGORY_SEARCH);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<PostItem> parseSearchItems(Document doc) {
+        List<PostItem> items = new ArrayList<>();
+        for (Element post : doc.select("article.post")) {
+            PostItem item = parseSearchItem(post);
             if (item != null) {
                 items.add(item);
             }

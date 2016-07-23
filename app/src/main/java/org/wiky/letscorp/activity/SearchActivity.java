@@ -1,18 +1,26 @@
 package org.wiky.letscorp.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import org.wiky.letscorp.R;
-import org.wiky.letscorp.view.SearchView;
+import org.wiky.letscorp.data.model.PostItem;
+import org.wiky.letscorp.list.BasePostListVIew;
+import org.wiky.letscorp.list.PostListAdapter;
+import org.wiky.letscorp.list.SearchListView;
+import org.wiky.letscorp.util.Util;
+import org.wiky.letscorp.view.SearchBox;
 import org.wiky.letscorp.view.SwipeRefreshLayout;
 
-public class SearchActivity extends BaseActivity implements SearchView.OnSearchListener {
+public class SearchActivity extends BaseActivity implements SearchBox.OnSearchListener, BasePostListVIew.OnRefreshListener, android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener, PostListAdapter.OnItemClickListener {
 
-    private SearchView mSearchView;
+    private SearchBox mSearchBox;
     private int mSearchCX;
     private int mSearchCY;
     private SwipeRefreshLayout mRefreshLayout;
+    private SearchListView mSearchList;
+    private String mQuery = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,14 +30,18 @@ public class SearchActivity extends BaseActivity implements SearchView.OnSearchL
         mSearchCX = getIntent().getIntExtra("cx", 0);
         mSearchCY= getIntent().getIntExtra("cy", 0);
 
-        mSearchView = (SearchView) findViewById(R.id.search_search_view);
+        mSearchBox = (SearchBox) findViewById(R.id.search_search_view);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.search_swipe_refresh);
+        mSearchList = (SearchListView) findViewById(R.id.search_post_list);
 
-        mSearchView.setOnSearchListener(this);
-        mSearchView.post(new Runnable() {
+        mRefreshLayout.setOnRefreshListener(this);
+        mSearchList.setOnRefreshListener(this);
+        mSearchList.setOnItemClickListener(this);
+        mSearchBox.setOnSearchListener(this);
+        mSearchBox.post(new Runnable() {
             @Override
             public void run() {
-                mSearchView.show(mSearchCX, mSearchCY);
+                mSearchBox.show(mSearchCX, mSearchCY);
             }
         });
     }
@@ -37,13 +49,15 @@ public class SearchActivity extends BaseActivity implements SearchView.OnSearchL
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        mSearchView.hide(mSearchCX, mSearchCY);
+        mSearchBox.hide(mSearchCX, mSearchCY);
     }
 
     @Override
     public void onSearch(String query) {
-        mRefreshLayout.setRefreshing(true);
-        Toast.makeText(this, String.format("%d,%d", mRefreshLayout.getWidth(), mRefreshLayout.getHeight()), Toast.LENGTH_SHORT).show();
+        mQuery = query;
+        mSearchList.search(mQuery);
+        Util.hideInputKeyboard(mSearchBox);
+        Toast.makeText(this, R.string.search_patient, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -54,5 +68,24 @@ public class SearchActivity extends BaseActivity implements SearchView.OnSearchL
     @Override
     public void onSearchBack() {
         onBackPressed();
+    }
+
+    @Override
+    public void onRefresh(boolean r) {
+        mRefreshLayout.setRefreshing(r);
+    }
+
+    @Override
+    public void onRefresh() {
+        if (TextUtils.isEmpty(mQuery)) {
+            mRefreshLayout.setRefreshing(false);
+        } else {
+            onSearch(mQuery);
+        }
+    }
+
+    @Override
+    public void onItemClick(PostListAdapter.PostItemHolder holder, PostItem data) {
+        PostActivity.startPostActivity(this, data);
     }
 }

@@ -2,13 +2,9 @@ package org.wiky.letscorp.list;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
-import org.wiky.letscorp.anim.PostItemAnimator;
 import org.wiky.letscorp.api.Api;
-import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.model.PostItem;
 
 import java.util.List;
@@ -17,62 +13,20 @@ import java.util.List;
  * Created by wiky on 6/13/16.
  * 文章列表控件，包含下滑载入和对Adapter方法的封装
  */
-public class PostListView extends RecyclerView {
-    private final int mPageCount = 15;
-    private PostListAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
-    private boolean mReseting;
-    private int mCategory = Const.LETSCORP_CATEGORY_ALL;
-    private int mPage;
-    private boolean mLocal;
-    /* 滚动事件监听 */
-    private OnScrollListener mOnScrollListener = new OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            if (mReseting) {
-                return;
-            }
-
-            int totalItemCount = mLayoutManager.getItemCount();
-            int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-            int visibleThreshold = mLayoutManager.findLastVisibleItemPosition() - mLayoutManager.findFirstVisibleItemPosition();
-
-            if (!mAdapter.isLoading() && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                loadMore();
-            }
-        }
-    };
-    private OnRefreshListener mOnRefreshListener = null;
+public class PostListView extends BasePostListVIew {
 
     public PostListView(Context context) {
         super(context);
-        initialize(context);
     }
 
     public PostListView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initialize(context);
     }
 
     public PostListView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initialize(context);
     }
 
-    private void initialize(Context context) {
-        mAdapter = new PostListAdapter();
-        mLayoutManager = new LinearLayoutManager(context);
-        mPage = 1;
-        mReseting = false;
-
-        setAdapter(mAdapter);
-        setLayoutManager(mLayoutManager);
-        setItemAnimator(new PostItemAnimator());
-        addItemDecoration(new CardItemDecoration(10));
-
-        addOnScrollListener(mOnScrollListener);
-    }
 
     public void setOnItemClickListener(PostListAdapter.OnItemClickListener listener) {
         mAdapter.setOnItemClickListener(listener);
@@ -122,12 +76,11 @@ public class PostListView extends RecyclerView {
 
     /* 载入下一页 */
     public void loadMore() {
-        mAdapter.setLoading();
         if (mLocal) {
             List<PostItem> items = Api.loadPostItems(mCategory, ++mPage, mPageCount);
-            mAdapter.setLoaded();
             mAdapter.addItems(items);
         } else {
+            mAdapter.setLoading();
             Api.fetchPostItems(mCategory, ++mPage, new Api.ApiHandler<List<PostItem>>() {
                 @Override
                 public void onSuccess(List<PostItem> items) {
@@ -142,22 +95,4 @@ public class PostListView extends RecyclerView {
         }
     }
 
-    @Override
-    public boolean isInEditMode() {
-        return true;
-    }
-
-    private void onRefresh(boolean r) {
-        if (mOnRefreshListener != null) {
-            mOnRefreshListener.onRefresh(r);
-        }
-    }
-
-    public void setOnRefreshListener(OnRefreshListener listener) {
-        mOnRefreshListener = listener;
-    }
-
-    public interface OnRefreshListener {
-        void onRefresh(boolean r);
-    }
 }

@@ -22,7 +22,7 @@ import org.wiky.letscorp.util.Util;
 /**
  * Created by wiky on 7/22/16.
  */
-public class SearchView extends FrameLayout implements View.OnClickListener, TextWatcher, View.OnKeyListener {
+public class SearchBox extends FrameLayout implements View.OnClickListener, TextWatcher, View.OnKeyListener {
 
 //    private View mAttachedView;
     private ImageView mBackImage;
@@ -30,23 +30,23 @@ public class SearchView extends FrameLayout implements View.OnClickListener, Tex
     private EditText mSearchBox;
     private OnSearchListener mOnSearchListener = null;
 
-    public SearchView(Context context) {
+    public SearchBox(Context context) {
         super(context);
         initialize(context);
     }
 
-    public SearchView(Context context, AttributeSet attrs) {
+    public SearchBox(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
     }
 
-    public SearchView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SearchBox(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize(context);
     }
 
 
-    public SearchView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SearchBox(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initialize(context);
     }

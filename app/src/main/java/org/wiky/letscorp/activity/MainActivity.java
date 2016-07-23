@@ -174,10 +174,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
 
         @Override
         public void onItemClick(PostListAdapter.PostItemHolder holder, PostItem data) {
-            Intent intent = new Intent(getContext(), PostActivity.class);
-            intent.putExtra("data", data);
-            startActivity(intent);
-            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+            PostActivity.startPostActivity(getActivity(), data);
         }
 
         @Override

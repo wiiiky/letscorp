@@ -41,6 +41,13 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
     private ViewPager mViewPager;
     private PostItem mPostitem;
 
+    public static void startPostActivity(Activity activity, PostItem data) {
+        Intent intent = new Intent(activity, PostActivity.class);
+        intent.putExtra("data", data);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

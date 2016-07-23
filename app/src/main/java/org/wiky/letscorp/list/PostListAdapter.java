@@ -102,7 +102,9 @@ public class PostListAdapter extends RecyclerView.Adapter {
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnItemClickListener.onItemClick(viewHolder, data);
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(viewHolder, data);
+                    }
                 }
             });
             if (data.readn) { /* 文章已经阅读过 */

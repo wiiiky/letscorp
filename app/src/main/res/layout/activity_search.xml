@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:transitionName="appbar">
 
-        <org.wiky.letscorp.view.SearchView
+        <org.wiky.letscorp.view.SearchBox
             android:id="@+id/search.search_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/appbar">
 
-        <org.wiky.letscorp.list.PostListView
+        <org.wiky.letscorp.list.SearchListView
             android:id="@+id/search.post_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

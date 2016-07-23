@@ -1,10 +1,12 @@
 package org.wiky.letscorp.util;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -96,5 +98,10 @@ public class Util {
         location[0] += v.getWidth() / 2;
         location[1] += v.getHeight() / 2;
         return location;
+    }
+
+    public static void hideInputKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) Application.getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 }

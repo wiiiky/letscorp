@@ -8,6 +8,7 @@ import org.jsoup.nodes.Document;
 import org.wiky.letscorp.util.Util;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -17,7 +18,13 @@ import okhttp3.Response;
  * Created by wiky on 7/18/16.
  */
 public class Request {
-    private static OkHttpClient mClient = new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true).build();
+    private static OkHttpClient mClient = new OkHttpClient()
+            .newBuilder()
+            .followRedirects(true)
+            .followSslRedirects(true)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .build();
 
     public static Call get(String url, Callback callback) {
         okhttp3.Request request = new okhttp3.Request.Builder()

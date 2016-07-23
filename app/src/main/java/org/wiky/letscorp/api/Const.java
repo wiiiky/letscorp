@@ -18,6 +18,7 @@ public final class Const {
     public final static int LETSCORP_CATEGORY_RUMOR = 6;
     public final static int LETSCORP_CATEGORY_TECH = 7;
     public final static int LETSCORP_CATEGORY_HISTORY = 8;
+    public final static int LETSCORP_CATEGORY_SEARCH = 9;
 
     private static Map<Integer, String> mCategoryURL = new HashMap<>();
 
@@ -64,4 +65,7 @@ public final class Const {
         return mCategoryURL.get(cagegory) + page;
     }
 
+    public static String getSearchUrl(String query, int page) {
+        return LETSCORP_HOST + "/search/" + query + "/page/" + page;
+    }
 }
