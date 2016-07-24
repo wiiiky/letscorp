@@ -1,22 +1,27 @@
 package org.wiky.letscorp.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.ListPopupWindow;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.adapter.PostListAdapter;
+import org.wiky.letscorp.adapter.QueryAdapter;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.list.BasePostListVIew;
-import org.wiky.letscorp.list.PostListAdapter;
 import org.wiky.letscorp.list.SearchListView;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.SearchBox;
 import org.wiky.letscorp.view.SwipeRefreshLayout;
 
-public class SearchActivity extends BaseActivity implements SearchBox.OnSearchListener, BasePostListVIew.OnRefreshListener, android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener, PostListAdapter.OnItemClickListener {
+public class SearchActivity extends BaseActivity implements SearchBox.OnSearchListener, BasePostListVIew.OnRefreshListener, android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener, PostListAdapter.OnItemClickListener, QueryAdapter.OnItemClickListener {
 
     private SearchBox mSearchBox;
+    private ListPopupWindow mQueryPopupWindow;
+    private QueryAdapter mQueryAdapter;
     private int mSearchCX;
     private int mSearchCY;
     private SwipeRefreshLayout mRefreshLayout;
@@ -31,7 +36,7 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
         mSearchCX = getIntent().getIntExtra("cx", 0);
         mSearchCY= getIntent().getIntExtra("cy", 0);
 
-        mSearchBox = new SearchBox(this);
+        mSearchBox = (SearchBox) findViewById(R.id.search_search_box);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.search_swipe_refresh);
         mSearchList = (SearchListView) findViewById(R.id.search_post_list);
 
@@ -40,30 +45,20 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
         mSearchList.setOnItemClickListener(this);
         mSearchBox.setOnSearchListener(this);
 
-        mToolBar.post(new Runnable() {
+        mSearchBox.post(new Runnable() {
             @Override
             public void run() {
-                mSearchBox.attach(SearchActivity.this);
-                mSearchBox.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSearchBox.show(mSearchCX, mSearchCY);
-                    }
-                });
+                mSearchBox.show(mSearchCX, mSearchCY);
             }
         });
     }
 
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        mSearchBox.detach();
-    }
 
     @Override
     public void onBackPressed(){
         super.onBackPressed();
         mSearchBox.hide(mSearchCX, mSearchCY);
+        mQueryPopupWindow.dismiss();
     }
 
     @Override
@@ -82,7 +77,15 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
 
     @Override
     public void onQueryChanged(String query) {
-        mRefreshLayout.setRefreshing(false);
+        if (mQueryPopupWindow == null) {
+            mQueryPopupWindow = new ListPopupWindow(this);
+            mQueryAdapter = new QueryAdapter();
+            mQueryAdapter.setOnItemClickListener(this);
+            mQueryPopupWindow.setAnchorView(mSearchBox);
+            mQueryPopupWindow.setAdapter(mQueryAdapter);
+        }
+        mQueryAdapter.update(query);
+        mQueryPopupWindow.show();
     }
 
     @Override
@@ -107,5 +110,12 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
     @Override
     public void onItemClick(PostListAdapter.PostItemHolder holder, PostItem data) {
         PostActivity.startPostActivity(this, data);
+    }
+
+    @Override
+    public void onItemClick(View v, String query) {
+        mQueryPopupWindow.dismiss();
+        mSearchBox.setQuery(query);
+        onSearch(query);
     }
 }

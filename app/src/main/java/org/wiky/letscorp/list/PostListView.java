@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
+import org.wiky.letscorp.adapter.PostListAdapter;
 import org.wiky.letscorp.api.Api;
 import org.wiky.letscorp.data.model.PostItem;
 

@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import org.wiky.letscorp.adapter.CommentListAdapter;
 import org.wiky.letscorp.anim.CommentItemAnimator;
 import org.wiky.letscorp.data.model.Comment;
 

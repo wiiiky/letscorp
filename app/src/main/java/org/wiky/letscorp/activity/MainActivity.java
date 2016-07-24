@@ -19,10 +19,11 @@ import android.view.Window;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.adapter.PostListAdapter;
 import org.wiky.letscorp.api.Const;
+import org.wiky.letscorp.data.db.QueryHelper;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
-import org.wiky.letscorp.list.PostListAdapter;
 import org.wiky.letscorp.list.PostListView;
 import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.util.Util;
@@ -54,6 +55,8 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         tabLayout.addOnTabSelectedListener(this);
 
         startToolbarAnimation();
+         /* 最多记录500条搜索记录 */
+        QueryHelper.clearQueries(500);
     }
 
     @Override
@@ -100,6 +103,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     }
 
 
+    /* 打开搜索界面 */
     public void startSearchActivity() {
         Intent intent = new Intent(this, SearchActivity.class);
         int[] pos=Util.getViewCenterOnScreen(findViewById(R.id.action_search));

@@ -22,8 +22,7 @@
     </style>
 
     <style name="AppTheme.SearchActivity" parent="AppTheme.NoActionBar">
-        <item name="android:dropDownHorizontalOffset">-16dp</item>
-        <item name="android:dropDownVerticalOffset">16dp</item>
+        <item name="android:windowSharedElementsUseOverlay">false</item>
     </style>
 
     <style name="AppTheme.ImageActivity" parent="AppTheme.NoActionBar">

@@ -1,4 +1,4 @@
-package org.wiky.letscorp.list;
+package org.wiky.letscorp.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;

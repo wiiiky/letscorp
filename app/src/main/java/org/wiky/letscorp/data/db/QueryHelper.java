@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.data.model.Query;
@@ -40,10 +39,9 @@ public class QueryHelper implements BaseColumns {
         return new Query(query, timestamp);
     }
 
-    public static List<Query> getQueries(int count) {
-        clearQueries(count);
+    public static List<Query> getQueries(String query, int count) {
         SQLiteDatabase db= Application.getDBHelper().getReadableDatabase();
-        Cursor c=db.query(TABLE_NAME, null ,null, null, null, null, String.format("%s DESC", COLUMN_NAME_TIMESTAMP), String.valueOf(count));
+        Cursor c = db.query(TABLE_NAME, null, String.format("%s like ?", COLUMN_NAME_QUERY), new String[]{query + "%"}, null, null, String.format("%s DESC", COLUMN_NAME_TIMESTAMP), String.valueOf(count));
 
         List<Query> queries=new ArrayList<>();
         while(c.moveToNext()){
@@ -76,7 +74,11 @@ public class QueryHelper implements BaseColumns {
         SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
         String sql=String.format("DELETE FROM %s WHERE %s NOT IN (SELECT %s FROM %s ORDER BY %s DESC LIMIT %s)",
                 TABLE_NAME, COLUMN_NAME_QUERY, COLUMN_NAME_QUERY, TABLE_NAME, COLUMN_NAME_TIMESTAMP, count);
-        Log.d("sql", sql);
         db.execSQL(sql);
+    }
+
+    public static void deleteQueries() {
+        SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
+        db.delete(TABLE_NAME, null, null);
     }
 }

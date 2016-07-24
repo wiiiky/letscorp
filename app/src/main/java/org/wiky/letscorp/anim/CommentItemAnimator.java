@@ -7,15 +7,9 @@ import android.view.animation.DecelerateInterpolator;
 
 import org.wiky.letscorp.Application;
 
-/**
- * Created by wiky on 7/21/16.
- */
+/* 评论列表的动画 */
 public class CommentItemAnimator extends DefaultItemAnimator {
 
-    @Override
-    public boolean canReuseUpdatedViewHolder(RecyclerView.ViewHolder viewHolder) {
-        return true;
-    }
 
     @Override
     public boolean animateAdd(RecyclerView.ViewHolder viewHolder) {

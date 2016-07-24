@@ -3,9 +3,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
+    <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
-        layout="@layout/toolbar" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:transitionName="appbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:popupTheme="@style/AppTheme.PopupOverlay"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:transitionName="toolbar" />
+
+            <org.wiky.letscorp.view.SearchBox
+                android:id="@+id/search.search_box"
+                android:layout_width="match_parent"
+                android:layout_height="?android:actionBarSize"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="4dp"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp" />
+
+        </RelativeLayout>
+
+    </android.support.design.widget.AppBarLayout>
 
     <org.wiky.letscorp.view.SwipeRefreshLayout
         android:id="@+id/search.swipe_refresh"

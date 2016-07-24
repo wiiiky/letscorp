@@ -8,6 +8,7 @@ import android.widget.Toast;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.db.PostHelper;
 import org.wiky.letscorp.data.db.PostItemHelper;
+import org.wiky.letscorp.data.db.QueryHelper;
 
 import java.util.Objects;
 
@@ -39,6 +40,7 @@ public class SettingsActivity extends BaseActivity {
             if (Objects.equals(key, getString(R.string.key_clear_cache))) {
                 PostHelper.deletePosts();
                 PostItemHelper.deletePostItems();
+                QueryHelper.deleteQueries();
                 Toast.makeText(getActivity(), R.string.toast_cache_deleted, Toast.LENGTH_SHORT).show();
             } else {
                 return false;
