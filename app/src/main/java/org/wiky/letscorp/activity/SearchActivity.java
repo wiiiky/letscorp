@@ -2,6 +2,7 @@ package org.wiky.letscorp.activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.widget.Toast;
 
 import org.wiky.letscorp.R;
@@ -30,7 +31,7 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
         mSearchCX = getIntent().getIntExtra("cx", 0);
         mSearchCY= getIntent().getIntExtra("cy", 0);
 
-        mSearchBox = (SearchBox) findViewById(R.id.search_search_view);
+        mSearchBox = new SearchBox(this);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.search_swipe_refresh);
         mSearchList = (SearchListView) findViewById(R.id.search_post_list);
 
@@ -38,18 +39,37 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
         mSearchList.setOnRefreshListener(this);
         mSearchList.setOnItemClickListener(this);
         mSearchBox.setOnSearchListener(this);
-        mSearchBox.post(new Runnable() {
+
+        mToolBar.post(new Runnable() {
             @Override
             public void run() {
-                mSearchBox.show(mSearchCX, mSearchCY);
+                mSearchBox.attach(SearchActivity.this);
+                mSearchBox.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSearchBox.show(mSearchCX, mSearchCY);
+                    }
+                });
             }
         });
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        mSearchBox.detach();
     }
 
     @Override
     public void onBackPressed(){
         super.onBackPressed();
         mSearchBox.hide(mSearchCX, mSearchCY);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     @Override

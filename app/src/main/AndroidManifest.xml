@@ -14,8 +14,8 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.MainActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.MainActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.MAIN" />
@@ -24,14 +24,13 @@
         <activity
             android:name=".activity.ImageActivity"
             android:theme="@style/AppTheme.ImageActivity" />
-        <activity
-            android:name=".activity.SettingsActivity" />
+        <activity android:name=".activity.SettingsActivity" />
         <activity
             android:name=".activity.PostActivity"
             android:theme="@style/AppTheme.PostActivity" />
         <activity
             android:name=".activity.SearchActivity"
-            android:theme="@style/AppTheme.SearchActivity"/>
+            android:theme="@style/AppTheme.SearchActivity" />
     </application>
 
 </manifest>

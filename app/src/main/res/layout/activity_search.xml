@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
+    <include
         android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:transitionName="appbar">
-
-        <org.wiky.letscorp.view.SearchBox
-            android:id="@+id/search.search_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </android.support.design.widget.AppBarLayout>
+        layout="@layout/toolbar" />
 
     <org.wiky.letscorp.view.SwipeRefreshLayout
         android:id="@+id/search.swipe_refresh"

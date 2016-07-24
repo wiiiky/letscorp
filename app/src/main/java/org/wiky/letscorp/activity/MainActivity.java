@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         int id = item.getItemId();
 
         if (id == R.id.action_search) {
-            onSearch();
+            startSearchActivity();
         } else if (id == R.id.action_browser) {
             Util.openBrowser(Const.LETSCORP_HOST);
         } else if (id == R.id.action_settings) {
@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     }
 
 
-    public void onSearch() {
+    public void startSearchActivity() {
         Intent intent = new Intent(this, SearchActivity.class);
         int[] pos=Util.getViewCenterOnScreen(findViewById(R.id.action_search));
         intent.putExtra("cx", pos[0]);
@@ -113,6 +113,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         pairs.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
         pairs.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
         pairs.add(Pair.create((View) mAppBar, mAppBar.getTransitionName()));
+        pairs.add(Pair.create((View) mToolBar, mToolBar.getTransitionName()));
 
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                 pairs.toArray(new Pair[pairs.size()])).toBundle();
