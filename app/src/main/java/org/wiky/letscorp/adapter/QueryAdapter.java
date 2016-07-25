@@ -1,10 +1,13 @@
 package org.wiky.letscorp.adapter;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.wiky.letscorp.Application;
@@ -23,16 +26,16 @@ public class QueryAdapter extends BaseAdapter {
     private static final int AUTOCOMPLETE_COUNT = 5;
 
     private List<Query> mData;
+    private String mQuery = "";
     private OnItemClickListener mOnItemClickListener = null;
 
     public QueryAdapter() {
-        mData = QueryHelper.getQueries("", AUTOCOMPLETE_COUNT);
+        mData = QueryHelper.getQueries(mQuery, AUTOCOMPLETE_COUNT);
     }
 
     public void update(String query) {
-        notifyDataSetInvalidated();
-        mData = QueryHelper.getQueries(query, AUTOCOMPLETE_COUNT);
-        notifyDataSetChanged();
+        mQuery = query;
+        update();
     }
 
     public void clear() {
@@ -50,7 +53,7 @@ public class QueryAdapter extends BaseAdapter {
         final Query query = mData.get(position);
         final QueryHolder viewHolder = (QueryHolder) holder;
         viewHolder.query.setText(query.query);
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.query.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mOnItemClickListener != null) {
@@ -63,6 +66,23 @@ public class QueryAdapter extends BaseAdapter {
                 }
             }
         });
+        viewHolder.clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mData.remove(query);
+                QueryHelper.deleteQuery(query.query);
+                update();
+            }
+        });
+    }
+
+    private void update() {
+        mData = QueryHelper.getQueries(mQuery, AUTOCOMPLETE_COUNT);
+        if (mData.isEmpty()) {
+            notifyDataSetInvalidated();
+        } else {
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -103,10 +123,13 @@ public class QueryAdapter extends BaseAdapter {
     private class QueryHolder extends RecyclerView.ViewHolder {
 
         private TextView query;
+        private ImageView clear;
 
         public QueryHolder(View itemView) {
             super(itemView);
             query = (TextView) itemView.findViewById(R.id.query_query);
+            clear = (ImageView) itemView.findViewById(R.id.query_clear);
+            clear.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
         }
     }
 }

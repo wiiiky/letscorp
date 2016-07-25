@@ -2,6 +2,7 @@ package org.wiky.letscorp.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         viewHolder.username.setText(data.username);
         viewHolder.datetime.setText(data.datetime);
         viewHolder.content.setText(Util.trim(Html.fromHtml(data.content)));
+        viewHolder.content.setMovementMethod(LinkMovementMethod.getInstance());
         if (data.cite != null) {
             viewHolder.citeLayout.setVisibility(View.VISIBLE);
             viewHolder.citeUsername.setText(data.cite.username);

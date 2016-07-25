@@ -72,12 +72,15 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         if (id == R.id.action_search) {
             startSearchActivity();
         } else if (id == R.id.action_browser) {
-            Util.openBrowser(Const.LETSCORP_HOST);
+            String url = Const.getPostListUrl(mPagerAdapter.getCategory(mViewPager.getCurrentItem()), 1);
+            Util.openURL(url);
         } else if (id == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.action_about) {
             AboutDialogHelper.showDialog(this);
+        } else if (id == R.id.action_feedback) {
+            Util.openURL("https://github.com/hitoshii/letscorp/issues");
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -232,10 +235,11 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
             return mCategories.size();
         }
 
-        private int getCategory(int position) {
+        public int getCategory(int position) {
             CategoryInfo info = mCategories.get(position);
             return info.category;
         }
+
 
         @Override
         public CharSequence getPageTitle(int position) {

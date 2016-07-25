@@ -12,6 +12,8 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +74,22 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         } else {
             getPostDetail(mPostitem.href);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_post, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_browser) {
+            Util.openURL(mPostitem.href);
+        }
+        return true;
     }
 
     private void getPostDetail(String href) {
@@ -210,8 +228,16 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
 
         private void update(Post post, boolean animated) {
             mAuthor.setText(String.format("%s %s %s", post.author, getString(R.string.published_on), post.date));
-            mCategory.setText(String.format("分类：%s", Util.joinString(post.categories)));
-            mTag.setText(String.format("标签：%s", Util.joinString(post.tags)));
+            if (!post.categories.isEmpty()) {
+                mCategory.setText(String.format("分类：%s", Util.joinString(post.categories)));
+            } else {
+                mCategory.setVisibility(View.GONE);
+            }
+            if (!post.tags.isEmpty()) {
+                mTag.setText(String.format("标签：%s", Util.joinString(post.tags)));
+            } else {
+                mTag.setVisibility(View.GONE);
+            }
             mContent.setContent(post.content);
             if (animated) {
                 mContent.setAlpha(0.0f);

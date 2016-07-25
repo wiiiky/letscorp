@@ -63,7 +63,7 @@ public class Util {
         return s.toString();
     }
 
-    public static void openBrowser(String url) {
+    public static void openURL(String url) {
         Uri uri = Uri.parse(url);
         Intent intent = new Intent();
         intent.setData(uri);

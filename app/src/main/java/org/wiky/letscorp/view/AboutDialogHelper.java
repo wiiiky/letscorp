@@ -19,11 +19,11 @@ public class AboutDialogHelper {
         @Override
         public void onClick(View view) {
             if (view.getId() == R.id.about_twitter) {
-                Util.openBrowser(TWITTER_URL);
+                Util.openURL(TWITTER_URL);
             } else if (view.getId() == R.id.about_gplus) {
-                Util.openBrowser(GOOGLE_PLUS_URL);
+                Util.openURL(GOOGLE_PLUS_URL);
             } else if (view.getId() == R.id.about_github) {
-                Util.openBrowser(GITHUB_URL);
+                Util.openURL(GITHUB_URL);
             }
         }
     };

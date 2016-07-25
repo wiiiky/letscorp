@@ -24,7 +24,6 @@ import org.wiky.letscorp.util.Util;
 
 public class SearchBox extends FrameLayout implements View.OnClickListener, TextWatcher, View.OnKeyListener {
 
-    //    private View mAttachedView;
     private ImageView mBackImage;
     private ImageView mClearImage;
     private EditText mQueryBox;

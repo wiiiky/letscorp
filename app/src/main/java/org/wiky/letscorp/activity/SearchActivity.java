@@ -12,15 +12,21 @@ import org.wiky.letscorp.R;
 import org.wiky.letscorp.adapter.PostListAdapter;
 import org.wiky.letscorp.adapter.QueryAdapter;
 import org.wiky.letscorp.data.db.QueryHelper;
+import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.data.model.Query;
 import org.wiky.letscorp.list.BasePostListVIew;
 import org.wiky.letscorp.list.SearchListView;
+import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.SearchBox;
 import org.wiky.letscorp.view.SwipeRefreshLayout;
 
-public class SearchActivity extends BaseActivity implements SearchBox.OnSearchListener, BasePostListVIew.OnRefreshListener, android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener, PostListAdapter.OnItemClickListener, QueryAdapter.OnItemClickListener, Transition.TransitionListener {
+public class SearchActivity extends BaseActivity implements SearchBox.OnSearchListener,
+        BasePostListVIew.OnRefreshListener,
+        android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener,
+        PostListAdapter.OnItemClickListener, QueryAdapter.OnItemClickListener,
+        Transition.TransitionListener, Signal.SignalListener {
 
     private SearchBox mSearchBox;
     private ListPopupWindow mQueryPopupWindow;
@@ -56,6 +62,7 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
         });
 
         getWindow().getSharedElementEnterTransition().addListener(this);
+        Signal.register(Signal.SIGINT_ITEM_READN, this);
     }
 
 
@@ -77,7 +84,6 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        //Analytics code will go here.
         return false;
     }
 
@@ -162,5 +168,13 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
     @Override
     public void onTransitionResume(Transition transition) {
 
+    }
+
+    @Override
+    public void onSignal(int signal, Object data) {
+        if (signal == Signal.SIGINT_ITEM_READN) {
+            Post post = (Post) data;
+            mSearchList.setItemReadn(post.href);
+        }
     }
 }

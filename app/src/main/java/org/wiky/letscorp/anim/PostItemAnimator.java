@@ -59,16 +59,19 @@ public class PostItemAnimator extends DefaultItemAnimator {
                 .setDuration(250)
                 .setStartDelay(100 * Math.min(holder.getLayoutPosition(), 5))
                 .setListener(new AnimatorListenerAdapter() {
+                    private void end() {
+                        holder.itemView.setTranslationY(0);
+                        holder.itemView.setAlpha(1.0f);
+                        dispatchAddFinished(holder);
+                    }
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        dispatchAddFinished(holder);
+                        end();
                     }
 
                     @Override
                     public void onAnimationCancel(Animator animator) {
-                        holder.itemView.setTranslationY(0);
-                        holder.itemView.setAlpha(1.0f);
-                        dispatchAddFinished(holder);
+                        end();
                     }
                 })
                 .start();
@@ -98,7 +101,6 @@ public class PostItemAnimator extends DefaultItemAnimator {
                     private void end() {
                         holder.itemView.setTranslationY(0.0f);
                         holder.itemView.setAlpha(1.0f);
-//                        holder.itemView.setClickable(true);
                         holder.itemView.setScaleX(1.0f);
                         holder.itemView.setScaleY(1.0f);
                         dispatchAddFinished(holder);
