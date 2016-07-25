@@ -15,7 +15,7 @@
     <string name="settings">设置</string>
     <string name="app_description">非官方</string>
     <string name="clear_cache">清除缓存</string>
-    <string name="settings_clear_cache">删除缓存</string>
+    <string name="settings_clear_cache">杀出缓存，包括文章以及搜索记录</string>
     <string name="toast_cache_deleted">缓存已删除</string>
     <string name="ok">确认</string>
     <string name="action_about">关于</string>

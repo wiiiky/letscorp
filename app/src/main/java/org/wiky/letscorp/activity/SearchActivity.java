@@ -3,6 +3,7 @@ package org.wiky.letscorp.activity;
 import android.os.Bundle;
 import android.support.v7.widget.ListPopupWindow;
 import android.text.TextUtils;
+import android.transition.Transition;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
@@ -10,14 +11,16 @@ import android.widget.Toast;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.adapter.PostListAdapter;
 import org.wiky.letscorp.adapter.QueryAdapter;
+import org.wiky.letscorp.data.db.QueryHelper;
 import org.wiky.letscorp.data.model.PostItem;
+import org.wiky.letscorp.data.model.Query;
 import org.wiky.letscorp.list.BasePostListVIew;
 import org.wiky.letscorp.list.SearchListView;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.SearchBox;
 import org.wiky.letscorp.view.SwipeRefreshLayout;
 
-public class SearchActivity extends BaseActivity implements SearchBox.OnSearchListener, BasePostListVIew.OnRefreshListener, android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener, PostListAdapter.OnItemClickListener, QueryAdapter.OnItemClickListener {
+public class SearchActivity extends BaseActivity implements SearchBox.OnSearchListener, BasePostListVIew.OnRefreshListener, android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener, PostListAdapter.OnItemClickListener, QueryAdapter.OnItemClickListener, Transition.TransitionListener {
 
     private SearchBox mSearchBox;
     private ListPopupWindow mQueryPopupWindow;
@@ -51,21 +54,33 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
                 mSearchBox.show(mSearchCX, mSearchCY);
             }
         });
+
+        getWindow().getSharedElementEnterTransition().addListener(this);
     }
 
 
     @Override
     public void onBackPressed(){
+        getWindow().getSharedElementEnterTransition().removeListener(this);
         super.onBackPressed();
         mSearchBox.hide(mSearchCX, mSearchCY);
-        mQueryPopupWindow.dismiss();
+        if (mQueryPopupWindow != null) {
+            mQueryPopupWindow.dismiss();
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_search, menu);
         return true;
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        //Analytics code will go here.
+        return false;
+    }
+
 
     @Override
     public void onSearch(String query) {
@@ -78,14 +93,12 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
     @Override
     public void onQueryChanged(String query) {
         if (mQueryPopupWindow == null) {
-            mQueryPopupWindow = new ListPopupWindow(this);
-            mQueryAdapter = new QueryAdapter();
-            mQueryAdapter.setOnItemClickListener(this);
-            mQueryPopupWindow.setAnchorView(mSearchBox);
-            mQueryPopupWindow.setAdapter(mQueryAdapter);
+            return;
         }
         mQueryAdapter.update(query);
-        mQueryPopupWindow.show();
+        if (!mQueryPopupWindow.isShowing()) {
+            mQueryPopupWindow.show();
+        }
     }
 
     @Override
@@ -116,6 +129,38 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
     public void onItemClick(View v, String query) {
         mQueryPopupWindow.dismiss();
         mSearchBox.setQuery(query);
+        QueryHelper.saveQuery(new Query(query));
         onSearch(query);
+    }
+
+    @Override
+    public void onTransitionStart(Transition transition) {
+
+    }
+
+    @Override
+    public void onTransitionEnd(Transition transition) {
+        mQueryPopupWindow = new ListPopupWindow(this);
+        mQueryAdapter = new QueryAdapter();
+        mQueryAdapter.setOnItemClickListener(this);
+        mQueryPopupWindow.setAnchorView(mSearchBox);
+        mQueryPopupWindow.setAdapter(mQueryAdapter);
+        mQueryPopupWindow.setVerticalOffset((int) Util.dp2px(2));
+        mQueryPopupWindow.show();
+    }
+
+    @Override
+    public void onTransitionCancel(Transition transition) {
+
+    }
+
+    @Override
+    public void onTransitionPause(Transition transition) {
+
+    }
+
+    @Override
+    public void onTransitionResume(Transition transition) {
+
     }
 }

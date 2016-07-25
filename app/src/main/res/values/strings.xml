@@ -15,7 +15,7 @@
     <string name="app_description">Unofficial</string>
     <string name="clear_cache">Clear Cache</string>
     <string name="developer_statement" translatable="false"><![CDATA[墙外楼的非官方APP，基于<a href=\"https//m.letscorp.net\">m.letscorp.net</a>开发；<a href=\"https://play.google.com/store/apps/details?id=net.letscorp.anbound\">墙外楼的官方APP</a>非常简单粗暴。这个APP没有使用官方的接口，通过下载m.letscorp.net的页面并解析HTML来获取文章信息。]]></string>
-    <string name="settings_clear_cache">delete cache</string>
+    <string name="settings_clear_cache">delete cache, including article and searching history</string>
     <string name="toast_cache_deleted">cache deleted</string>
     <string name="ok">OK</string>
     <string name="key_clear_cache" translatable="false">clear_cache</string>
