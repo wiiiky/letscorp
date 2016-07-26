@@ -3,10 +3,12 @@ package org.wiky.letscorp.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.wiky.letscorp.Application;
+import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.Const;
 
-/**
- * Created by wiky on 6/11/16.
+/*
+ * 文章列表页的一项
  */
 public class PostItem implements Parcelable {
     public static final Creator<PostItem> CREATOR = new Creator<PostItem>() {
@@ -25,13 +27,13 @@ public class PostItem implements Parcelable {
     public String href;
     public String img;
     public String content;
-    public String commentCount;
+    public int commentCount;
     public String date;
     public boolean readn;
     public int category;
 
 
-    public PostItem(int id, String title, String href, String img, String content, String ccount, String date) {
+    public PostItem(int id, String title, String href, String img, String content, int ccount, String date) {
         this.id = id;
         this.title = title;
         this.href = href;
@@ -43,7 +45,7 @@ public class PostItem implements Parcelable {
         category = Const.LETSCORP_CATEGORY_ALL;
     }
 
-    public PostItem(int id, String title, String href, String img, String content, String ccount, String date, int cate) {
+    public PostItem(int id, String title, String href, String img, String content, int ccount, String date, int cate) {
         this(id, title, href, img, content, ccount, date);
         category = cate;
     }
@@ -54,7 +56,7 @@ public class PostItem implements Parcelable {
         href = in.readString();
         img = in.readString();
         content = in.readString();
-        commentCount = in.readString();
+        commentCount = in.readInt();
         date = in.readString();
         readn = in.readInt() > 0;
         category = in.readInt();
@@ -72,9 +74,16 @@ public class PostItem implements Parcelable {
         dest.writeString(href);
         dest.writeString(img);
         dest.writeString(content);
-        dest.writeString(commentCount);
+        dest.writeInt(commentCount);
         dest.writeString(date);
         dest.writeInt(readn ? 1 : 0);
         dest.writeInt(category);
+    }
+
+    public String commentCount() {
+        if (commentCount == 0) {
+            return "";
+        }
+        return String.format(Application.getApplication().getString(R.string.comment_count), commentCount);
     }
 }

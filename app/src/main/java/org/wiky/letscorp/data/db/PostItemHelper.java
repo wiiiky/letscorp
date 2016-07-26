@@ -32,7 +32,7 @@ public class PostItemHelper implements BaseColumns {
             COLUMN_NAME_HREF + " TEXT," +
             COLUMN_NAME_IMG + " TEXT," +
             COLUMN_NAME_CONTENT + " TEXT," +
-            COLUMN_NAME_COMMENT_COUNT + " TEXT," +
+            COLUMN_NAME_COMMENT_COUNT + " INTEGER," +
             COLUMN_NAME_DATE + " TEXT," +
             COLUMN_NAME_CATEGORY + " INTEGER," +
             "PRIMARY KEY(" + COLUMN_NAME_ITEM_ID + "," + COLUMN_NAME_CATEGORY + ")" +
@@ -58,7 +58,7 @@ public class PostItemHelper implements BaseColumns {
         String href = c.getString(c.getColumnIndex(COLUMN_NAME_HREF));
         String img = c.getString(c.getColumnIndex(COLUMN_NAME_IMG));
         String content = c.getString(c.getColumnIndex(COLUMN_NAME_CONTENT));
-        String commentCount = c.getString(c.getColumnIndex(COLUMN_NAME_COMMENT_COUNT));
+        int commentCount = c.getInt(c.getColumnIndex(COLUMN_NAME_COMMENT_COUNT));
         String date = c.getString(c.getColumnIndex(COLUMN_NAME_DATE));
         int category = c.getInt(c.getColumnIndex(COLUMN_NAME_CATEGORY));
         PostItem p = new PostItem(id, title, href, img, content, commentCount, date, category);
@@ -109,6 +109,15 @@ public class PostItemHelper implements BaseColumns {
         } else {
             db.insert(TABLE_NAME, null, values);
         }
+    }
+
+    /* 更新评论数和发布时间 */
+    public static void updatePostItem(String href, int ccount, String date) {
+        SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME_COMMENT_COUNT, ccount);
+        values.put(COLUMN_NAME_DATE, date);
+        db.update(TABLE_NAME, values, String.format("%s=?", COLUMN_NAME_HREF), new String[]{href});
     }
 
     public static void savePostItems(List<PostItem> items) {

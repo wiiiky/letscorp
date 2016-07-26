@@ -104,4 +104,21 @@ public class Util {
         InputMethodManager imm = (InputMethodManager) Application.getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
+
+    /* 解析数字 */
+    public static int parseInt(String str) {
+        StringBuilder v = new StringBuilder();
+        for (int i = 0; i < str.length(); i++) {
+            if (Character.isDigit(str.charAt(i))) {
+                v.append(str.charAt(i));
+            } else {
+                break;
+            }
+        }
+        try {
+            return Integer.parseInt(v.toString());
+        } catch (Exception e) {
+            return 0;
+        }
+    }
 }

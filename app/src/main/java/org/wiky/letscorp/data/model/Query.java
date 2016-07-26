@@ -1,7 +1,7 @@
 package org.wiky.letscorp.data.model;
 
 /**
- * Created by wiky on 7/24/16.
+ * 搜索的记录
  */
 public class Query {
     public String query;

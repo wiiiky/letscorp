@@ -33,10 +33,6 @@ public class PostListView extends BasePostListVIew {
         mAdapter.setOnItemClickListener(listener);
     }
 
-    public void setItemReadn(String href) {
-        mAdapter.setItemReadn(href);
-    }
-
     public void setCategory(int category) {
         mCategory = category;
     }

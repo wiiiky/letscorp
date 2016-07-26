@@ -198,8 +198,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         @Override
         public void onSignal(int signal, Object data) {
             if (signal == Signal.SIGINT_ITEM_READN) {
-                Post post = (Post) data;
-                mPostList.setItemReadn(post.href);
+                mPostList.updateItem((Post) data);
             }
         }
     }

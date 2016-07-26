@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wiky on 6/21/16.
+ * 文章详情
  */
 public class Post {
     public String href;
@@ -42,6 +42,14 @@ public class Post {
         Type listType = new TypeToken<List<Comment>>() {
         }.getType();
         return gson.fromJson(data, listType);
+    }
+
+    public int commentCount() {
+        int size = 0;
+        for (Comment comment : comments) {
+            size += comment.size();
+        }
+        return size;
     }
 
     public String comments() {

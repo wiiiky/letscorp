@@ -141,7 +141,6 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
 
     @Override
     public void onTransitionStart(Transition transition) {
-
     }
 
     @Override
@@ -173,8 +172,7 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
     @Override
     public void onSignal(int signal, Object data) {
         if (signal == Signal.SIGINT_ITEM_READN) {
-            Post post = (Post) data;
-            mSearchList.setItemReadn(post.href);
+            mSearchList.updateItem((Post) data);
         }
     }
 }

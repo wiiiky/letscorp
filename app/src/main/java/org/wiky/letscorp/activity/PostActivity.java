@@ -1,6 +1,7 @@
 package org.wiky.letscorp.activity;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,15 +11,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.Api;
@@ -26,7 +26,6 @@ import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.list.CommentListView;
-import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.PhotoView;
 import org.wiky.letscorp.view.PostContent;
@@ -41,7 +40,31 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
     private PageAdapter mPagerAdapter;
     private MaterialProgressBar mProgressBar;
     private ViewPager mViewPager;
-    private PostItem mPostitem;
+    private PostItem mPostItem;
+    private Post mPost;
+    /* 接口回调处理 */
+    private Api.ApiHandler<Post> mPostDetailHandler = new Api.ApiHandler<Post>() {
+
+        @Override
+        public void onSuccess(Post post) {
+            mPost = post;
+            mPagerAdapter.update(mPost);
+        }
+
+        @Override
+        public void onFinally() {
+            hideProgressBar();
+        }
+
+        @Override
+        public void onError(Exception e) {
+            if (mPost != null) {
+                Toast.makeText(PostActivity.this, String.format(getString(R.string.reload_post_failure), e != null ? e.getMessage() : ""), Toast.LENGTH_SHORT).show();
+            } else {
+                super.onError(e);
+            }
+        }
+    };
 
     public static void startPostActivity(Activity activity, PostItem data) {
         Intent intent = new Intent(activity, PostActivity.class);
@@ -56,24 +79,28 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
 
         setContentView(R.layout.activity_post);
 
-        mPostitem = getIntent().getParcelableExtra("data");
-        setTitle(mPostitem.title);
+        mPostItem = getIntent().getParcelableExtra("data");
+        setTitle(mPostItem.title);
 
-        mPagerAdapter = new PageAdapter(getSupportFragmentManager(), mPostitem);
+        mPagerAdapter = new PageAdapter(getSupportFragmentManager(), mPostItem);
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mProgressBar = (MaterialProgressBar) findViewById(R.id.post_loading);
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.addOnPageChangeListener(this);
 
-        Post post = Api.loadPostDetail(mPostitem.href);
+        mPost = Api.loadPostDetail(mPostItem.href);
 
-        if (post != null) {
+        if (mPost != null) {
+            /* 有缓存数据时不在显示载入进度条 */
             mProgressBar.setVisibility(View.GONE);
-            mPagerAdapter.update(post);
+            mPagerAdapter.update(mPost);
         } else {
-            getPostDetail(mPostitem.href);
+            mProgressBar.setVisibility(View.VISIBLE);
         }
+
+        /* 即使已经有缓存也要请求网络，因为评论可能会变 */
+        Api.fetchPostDetail(mPostItem.href, mPostDetailHandler);
     }
 
     @Override
@@ -87,37 +114,19 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         int id = item.getItemId();
 
         if (id == R.id.action_browser) {
-            Util.openURL(mPostitem.href);
+            Util.openURL(mPostItem.href);
         }
         return true;
     }
 
-    private void getPostDetail(String href) {
-        mProgressBar.setVisibility(View.VISIBLE);
-        Api.fetchPostDetail(href, new Api.ApiHandler<Post>() {
-            @Override
-            public void onSuccess(Post post) {
-                mPagerAdapter.update(post);
-                Signal.trigger(Signal.SIGINT_ITEM_READN, post);
-            }
-
-            @Override
-            public void onFinally() {
-                hideProgressBar();
-            }
-        });
-    }
-
     private void hideProgressBar() {
+        if (mProgressBar.getVisibility() != View.VISIBLE) {
+            return;
+        }
         mProgressBar.animate()
                 .alpha(0.0f)
                 .setDuration(250)
-                .setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
+                .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         mProgressBar.setVisibility(View.GONE);
@@ -126,11 +135,6 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
                     @Override
                     public void onAnimationCancel(Animator animation) {
                         mProgressBar.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
                     }
                 })
                 .start();
@@ -149,7 +153,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         if (position == 0 && positionOffset < 0.5f) {
-            setTitle(mPostitem.title);
+            setTitle(mPostItem.title);
             mToolBar.setAlpha((0.5f - positionOffset) * 2);
         } else if (position == 0 && positionOffset >= 0.5f) {
             setTitle(R.string.title_comment);
@@ -213,7 +217,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             assert item != null;
             mTitle.setText(item.title);
             if (mData != null) {
-                update(mData, false);
+                update(mData);
             }
             return rootView;
         }
@@ -222,11 +226,11 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             if (!isAdded() || mAuthor == null) {
                 mData = post;
             } else {
-                update(post, true);
+                update(post);
             }
         }
 
-        private void update(Post post, boolean animated) {
+        private void update(Post post) {
             mAuthor.setText(String.format("%s %s %s", post.author, getString(R.string.published_on), post.date));
             if (!post.categories.isEmpty()) {
                 mCategory.setText(String.format("分类：%s", Util.joinString(post.categories)));
@@ -239,10 +243,6 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
                 mTag.setVisibility(View.GONE);
             }
             mContent.setContent(post.content);
-            if (animated) {
-                mContent.setAlpha(0.0f);
-                mContent.animate().alpha(1.0f).setDuration(250).start();
-            }
         }
 
         @Override
@@ -310,29 +310,6 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
 
         private void update(List<Comment> comments) {
             mCommentList.setComments(comments);
-        }
-    }
-
-    class MyGestureDetector extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                               float velocityY) {
-            try {
-                float slope = (e1.getY() - e2.getY()) / (e1.getX() - e2.getX());
-                float angle = (float) Math.atan(slope);
-                float angleInDegree = (float) Math.toDegrees(angle);
-                // left to right
-                if (e1.getX() - e2.getX() > 20 && Math.abs(velocityX) > 20) {
-                    if ((angleInDegree < 45 && angleInDegree > -45)) {
-                        onBackPressed();
-                    }
-                    // right to left fling
-                }
-                return true;
-            } catch (Exception e) {
-                // nothing
-            }
-            return false;
         }
     }
 

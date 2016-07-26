@@ -9,10 +9,11 @@ import android.util.AttributeSet;
 import org.wiky.letscorp.adapter.PostListAdapter;
 import org.wiky.letscorp.anim.PostItemAnimator;
 import org.wiky.letscorp.api.Const;
+import org.wiky.letscorp.data.model.Post;
 
 
 public abstract class BasePostListVIew extends RecyclerView {
-    protected final int mPageCount = 15;
+    protected final int mPageCount = 15;    /* 这是网页上显示的文章数量，用于取数据库时限制 */
     protected PostListAdapter mAdapter;
     protected LinearLayoutManager mLayoutManager;
     protected int mCategory = Const.LETSCORP_CATEGORY_ALL;
@@ -72,8 +73,8 @@ public abstract class BasePostListVIew extends RecyclerView {
         mAdapter.setOnItemClickListener(listener);
     }
 
-    public void setItemReadn(String href) {
-        mAdapter.setItemReadn(href);
+    public void updateItem(Post post) {
+        mAdapter.updateItem(post.href, post.commentCount(), post.date);
     }
 
     public void setCategory(int category) {

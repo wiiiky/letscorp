@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.util.Util;
@@ -55,16 +54,15 @@ public class CommentListAdapter extends RecyclerView.Adapter {
     }
 
     public void setComments(final List<Comment> comments) {
-        int count = mData.size();
-        mData.clear();
-        notifyItemRangeRemoved(0, count);
-        Application.getUIHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mData.addAll(comments);
-                notifyItemRangeInserted(0, mData.size());
-            }
-        }, 300);
+        List<Comment> oldData = mData;
+        mData = comments;
+        if (mData.size() > oldData.size()) {
+            notifyItemRangeChanged(0, oldData.size());
+            notifyItemRangeInserted(oldData.size(), mData.size() - oldData.size());
+        } else {
+            notifyItemRangeChanged(0, mData.size());
+            notifyItemRangeRemoved(mData.size(), oldData.size() - mData.size());
+        }
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {

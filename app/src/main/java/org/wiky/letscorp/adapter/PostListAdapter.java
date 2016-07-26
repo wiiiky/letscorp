@@ -97,7 +97,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
             final PostItem data = mItems.get(position);
             viewHolder.mTitle.setText(data.title);
             viewHolder.mContent.setText(Html.fromHtml(data.content));
-            viewHolder.mComment.setText(data.commentCount);
+            viewHolder.mComment.setText(data.commentCount());
             viewHolder.mDate.setText(data.date);
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -116,14 +116,14 @@ public class PostListAdapter extends RecyclerView.Adapter {
     }
 
     /*  将指定ID的文章设置成已读 */
-    public void setItemReadn(String href) {
+    public void updateItem(String href, int ccount, String date) {
         for (int i = 0; i < mItems.size(); i++) {
             PostItem item = mItems.get(i);
             if (Objects.equals(item.href, href)) {
-                if (!item.readn) {
-                    item.readn = true;
-                    notifyItemChanged(i);
-                }
+                item.readn = true;
+                item.commentCount = ccount;
+                item.date = date;
+                notifyItemChanged(i);
                 break;
             }
         }
