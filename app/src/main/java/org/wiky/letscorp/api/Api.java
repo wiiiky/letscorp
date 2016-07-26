@@ -4,18 +4,18 @@ import android.widget.Toast;
 
 import org.jsoup.nodes.Document;
 import org.wiky.letscorp.Application;
+import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.db.PostHelper;
 import org.wiky.letscorp.data.db.PostItemHelper;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
+import org.wiky.letscorp.signal.Signal;
 
 import java.util.List;
 
 import okhttp3.Call;
 
-/**
- * Created by wiky on 7/18/16.
- */
+
 public class Api {
 
     /* 搜索请求同时只能有一个 */
@@ -51,10 +51,7 @@ public class Api {
 
             @Override
             public void onError(Exception e) {
-                if (e != null) {
-                    Toast.makeText(Application.getApplication(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                apiHandler.onFinally();
+                apiHandler.onError(e);
             }
         });
     }
@@ -66,6 +63,8 @@ public class Api {
             public void onSuccess(Document doc) {
                 Post post = Parser.parsePost(doc, url);
                 PostHelper.savePost(post);
+                PostItemHelper.updatePostItem(post.href, post.comments.size(), post.date);
+                Signal.trigger(Signal.SIGINT_ITEM_READN, post);
                 apiHandler.onSuccess(post);
                 apiHandler.onFinally();
             }
@@ -77,10 +76,7 @@ public class Api {
 
             @Override
             public void onError(Exception e) {
-                if (e != null) {
-                    Toast.makeText(Application.getApplication(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                apiHandler.onFinally();
+                apiHandler.onError(e);
             }
         });
     }
@@ -96,7 +92,12 @@ public class Api {
             public void onSuccess(Document doc) {
                 List<PostItem> items = Parser.parseSearchItems(doc);
                 for (PostItem item : items) {
-                    item.readn = PostHelper.checkPost(item.href);
+                    Post post = PostHelper.getPost(item.href);
+                    if (post != null) {
+                        item.readn = true;
+                        item.commentCount = post.commentCount();
+                        item.date = post.date;
+                    }
                 }
                 apiHandler.onSuccess(items);
                 apiHandler.onFinally();
@@ -108,18 +109,20 @@ public class Api {
 
             @Override
             public void onError(Exception e) {
-                if (e != null) {
-                    Toast.makeText(Application.getApplication(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                apiHandler.onFinally();
+                apiHandler.onError(e);
             }
         });
     }
 
-    public interface ApiHandler<T> {
-        void onSuccess(T data);
+    public static abstract class ApiHandler<T> {
+        public abstract void onSuccess(T data);
 
-        void onFinally();
+        public abstract void onFinally();
+
+        public void onError(Exception e) {
+            Toast.makeText(Application.getApplication(), String.format(Application.getApplication().getString(R.string.network_error), e != null ? e.getMessage() : ""), Toast.LENGTH_SHORT).show();
+            onFinally();
+        }
     }
 }
 

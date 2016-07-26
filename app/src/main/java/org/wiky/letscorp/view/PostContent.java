@@ -2,6 +2,7 @@ package org.wiky.letscorp.view;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -54,7 +55,7 @@ public class PostContent extends LinearLayout {
         layoutParams.topMargin = (int) Util.dp2px(4);
         tv.setLayoutParams(layoutParams);
         tv.setTextColor(getResources().getColor(R.color.colorPrimaryText));
-        tv.setText(text);
+        tv.setText(Html.fromHtml(text));
         if (Objects.equals(tag, "blockquote")) {
             tv.setPadding((int) Util.dp2px(20), getPaddingTop(), getPaddingRight(), getPaddingBottom());
             tv.setBackgroundResource(R.drawable.blockquote);
@@ -90,6 +91,9 @@ public class PostContent extends LinearLayout {
     }
 
     public void setContent(String content) {
+        if (getChildCount() > 0) {
+            return;
+        }
         removeAllViews();
         mContent = content;
         Document doc = Jsoup.parseBodyFragment(mContent);
@@ -102,11 +106,11 @@ public class PostContent extends LinearLayout {
                         addImage(img.attr("data-original"));
                     }
                 } else {
-                    addText(e.ownText(), tag);
+                    addText(e.html(), tag);
                 }
             } else if (Objects.equals(tag, "blockquote")) {
                 for (Element p : e.select(">p")) {
-                    addText(p.ownText(), tag);
+                    addText(p.html(), tag);
                 }
             } else {
                 Toast.makeText(getContext(), String.format("unknown tag %s", tag), Toast.LENGTH_SHORT).show();

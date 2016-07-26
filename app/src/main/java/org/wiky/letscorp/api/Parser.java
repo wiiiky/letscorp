@@ -5,6 +5,7 @@ import org.jsoup.nodes.Element;
 import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
+import org.wiky.letscorp.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,8 @@ public class Parser {
                 return null;
             }
         }
-        String id, title, href, content, img = "", commentCount = "", date = "";
+        String id, title, href, content, img = "", date = "";
+        int commentCount = 0;
         id = root.id();
         title = titleElement.text();
         href = titleElement.attr("href");
@@ -43,10 +45,7 @@ public class Parser {
         }
         content = contentElement.html();
         if (commentElement != null) {
-            commentCount = commentElement.text();
-            if (!commentCount.endsWith("条评论")) {
-                commentCount = "没有评论";
-            }
+            commentCount = Util.parseInt(commentElement.text());
         }
         if (dateElement != null) {
             date = dateElement.text();
@@ -77,7 +76,7 @@ public class Parser {
             String title = root.select("div.entry-title > h3").text();
             String href = root.select("a.search-entry").attr("href");
             String content = root.select("div.entry-summary").html();
-            return new PostItem(id, title, href, "", content, "", "", Const.LETSCORP_CATEGORY_SEARCH);
+            return new PostItem(id, title, href, "", content, 0, "", Const.LETSCORP_CATEGORY_SEARCH);
         } catch (Exception e) {
             e.printStackTrace();
         }

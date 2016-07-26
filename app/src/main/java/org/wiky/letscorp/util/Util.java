@@ -64,11 +64,13 @@ public class Util {
     }
 
     public static void openURL(String url) {
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent();
-        intent.setData(uri);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Application.getApplication().startActivity(intent);
+//        Uri uri = Uri.parse(url);
+//        Intent intent = new Intent();
+//        intent.setData(uri);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        Application.getApplication().startActivity(intent);
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        Application.getApplication().startActivity(i);
     }
 
     public static CharSequence trim(CharSequence s) {
@@ -103,5 +105,22 @@ public class Util {
     public static void hideInputKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager) Application.getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    /* 解析数字 */
+    public static int parseInt(String str) {
+        StringBuilder v = new StringBuilder();
+        for (int i = 0; i < str.length(); i++) {
+            if (Character.isDigit(str.charAt(i))) {
+                v.append(str.charAt(i));
+            } else {
+                break;
+            }
+        }
+        try {
+            return Integer.parseInt(v.toString());
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

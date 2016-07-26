@@ -1,9 +1,10 @@
 package org.wiky.letscorp.data.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wiky on 7/20/16.
+ * 文章评论
  */
 public class Comment {
     public String id;
@@ -25,6 +26,11 @@ public class Comment {
         this.datetime = datetime;
         this.content = content;
         this.cite = cite;
+        this.children = new ArrayList<>();
+    }
+
+    public int size() {
+        return 1 + children.size();
     }
 
     /* 评论的引用 */
