@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <org.wiky.letscorp.view.CircleImageView
+        android:id="@+id/comment.avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/comment.avatar"
+        android:padding="4dp"
+        android:paddingTop="0dp">
+
+        <TextView
+            android:id="@+id/comment.username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondaryText" />
+
+        <TextView
+            android:id="@+id/comment.datetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/colorAccent" />
+
+        <RelativeLayout
+            android:id="@+id/comment.cite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/comment.username"
+            android:layout_marginTop="6dp"
+            android:background="@color/md_grey_50"
+            android:elevation="0dp"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/comment.cite.cite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/comment_cite"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/comment.cite.username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_toEndOf="@id/comment.cite.cite"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/comment.cite.content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/comment.cite.username"
+                android:layout_marginStart="3dp"
+                android:layout_toEndOf="@id/comment.cite.cite"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/comment.content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/comment.cite"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorPrimaryText" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/comment.reply_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/comment.content"
+            android:layout_marginTop="10dp">
+
+            <org.wiky.letscorp.list.CommentReplyListView
+                android:id="@+id/comment.reply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
+
+</RelativeLayout>

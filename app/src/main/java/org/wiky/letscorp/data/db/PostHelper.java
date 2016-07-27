@@ -46,7 +46,7 @@ public class PostHelper implements BaseColumns {
         values.put(COLUMN_NAME_CATEGORIES, Util.serializeStringList(post.categories));
         values.put(COLUMN_NAME_DATETIME, post.date);
         values.put(COLUMN_NAME_AUTHOR, post.author);
-        values.put(COLUMN_NAME_COMMENTS, post.comments());
+        values.put(COLUMN_NAME_COMMENTS, post.getComments());
         return values;
     }
 

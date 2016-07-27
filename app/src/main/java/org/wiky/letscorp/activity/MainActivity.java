@@ -19,7 +19,7 @@ import android.view.Window;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
-import org.wiky.letscorp.adapter.PostListAdapter;
+import org.wiky.letscorp.adapter.PostItemAdapter;
 import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.db.QueryHelper;
 import org.wiky.letscorp.data.model.Post;
@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         startActivity(intent, options);
     }
 
-    public static class PostListFragment extends Fragment implements PostListAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, PostListView.OnRefreshListener, Signal.SignalListener {
+    public static class PostListFragment extends Fragment implements PostItemAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, PostListView.OnRefreshListener, Signal.SignalListener {
         private static final String ARG_CATEGORY = "category";
         private PostListView mPostList;
         private SwipeRefreshLayout mRefreshLayout;
@@ -181,7 +181,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         }
 
         @Override
-        public void onItemClick(PostListAdapter.PostItemHolder holder, PostItem data) {
+        public void onItemClick(PostItemAdapter.PostItemHolder holder, PostItem data) {
             PostActivity.startPostActivity(getActivity(), data);
         }
 

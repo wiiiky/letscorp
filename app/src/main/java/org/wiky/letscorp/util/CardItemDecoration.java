@@ -1,10 +1,8 @@
-package org.wiky.letscorp.list;
+package org.wiky.letscorp.util;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
-import org.wiky.letscorp.util.Util;
 
 /**
  * Created by wiky on 6/11/16.

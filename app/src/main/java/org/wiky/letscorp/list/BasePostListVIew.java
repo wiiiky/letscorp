@@ -6,15 +6,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
-import org.wiky.letscorp.adapter.PostListAdapter;
+import org.wiky.letscorp.adapter.PostItemAdapter;
 import org.wiky.letscorp.anim.PostItemAnimator;
 import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.model.Post;
+import org.wiky.letscorp.util.CardItemDecoration;
 
 
 public abstract class BasePostListVIew extends RecyclerView {
     protected final int mPageCount = 15;    /* 这是网页上显示的文章数量，用于取数据库时限制 */
-    protected PostListAdapter mAdapter;
+    protected PostItemAdapter mAdapter;
     protected LinearLayoutManager mLayoutManager;
     protected int mCategory = Const.LETSCORP_CATEGORY_ALL;
     protected int mPage;
@@ -56,7 +57,7 @@ public abstract class BasePostListVIew extends RecyclerView {
     }
 
     private void initialize(Context context) {
-        mAdapter = new PostListAdapter();
+        mAdapter = new PostItemAdapter();
         mLayoutManager = new LinearLayoutManager(context);
         mPage = 1;
         mReseting = false;
@@ -69,7 +70,7 @@ public abstract class BasePostListVIew extends RecyclerView {
         addOnScrollListener(mOnScrollListener);
     }
 
-    public void setOnItemClickListener(PostListAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(PostItemAdapter.OnItemClickListener listener) {
         mAdapter.setOnItemClickListener(listener);
     }
 

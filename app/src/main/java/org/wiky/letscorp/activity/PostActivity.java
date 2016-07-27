@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,8 +19,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.Api;
@@ -98,6 +95,9 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             /* 有缓存数据时不在显示载入进度条 */
             mProgressBar.setVisibility(View.GONE);
             mPagerAdapter.update(mPost);
+            if (mPost.commentCount() == mPostItem.commentCount) {   /* 当评论数量没有改变时不更新 */
+                return;
+            }
         } else {
             mProgressBar.setVisibility(View.VISIBLE);
         }
@@ -312,7 +312,6 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         }
 
         private void update(List<Comment> comments) {
-            Log.d("comments", new Gson().toJson(comments));
             mCommentList.setComments(comments);
         }
     }

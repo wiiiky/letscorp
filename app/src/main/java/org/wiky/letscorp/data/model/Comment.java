@@ -30,8 +30,16 @@ public class Comment {
         this.children = children;
     }
 
+    public static int getChildrenSize(List<Comment> children) {
+        int size = 0;
+        for (Comment c : children) {
+            size += c.size();
+        }
+        return size;
+    }
+
     public int size() {
-        return 1 + children.size();
+        return 1 + getChildrenSize(children);
     }
 
     /* 评论的引用 */

@@ -6,9 +6,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
-import org.wiky.letscorp.adapter.CommentListAdapter;
+import org.wiky.letscorp.adapter.CommentAdapter;
 import org.wiky.letscorp.anim.CommentItemAnimator;
 import org.wiky.letscorp.data.model.Comment;
+import org.wiky.letscorp.util.CardItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorat
 import me.everything.android.ui.overscroll.adapters.RecyclerViewOverScrollDecorAdapter;
 
 public class CommentListView extends RecyclerView {
-    private CommentListAdapter mAdapter;
+    private CommentAdapter mAdapter;
 
     public CommentListView(Context context) {
         super(context);
@@ -36,7 +37,7 @@ public class CommentListView extends RecyclerView {
 
     private void initialize(Context context) {
         setLayoutManager(new LinearLayoutManager(context));
-        mAdapter = new CommentListAdapter(new ArrayList<Comment>());
+        mAdapter = new CommentAdapter(new ArrayList<Comment>());
         setAdapter(mAdapter);
         setItemAnimator(new CommentItemAnimator());
         addItemDecoration(new CardItemDecoration(8));

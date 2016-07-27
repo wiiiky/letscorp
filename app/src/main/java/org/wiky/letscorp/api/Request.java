@@ -26,6 +26,7 @@ public class Request {
             .build();
 
     public static Call get(String url, Callback callback) {
+        Log.d("call", url);
         okhttp3.Request request = new okhttp3.Request.Builder()
                 .addHeader("User-Agent", Const.HTTP_USER_AGENT)
                 .addHeader("Accept", Const.HTTP_ACCEPT)

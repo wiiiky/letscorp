@@ -9,7 +9,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import org.wiky.letscorp.Application;
-import org.wiky.letscorp.adapter.PostListAdapter;
+import org.wiky.letscorp.adapter.PostItemAdapter;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class PostItemAnimator extends DefaultItemAnimator {
 
     @Override
     public boolean animateAdd(RecyclerView.ViewHolder viewHolder) {
-        if (viewHolder.getItemViewType() == PostListAdapter.VIEW_TYPE_DEFAULT) {
+        if (viewHolder.getItemViewType() == PostItemAdapter.VIEW_TYPE_DEFAULT) {
             runEnterAnimation(viewHolder);
             return false;
         }
@@ -79,7 +79,7 @@ public class PostItemAnimator extends DefaultItemAnimator {
 
     @Override
     public boolean animateRemove(RecyclerView.ViewHolder viewHolder) {
-        if (viewHolder.getItemViewType() == PostListAdapter.VIEW_TYPE_DEFAULT) {
+        if (viewHolder.getItemViewType() == PostItemAdapter.VIEW_TYPE_DEFAULT) {
             runExitAnimation(viewHolder);
         } else {
             runLoaderExitAnimation(viewHolder);

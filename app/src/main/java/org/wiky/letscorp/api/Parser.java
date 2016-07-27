@@ -80,12 +80,12 @@ public class Parser {
     public static Comment.CommentCite parseCommentCite(Element e) {
         try {
             String id = e.attr("cite").substring(1);
-            String username = e.select("p:first-child strong a").first().ownText();
+            String username = e.select("strong a").first().ownText();
 
             e = e.clone();
-            e.select("p:first-child strong").remove();
-            e.select("p:first-child br").remove();
-            String content = e.select("p").outerHtml();
+            e.select("strong").remove();
+            e.select("br").remove();
+            String content = e.html();
             return new Comment.CommentCite(id, username, content);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -99,7 +99,10 @@ public class Parser {
             return children;
         }
         for (Element li : ol.select(">li.comment")) {
-            children.add(parseComment(li));
+            Comment c = parseComment(li);
+            if (c != null) {
+                children.add(c);
+            }
         }
         return children;
     }

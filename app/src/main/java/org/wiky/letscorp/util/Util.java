@@ -63,13 +63,11 @@ public class Util {
     }
 
     public static void openURL(String url) {
-//        Uri uri = Uri.parse(url);
-//        Intent intent = new Intent();
-//        intent.setData(uri);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        Application.getApplication().startActivity(intent);
-        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        Application.getApplication().startActivity(i);
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent();
+        intent.setData(uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Application.getApplication().startActivity(intent);
     }
 
     public static CharSequence trim(CharSequence s) {

@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.wiky.letscorp.R;
-import org.wiky.letscorp.adapter.PostListAdapter;
+import org.wiky.letscorp.adapter.PostItemAdapter;
 import org.wiky.letscorp.adapter.QueryAdapter;
 import org.wiky.letscorp.data.db.QueryHelper;
 import org.wiky.letscorp.data.model.Post;
@@ -25,7 +25,7 @@ import org.wiky.letscorp.view.SwipeRefreshLayout;
 public class SearchActivity extends BaseActivity implements SearchBox.OnSearchListener,
         BasePostListVIew.OnRefreshListener,
         android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener,
-        PostListAdapter.OnItemClickListener, QueryAdapter.OnItemClickListener,
+        PostItemAdapter.OnItemClickListener, QueryAdapter.OnItemClickListener,
         Transition.TransitionListener, Signal.SignalListener {
 
     private SearchBox mSearchBox;
@@ -127,7 +127,7 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
     }
 
     @Override
-    public void onItemClick(PostListAdapter.PostItemHolder holder, PostItem data) {
+    public void onItemClick(PostItemAdapter.PostItemHolder holder, PostItem data) {
         PostActivity.startPostActivity(this, data);
     }
 

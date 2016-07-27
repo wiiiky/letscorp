@@ -21,7 +21,7 @@ import java.util.Objects;
  * Created by wiky on 6/14/16.
  * 文章列表适配器
  */
-public class PostListAdapter extends RecyclerView.Adapter {
+public class PostItemAdapter extends RecyclerView.Adapter {
 
     public static final int VIEW_TYPE_DEFAULT = 1;
     public static final int VIEW_TYPE_LOADER = 2;
@@ -30,7 +30,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
     private boolean mLoading;
     private OnItemClickListener mOnItemClickListener;
 
-    public PostListAdapter() {
+    public PostItemAdapter() {
         mItems = new ArrayList<>();
         mLoading = false;
     }

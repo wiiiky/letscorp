@@ -46,13 +46,13 @@ public class Post {
 
     public int commentCount() {
         int size = 0;
-        for (Comment comment : comments) {
-            size += comment.size();
+        for (Comment c : comments) {
+            size += c.size();
         }
         return size;
     }
 
-    public String comments() {
+    public String getComments() {
         Gson gson = new Gson();
         return gson.toJson(comments);
     }

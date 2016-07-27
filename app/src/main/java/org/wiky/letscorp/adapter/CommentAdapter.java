@@ -10,17 +10,18 @@ import android.widget.TextView;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.model.Comment;
+import org.wiky.letscorp.list.CommentReplyListView;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.CircleImageView;
 
 import java.util.List;
 
 
-public class CommentListAdapter extends RecyclerView.Adapter {
+public class CommentAdapter extends RecyclerView.Adapter {
 
     private List<Comment> mData;
 
-    public CommentListAdapter(List<Comment> comments) {
+    public CommentAdapter(List<Comment> comments) {
         mData = comments;
     }
 
@@ -38,13 +39,18 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         viewHolder.username.setText(data.username);
         viewHolder.datetime.setText(data.datetime);
         viewHolder.content.setText(Util.trim(Html.fromHtml(data.content)));
-        viewHolder.content.setMovementMethod(LinkMovementMethod.getInstance());
         if (data.cite != null) {
             viewHolder.citeLayout.setVisibility(View.VISIBLE);
             viewHolder.citeUsername.setText(data.cite.username);
             viewHolder.citeContent.setText(Util.trim(Html.fromHtml(data.cite.content)));
         } else {
             viewHolder.citeLayout.setVisibility(View.GONE);
+        }
+        if (!data.children.isEmpty()) {
+            viewHolder.replyContainer.setVisibility(View.VISIBLE);
+            viewHolder.reply.setComments(data.children);
+        } else {
+            viewHolder.replyContainer.setVisibility(View.GONE);
         }
     }
 
@@ -74,6 +80,8 @@ public class CommentListAdapter extends RecyclerView.Adapter {
         public ViewGroup citeLayout;
         public TextView citeUsername;
         public TextView citeContent;
+        public ViewGroup replyContainer;
+        public CommentReplyListView reply;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -84,6 +92,10 @@ public class CommentListAdapter extends RecyclerView.Adapter {
             citeLayout = (ViewGroup) itemView.findViewById(R.id.comment_cite);
             citeUsername = (TextView) itemView.findViewById(R.id.comment_cite_username);
             citeContent = (TextView) itemView.findViewById(R.id.comment_cite_content);
+            replyContainer = (ViewGroup) itemView.findViewById(R.id.comment_reply_container);
+            reply = (CommentReplyListView) itemView.findViewById(R.id.comment_reply);
+
+            content.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 }
