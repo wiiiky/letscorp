@@ -17,52 +17,34 @@ import java.util.Objects;
  */
 public class Parser {
     /* 解析列表中的文章信息 */
-    public static PostItem parsePostItem(Element root, int category) {
-        Element titleElement = root.select("div.entry-title a").first();
-        Element imgELement = root.select("img").first();
-        Element contentElement = root.select("div.entry-content").first();
-        Element commentElement = root.select("footer div.comments-link a").first();
-        Element dateElement = root.select("footer time.entry-date").first();
-        if (titleElement == null) {
-            return null;
-        } else if (contentElement == null) {
-            if ((contentElement = root.select("div.entry-summary").first()) == null) {
+    public static PostItem parsePostItem(Element article, int category) {
+        int id = Util.parseInt(article.id().substring(5));
+        String title = article.select(">header>div.entry-title a").text();
+        String href = article.select(">header>div.entry-title a").attr("href");
+        String img = article.select(">header img").attr("data-original");
+        int commentCount = Util.parseInt(article.select(">footer div.comments-link a").text());
+        String date = article.select(">footer time.entry-date").text();
+        Element contentElement = article.select("div.entry-content").first();
+        if (contentElement == null) {
+            if ((contentElement = article.select("div.entry-summary").first()) == null) {
                 return null;
             }
-        }
-        String id, title, href, content, img = "", date = "";
-        int commentCount = 0;
-        id = root.id();
-        title = titleElement.text();
-        href = titleElement.attr("href");
-        if (imgELement != null && !imgELement.attr("data-original").isEmpty()) {
-            img = imgELement.attr("data-original");
         }
         for (Element t : contentElement.getAllElements()) { /* 删除多余的标签 */
             if (Objects.equals(t.tagName(), "a") || t.text().isEmpty()) {
                 t.remove();
             }
         }
-        content = contentElement.html();
-        if (commentElement != null) {
-            commentCount = Util.parseInt(commentElement.text());
-        }
-        if (dateElement != null) {
-            date = dateElement.text();
-        }
+        String content = contentElement.html();
 
-        if (id.startsWith("post-")) {
-            id = id.substring(5);
-        }
-
-        return new PostItem(Integer.parseInt(id), title, href, img, content, commentCount, date, category);
+        return new PostItem(id, title, href, img, content, commentCount, date, category);
     }
 
     /* 解析文章列表 */
     public static List<PostItem> parsePostItems(Document doc, int category) {
         List<PostItem> items = new ArrayList<>();
-        for (Element post : doc.select("article.post")) {
-            PostItem item = parsePostItem(post, category);
+        for (Element article : doc.select("article.post")) {
+            PostItem item = parsePostItem(article, category);
             if (item != null) {
                 items.add(item);
             }
@@ -111,10 +93,21 @@ public class Parser {
         return null;
     }
 
+    public static List<Comment> parseCommentChildren(Element ol) {
+        List<Comment> children = new ArrayList<>();
+        if (ol == null) {
+            return children;
+        }
+        for (Element li : ol.select(">li.comment")) {
+            children.add(parseComment(li));
+        }
+        return children;
+    }
+
     /* 解析评论 */
-    public static Comment parseComment(Element e) {
+    public static Comment parseComment(Element li) {
         try {
-            Element article = e.select(">article").first();
+            Element article = li.select(">article").first();
             String id = article.attr("id").substring(4);
             String avatar = article.select("div.vcard > img").first().attr("data-original");
             String username = article.select("div.vcard > b.fn").first().text();
@@ -125,7 +118,8 @@ public class Parser {
             if (blockquote != null) {
                 commentCite = parseCommentCite(blockquote);
             }
-            return new Comment(id, username, avatar, datetime, content, commentCite);
+            List<Comment> children = parseCommentChildren(li.select(">ol.children").first());
+            return new Comment(id, username, avatar, datetime, content, commentCite, children);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -134,24 +128,24 @@ public class Parser {
 
     /* 解析文章详情 */
     public static Post parsePost(Element doc, String href) {
-        Element p = doc.select("article.post").first();
-        String title = p.select("div.entry-title > h2").text();
-        String content = p.select("div.entry-content").html();
+        Element article = doc.select("article.post").first();
+        String title = article.select("div.entry-title > h2").text();
+        String content = article.select("div.entry-content").html();
         ArrayList<String> tags = new ArrayList<>();
-        for (Element t : p.select("p.tags > a")) {
-            tags.add(t.text());
+        for (Element a : article.select("p.tags > a")) {
+            tags.add(a.text());
         }
         ArrayList<String> categories = new ArrayList<>();
-        for (Element t : p.select("p.categories > a")) {
+        for (Element t : article.select("p.categories > a")) {
             categories.add(t.text());
         }
-        String date = p.select("p.date time.entry-date").text();
-        String author = p.select("p.date a[rel=author]").text();
+        String date = article.select("p.date time.entry-date").text();
+        String author = article.select("p.date a[rel=author]").text();
 
         List<Comment> comments = new ArrayList<>();
 
-        for (Element c : doc.select("div.comments-area > ol.comment-list > li.comment")) {
-            Comment comment = parseComment(c);
+        for (Element li : doc.select("div.comments-area > ol.comment-list > li.comment")) {
+            Comment comment = parseComment(li);
             if (comment != null) {
                 comments.add(comment);
             }

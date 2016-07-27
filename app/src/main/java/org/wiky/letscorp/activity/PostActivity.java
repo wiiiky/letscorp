@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.Api;
@@ -309,6 +312,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         }
 
         private void update(List<Comment> comments) {
+            Log.d("comments", new Gson().toJson(comments));
             mCommentList.setComments(comments);
         }
     }

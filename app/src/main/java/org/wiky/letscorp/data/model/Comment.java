@@ -16,17 +16,18 @@ public class Comment {
     public List<Comment> children;
 
     public Comment(String id, String username, String avatar, String datetime, String content) {
-        this(id, username, avatar, datetime, content, null);
+        this(id, username, avatar, datetime, content, null, new ArrayList<Comment>());
     }
 
-    public Comment(String id, String username, String avatar, String datetime, String content, CommentCite cite) {
+    public Comment(String id, String username, String avatar, String datetime, String content, CommentCite cite,
+                   List<Comment> children) {
         this.id = id;
         this.username = username;
         this.avatar = avatar;
         this.datetime = datetime;
         this.content = content;
         this.cite = cite;
-        this.children = new ArrayList<>();
+        this.children = children;
     }
 
     public int size() {

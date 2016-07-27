@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class Util {
 
-    public static final String HTTP_USER_AGENT = "Mozilla/5.0 (X11; Fedora; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
     public static float dp2px(float dp) {
         Resources r = Resources.getSystem();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());

@@ -8,6 +8,8 @@ import java.util.Map;
  */
 public final class Const {
     public final static String LETSCORP_HOST = "https://m.letscorp.net";
+    public static final String HTTP_USER_AGENT = "Mozilla/5.0 (X11; Fedora; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
+    public static final String HTTP_ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
 
     public final static int LETSCORP_CATEGORY_ALL = 0;
     public final static int LETSCORP_CATEGORY_ECONOMICS = 1;
