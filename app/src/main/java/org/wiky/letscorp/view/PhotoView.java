@@ -12,7 +12,7 @@ import com.bumptech.glide.request.target.Target;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
-import org.wiky.letscorp.util.Util;
+import org.wiky.letscorp.api.Const;
 
 public class PhotoView extends uk.co.senab.photoview.PhotoView {
 
@@ -48,7 +48,7 @@ public class PhotoView extends uk.co.senab.photoview.PhotoView {
 
         Log.d("url", mUrl);
         GlideUrl glideUrl = new GlideUrl(mUrl, new LazyHeaders.Builder()
-                .addHeader("User-Agent", Util.HTTP_USER_AGENT)
+                .addHeader("User-Agent", Const.HTTP_USER_AGENT)
                 .build());
         BitmapTypeRequest req = Glide.with(Application.getApplication()).load(glideUrl).asBitmap();
         if (loading) {

@@ -1,5 +1,6 @@
 package org.wiky.letscorp.api;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import org.jsoup.nodes.Document;
@@ -32,6 +33,7 @@ public class Api {
     /* 获取文章列表 */
     public static void fetchPostItems(final int category, int page, final ApiHandler<List<PostItem>> apiHandler) {
         String url = Const.getPostListUrl(category, page);
+        Log.d("url", url);
         Request.get(url, new Request.Callback() {
             @Override
             public void onSuccess(Document doc) {

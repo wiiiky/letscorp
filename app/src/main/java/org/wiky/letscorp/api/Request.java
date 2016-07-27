@@ -5,7 +5,6 @@ import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.wiky.letscorp.util.Util;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -15,7 +14,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 /**
- * Created by wiky on 7/18/16.
+ * HTTP请求的封装
  */
 public class Request {
     private static OkHttpClient mClient = new OkHttpClient()
@@ -28,7 +27,8 @@ public class Request {
 
     public static Call get(String url, Callback callback) {
         okhttp3.Request request = new okhttp3.Request.Builder()
-                .addHeader("User-Agent", Util.HTTP_USER_AGENT)
+                .addHeader("User-Agent", Const.HTTP_USER_AGENT)
+                .addHeader("Accept", Const.HTTP_ACCEPT)
                 .url(url)
                 .build();
         Call call = mClient.newCall(request);
