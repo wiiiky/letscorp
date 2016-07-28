@@ -36,6 +36,9 @@ public class CommentListView extends RecyclerView {
     }
 
     private void initialize(Context context) {
+        if (isInEditMode()) {
+            return;
+        }
         setLayoutManager(new LinearLayoutManager(context));
         mAdapter = new CommentAdapter(new ArrayList<Comment>());
         setAdapter(mAdapter);
@@ -48,4 +51,5 @@ public class CommentListView extends RecyclerView {
     public void setComments(List<Comment> comments) {
         mAdapter.setComments(comments);
     }
+
 }

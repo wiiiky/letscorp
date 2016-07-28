@@ -11,7 +11,6 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -70,20 +69,14 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
 
 
     public void show(int cx, int cy) {
-        int[] pos = Util.getScreenLocation(this);
-        cx -= pos[0];
-        cy -= pos[1];
-        Animator animator = ViewAnimationUtils.createCircularReveal(this, cx, cy, 0, (float) Math.hypot(getWidth(), getHeight()));
+        Animator animator = Util.createCircularReveal(this, cx, cy, true);
         animator.setDuration(300);
         setVisibility(VISIBLE);
         animator.start();
     }
 
     public void hide(int cx, int cy) {
-        int[] pos = Util.getScreenLocation(this);
-        cx -= pos[0];
-        cy -= pos[1];
-        Animator animator = ViewAnimationUtils.createCircularReveal(this, cx, cy, (float) Math.hypot(getWidth(), getHeight()), 0);
+        Animator animator = Util.createCircularReveal(this, cx, cy, false);
         animator.setDuration(300);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override

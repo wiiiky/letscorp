@@ -1,11 +1,13 @@
 package org.wiky.letscorp.util;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
 import org.json.JSONArray;
@@ -119,5 +121,20 @@ public class Util {
         } catch (Exception e) {
             return 0;
         }
+    }
+
+    /* 创建reveal动画，cx和cy分别是圆心相对于屏幕的坐标 */
+    public static Animator createCircularReveal(View view, int cx, int cy, boolean show) {
+        int[] pos = Util.getScreenLocation(view);
+        cx -= pos[0];
+        cy -= pos[1];
+        float r = (float) Math.hypot(view.getWidth(), view.getHeight());
+        float startRadius = 0;
+        float endRadius = r;
+        if (!show) {
+            startRadius = r;
+            endRadius = 0;
+        }
+        return ViewAnimationUtils.createCircularReveal(view, cx, cy, startRadius, endRadius);
     }
 }
