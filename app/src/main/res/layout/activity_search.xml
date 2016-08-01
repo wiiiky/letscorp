@@ -21,14 +21,6 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 android:transitionName="toolbar" />
 
-            <org.wiky.letscorp.view.SearchBox
-                android:id="@+id/search.search_box"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="4dp"
-                android:layout_marginStart="4dp" />
-
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
@@ -46,5 +38,10 @@
 
     </org.wiky.letscorp.view.SwipeRefreshLayout>
 
+    <org.wiky.letscorp.view.SearchBox
+        android:id="@+id/search.search_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:translationZ="100000dp" />
 
 </RelativeLayout>

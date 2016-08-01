@@ -7,9 +7,7 @@ import android.support.v7.widget.Toolbar;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.util.Util;
 
-/**
- * Created by wiky on 6/11/16.
- */
+
 public class BaseActivity extends AppCompatActivity {
     protected Toolbar mToolBar;
     protected AppBarLayout mAppBar;

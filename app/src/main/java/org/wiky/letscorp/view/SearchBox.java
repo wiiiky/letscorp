@@ -5,27 +5,36 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.adapter.QueryAdapter;
 import org.wiky.letscorp.data.db.QueryHelper;
 import org.wiky.letscorp.data.model.Query;
 import org.wiky.letscorp.util.Util;
 
 
-public class SearchBox extends FrameLayout implements View.OnClickListener, TextWatcher, View.OnKeyListener {
+public class SearchBox extends FrameLayout implements View.OnClickListener, TextWatcher, View.OnKeyListener, View.OnFocusChangeListener, QueryAdapter.OnItemClickListener {
 
+    private ViewGroup mRoot;
+    private CardView mCard;
     private ImageView mBackImage;
     private ImageView mClearImage;
-    private EditText mQueryBox;
+    private EditText mQueryEdit;
+    private RecyclerView mQueryList;
+    private QueryAdapter mQueryAdapter;
     private OnSearchListener mOnSearchListener = null;
 
     public SearchBox(Context context) {
@@ -52,31 +61,50 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
     private void initialize(Context context) {
         inflate(context, R.layout.search_box, this);
 
-        mQueryBox = (EditText) findViewById(R.id.search_box_edit);
+        mRoot = (ViewGroup) findViewById(R.id.search_box_root);
+        mCard = (CardView) findViewById(R.id.search_box_card);
+        mQueryEdit = (EditText) findViewById(R.id.search_box_edit);
         mBackImage = (ImageView) findViewById(R.id.search_box_back);
         mClearImage = (ImageView) findViewById(R.id.search_box_clear);
-        if (mQueryBox == null) {
+        mQueryList = (RecyclerView) findViewById(R.id.search_box_query_list);
+        if (mQueryEdit == null) {
             return;
         }
         mBackImage.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
         mClearImage.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
-        mQueryBox.addTextChangedListener(this);
-        mQueryBox.setOnKeyListener(this);
+        mQueryEdit.addTextChangedListener(this);
+        mQueryEdit.setOnFocusChangeListener(this);
+        mQueryEdit.setOnKeyListener(this);
         mBackImage.setOnClickListener(this);
         mClearImage.setOnClickListener(this);
+        mRoot.setOnClickListener(this);
+
+        mQueryAdapter = new QueryAdapter();
+        mQueryAdapter.setOnItemClickListener(this);
+        mQueryList.setAdapter(mQueryAdapter);
+        mQueryList.setLayoutManager(new LinearLayoutManager(context));
+
+        setVisibility(INVISIBLE);
     }
 
 
     public void show(int cx, int cy) {
-        Animator animator = Util.createCircularReveal(this, cx, cy, true);
-        animator.setDuration(300);
         setVisibility(VISIBLE);
+        Animator animator = Util.createCircularReveal(mCard, cx, cy, true);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mQueryEdit.requestFocus();
+            }
+        });
+        animator.setDuration(300);
         animator.start();
     }
 
     public void hide(int cx, int cy) {
-        Animator animator = Util.createCircularReveal(this, cx, cy, false);
+        Animator animator = Util.createCircularReveal(mCard, cx, cy, false);
         animator.setDuration(300);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -89,10 +117,11 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
     }
 
     public void setQuery(String query) {
-        mQueryBox.removeTextChangedListener(this);
-        mQueryBox.setText(query);
-        mQueryBox.setSelection(query.length());
-        mQueryBox.addTextChangedListener(this);
+        mQueryEdit.removeTextChangedListener(this);
+        mQueryEdit.setText(query);
+        mQueryEdit.setSelection(query.length());
+        mClearImage.setVisibility(TextUtils.isEmpty(query) ? INVISIBLE : VISIBLE);
+        mQueryEdit.addTextChangedListener(this);
     }
 
     @Override
@@ -103,11 +132,11 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
                 mOnSearchListener.onSearchBack();
             }
         } else if (id == R.id.search_box_clear) {
-            mQueryBox.setText("");
+            mQueryEdit.setText("");
             mClearImage.setVisibility(INVISIBLE);
-            if (mOnSearchListener != null) {
-                mOnSearchListener.onQueryChanged("");
-            }
+            mQueryEdit.requestFocus();
+        } else if (id == R.id.search_box_root) {
+            mQueryEdit.clearFocus();
         }
     }
 
@@ -118,9 +147,7 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if (mOnSearchListener != null) {
-            mOnSearchListener.onQueryChanged(charSequence.toString());
-        }
+        mQueryAdapter.update(charSequence.toString());
         mClearImage.setVisibility(TextUtils.isEmpty(charSequence) ? INVISIBLE : VISIBLE);
     }
 
@@ -130,7 +157,7 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
     }
 
     public String getSearchQuery() {
-        Editable editable = mQueryBox.getText();
+        Editable editable = mQueryEdit.getText();
         if (editable == null) {
             return "";
         }
@@ -143,10 +170,9 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
                 (keyCode == KeyEvent.KEYCODE_ENTER ||
                         keyCode == KeyEvent.KEYCODE_SEARCH)) {
             String query = getSearchQuery();
-            if (!TextUtils.isEmpty(query) && mOnSearchListener != null) {
-                mOnSearchListener.onSearch(query);
+            if (!TextUtils.isEmpty(query)) {
+                onSearch(query);
             }
-            QueryHelper.saveQuery(new Query(query));
             return true;
         }
         return false;
@@ -161,9 +187,38 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
         return true;
     }
 
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        if (b) {
+            mQueryAdapter.update(getSearchQuery());
+            mRoot.setClickable(true);
+            Util.showInputKeyboard(view);
+        } else {
+            mQueryAdapter.clear();
+            mRoot.setClickable(false);
+            Util.hideInputKeyboard(view);
+        }
+    }
+
+    public void clearFocus() {
+        mQueryEdit.clearFocus();
+    }
+
+    @Override
+    public void onItemClick(View v, String query) {
+        onSearch(query);
+    }
+
+    private void onSearch(String query) {
+        if (mOnSearchListener != null) {
+            QueryHelper.saveQuery(new Query(query));
+            setQuery(query);
+            mOnSearchListener.onSearch(query);
+        }
+    }
+
     public interface OnSearchListener {
         void onSearch(String query);
-        void onQueryChanged(String query);
 
         void onSearchBack();
     }

@@ -106,6 +106,11 @@ public class Util {
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
+    public static void showInputKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) Application.getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(v, 0);
+    }
+
     /* 解析数字 */
     public static int parseInt(String str) {
         StringBuilder v = new StringBuilder();

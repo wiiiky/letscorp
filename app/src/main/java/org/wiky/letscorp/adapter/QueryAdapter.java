@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,7 +20,7 @@ import java.util.List;
 /**
  * Created by wiky on 7/25/16.
  */
-public class QueryAdapter extends BaseAdapter {
+public class QueryAdapter extends RecyclerView.Adapter {
 
     private static final int AUTOCOMPLETE_COUNT = 5;
 
@@ -30,7 +29,8 @@ public class QueryAdapter extends BaseAdapter {
     private OnItemClickListener mOnItemClickListener = null;
 
     public QueryAdapter() {
-        mData = QueryHelper.getQueries(mQuery, AUTOCOMPLETE_COUNT);
+//        mData = QueryHelper.getQueries(mQuery, AUTOCOMPLETE_COUNT);
+        mData = new ArrayList<>();
     }
 
     public void update(String query) {
@@ -39,16 +39,18 @@ public class QueryAdapter extends BaseAdapter {
     }
 
     public void clear() {
-        notifyDataSetInvalidated();
+        List<Query> oldData = mData;
         mData = new ArrayList<>();
-        notifyDataSetChanged();
+        notifyItemRangeRemoved(0, oldData.size());
     }
 
+    @Override
     public QueryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_query, parent, false);
         return new QueryHolder(v);
     }
 
+    @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Query query = mData.get(position);
         final QueryHolder viewHolder = (QueryHolder) holder;
@@ -69,48 +71,29 @@ public class QueryAdapter extends BaseAdapter {
         viewHolder.clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mData.remove(query);
                 QueryHelper.deleteQuery(query.query);
                 update();
             }
         });
     }
 
-    private void update() {
-        mData = QueryHelper.getQueries(mQuery, AUTOCOMPLETE_COUNT);
-        if (mData.isEmpty()) {
-            notifyDataSetInvalidated();
-        } else {
-            notifyDataSetChanged();
-        }
-    }
-
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return mData.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return mData.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if (view == null) {
-            QueryHolder holder = onCreateViewHolder(viewGroup, 0);
-            view = holder.itemView;
-            view.setTag(holder);
+    private void update() {
+        List<Query> oldData = mData;
+        mData = QueryHelper.getQueries(mQuery, AUTOCOMPLETE_COUNT);
+        if (mData.size() >= oldData.size()) {
+            notifyItemRangeChanged(0, oldData.size());
+            notifyItemRangeInserted(oldData.size(), mData.size() - oldData.size());
+        } else {
+            notifyItemRangeChanged(0, mData.size());
+            notifyItemRangeRemoved(mData.size(), oldData.size() - mData.size());
         }
-        QueryHolder holder = (QueryHolder) view.getTag();
-        onBindViewHolder(holder, i);
-        return view;
     }
+
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         mOnItemClickListener = listener;
