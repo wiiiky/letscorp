@@ -6,10 +6,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
-import org.wiky.letscorp.adapter.PostItemAdapter;
-import org.wiky.letscorp.anim.PostItemAnimator;
 import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.model.Post;
+import org.wiky.letscorp.list.adapter.PostItemAdapter;
+import org.wiky.letscorp.list.anim.PostAnimator;
 import org.wiky.letscorp.util.CardItemDecoration;
 
 
@@ -64,7 +64,7 @@ public abstract class BasePostListVIew extends RecyclerView {
 
         setAdapter(mAdapter);
         setLayoutManager(mLayoutManager);
-        setItemAnimator(new PostItemAnimator());
+        setItemAnimator(new PostAnimator());
         addItemDecoration(new CardItemDecoration(10));
 
         addOnScrollListener(mOnScrollListener);

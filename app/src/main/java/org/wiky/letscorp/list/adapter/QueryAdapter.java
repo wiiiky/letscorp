@@ -1,4 +1,4 @@
-package org.wiky.letscorp.adapter;
+package org.wiky.letscorp.list.adapter;
 
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -16,9 +16,11 @@ import org.wiky.letscorp.data.model.Query;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by wiky on 7/25/16.
+ * 搜索历史记录的适配器
  */
 public class QueryAdapter extends RecyclerView.Adapter {
 
@@ -29,7 +31,6 @@ public class QueryAdapter extends RecyclerView.Adapter {
     private OnItemClickListener mOnItemClickListener = null;
 
     public QueryAdapter() {
-//        mData = QueryHelper.getQueries(mQuery, AUTOCOMPLETE_COUNT);
         mData = new ArrayList<>();
     }
 
@@ -86,10 +87,18 @@ public class QueryAdapter extends RecyclerView.Adapter {
         List<Query> oldData = mData;
         mData = QueryHelper.getQueries(mQuery, AUTOCOMPLETE_COUNT);
         if (mData.size() >= oldData.size()) {
-            notifyItemRangeChanged(0, oldData.size());
+            for (int i = 0; i < oldData.size(); i++) {
+                if (!Objects.equals(oldData.get(i).query, mData.get(i).query)) {
+                    notifyItemChanged(i);
+                }
+            }
             notifyItemRangeInserted(oldData.size(), mData.size() - oldData.size());
         } else {
-            notifyItemRangeChanged(0, mData.size());
+            for (int i = 0; i < mData.size(); i++) {
+                if (!Objects.equals(oldData.get(i).query, mData.get(i).query)) {
+                    notifyItemChanged(i);
+                }
+            }
             notifyItemRangeRemoved(mData.size(), oldData.size() - mData.size());
         }
     }

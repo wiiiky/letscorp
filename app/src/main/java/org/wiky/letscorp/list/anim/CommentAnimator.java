@@ -1,4 +1,4 @@
-package org.wiky.letscorp.anim;
+package org.wiky.letscorp.list.anim;
 
 import android.animation.Animator;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,7 +8,7 @@ import android.view.animation.DecelerateInterpolator;
 import org.wiky.letscorp.Application;
 
 /* 评论列表的动画 */
-public class CommentItemAnimator extends DefaultItemAnimator {
+public class CommentAnimator extends DefaultItemAnimator {
 
 
     @Override

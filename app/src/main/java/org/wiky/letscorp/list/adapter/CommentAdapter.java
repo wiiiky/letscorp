@@ -1,4 +1,4 @@
-package org.wiky.letscorp.adapter;
+package org.wiky.letscorp.list.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -14,30 +14,27 @@ import org.wiky.letscorp.list.CommentReplyListView;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.CircleImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by wiky on 7/27/16.
- */
-public class CommentReplyAdapter extends RecyclerView.Adapter {
+
+public class CommentAdapter extends RecyclerView.Adapter {
 
     private List<Comment> mData;
 
-    public CommentReplyAdapter() {
-        mData = new ArrayList<>();
+    public CommentAdapter(List<Comment> comments) {
+        mData = comments;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment_reply, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
-        Comment data = mData.get(position);
+        final Comment data = mData.get(position);
         viewHolder.avatar.setImageResource(R.mipmap.ic_face_black);
         viewHolder.username.setText(data.username);
         viewHolder.datetime.setText(data.datetime);
@@ -62,9 +59,16 @@ public class CommentReplyAdapter extends RecyclerView.Adapter {
         return mData.size();
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(final List<Comment> comments) {
+        List<Comment> oldData = mData;
         mData = comments;
-        notifyDataSetChanged();
+        if (mData.size() > oldData.size()) {
+            notifyItemRangeChanged(0, oldData.size());
+            notifyItemRangeInserted(oldData.size(), mData.size() - oldData.size());
+        } else {
+            notifyItemRangeChanged(0, mData.size());
+            notifyItemRangeRemoved(mData.size(), oldData.size() - mData.size());
+        }
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {

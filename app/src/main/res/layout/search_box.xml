@@ -61,7 +61,7 @@
                 android:layout_height="1dp"
                 android:background="@color/md_grey_100" />
 
-            <android.support.v7.widget.RecyclerView
+            <org.wiky.letscorp.list.QueryListView
                 android:id="@+id/search_box.query_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

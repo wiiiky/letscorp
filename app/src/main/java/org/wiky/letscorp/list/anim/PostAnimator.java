@@ -1,4 +1,4 @@
-package org.wiky.letscorp.anim;
+package org.wiky.letscorp.list.anim;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -9,7 +9,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import org.wiky.letscorp.Application;
-import org.wiky.letscorp.adapter.PostItemAdapter;
+import org.wiky.letscorp.list.adapter.PostItemAdapter;
 
 import java.util.List;
 
@@ -17,10 +17,10 @@ import java.util.List;
  * Created by wiky on 6/14/16.
  * 文章列表的动画效果
  */
-public class PostItemAnimator extends DefaultItemAnimator {
+public class PostAnimator extends DefaultItemAnimator {
 
     @Override
-    public boolean canReuseUpdatedViewHolder(RecyclerView.ViewHolder viewHolder) {
+    public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder) {
         return true;
     }
 

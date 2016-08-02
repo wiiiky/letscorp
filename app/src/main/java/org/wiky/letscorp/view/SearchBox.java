@@ -6,8 +6,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,9 +18,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import org.wiky.letscorp.R;
-import org.wiky.letscorp.adapter.QueryAdapter;
 import org.wiky.letscorp.data.db.QueryHelper;
 import org.wiky.letscorp.data.model.Query;
+import org.wiky.letscorp.list.QueryListView;
+import org.wiky.letscorp.list.adapter.QueryAdapter;
 import org.wiky.letscorp.util.Util;
 
 
@@ -33,8 +32,8 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
     private ImageView mBackImage;
     private ImageView mClearImage;
     private EditText mQueryEdit;
-    private RecyclerView mQueryList;
-    private QueryAdapter mQueryAdapter;
+    private QueryListView mQueryList;
+    //    private QueryAdapter mQueryAdapter;
     private OnSearchListener mOnSearchListener = null;
 
     public SearchBox(Context context) {
@@ -66,7 +65,7 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
         mQueryEdit = (EditText) findViewById(R.id.search_box_edit);
         mBackImage = (ImageView) findViewById(R.id.search_box_back);
         mClearImage = (ImageView) findViewById(R.id.search_box_clear);
-        mQueryList = (RecyclerView) findViewById(R.id.search_box_query_list);
+        mQueryList = (QueryListView) findViewById(R.id.search_box_query_list);
         if (mQueryEdit == null) {
             return;
         }
@@ -80,10 +79,7 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
         mClearImage.setOnClickListener(this);
         mRoot.setOnClickListener(this);
 
-        mQueryAdapter = new QueryAdapter();
-        mQueryAdapter.setOnItemClickListener(this);
-        mQueryList.setAdapter(mQueryAdapter);
-        mQueryList.setLayoutManager(new LinearLayoutManager(context));
+        mQueryList.setOnItemClickListener(this);
 
         setVisibility(INVISIBLE);
     }
@@ -147,7 +143,7 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        mQueryAdapter.update(charSequence.toString());
+        mQueryList.update(charSequence.toString());
         mClearImage.setVisibility(TextUtils.isEmpty(charSequence) ? INVISIBLE : VISIBLE);
     }
 
@@ -190,11 +186,11 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
     @Override
     public void onFocusChange(View view, boolean b) {
         if (b) {
-            mQueryAdapter.update(getSearchQuery());
+            mQueryList.update(getSearchQuery());
             mRoot.setClickable(true);
             Util.showInputKeyboard(view);
         } else {
-            mQueryAdapter.clear();
+            mQueryList.clear();
             mRoot.setClickable(false);
             Util.hideInputKeyboard(view);
         }

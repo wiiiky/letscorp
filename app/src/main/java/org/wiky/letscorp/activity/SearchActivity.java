@@ -6,11 +6,11 @@ import android.view.Menu;
 import android.widget.Toast;
 
 import org.wiky.letscorp.R;
-import org.wiky.letscorp.adapter.PostItemAdapter;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.list.BasePostListVIew;
 import org.wiky.letscorp.list.SearchListView;
+import org.wiky.letscorp.list.adapter.PostItemAdapter;
 import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.view.SearchBox;
 import org.wiky.letscorp.view.SwipeRefreshLayout;

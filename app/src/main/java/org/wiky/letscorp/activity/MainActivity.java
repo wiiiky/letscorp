@@ -19,12 +19,12 @@ import android.view.Window;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
-import org.wiky.letscorp.adapter.PostItemAdapter;
 import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.db.QueryHelper;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.list.PostListView;
+import org.wiky.letscorp.list.adapter.PostItemAdapter;
 import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.AboutDialogHelper;

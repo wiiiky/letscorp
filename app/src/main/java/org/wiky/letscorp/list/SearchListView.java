@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Created by wiky on 7/23/16.
+ * 搜索结果列表
  */
 public class SearchListView extends BasePostListVIew {
 
