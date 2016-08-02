@@ -33,8 +33,9 @@ public class QueryListView extends RecyclerView {
         mAdapter = new QueryAdapter();
         setAdapter(mAdapter);
         setLayoutManager(new LinearLayoutManager(context));
-        getItemAnimator().setAddDuration(50);
-        getItemAnimator().setRemoveDuration(50);
+        getItemAnimator().setChangeDuration(0);
+        getItemAnimator().setRemoveDuration(100);
+        getItemAnimator().setAddDuration(100);
     }
 
     public void setOnItemClickListener(QueryAdapter.OnItemClickListener listener) {
