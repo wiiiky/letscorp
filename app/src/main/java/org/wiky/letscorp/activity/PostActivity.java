@@ -5,12 +5,14 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +44,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
     private ViewPager mViewPager;
     private PostItem mPostItem;
     private Post mPost;
+    private String mCommentTitle;
     /* 接口回调处理 */
     private Api.ApiHandler<Post> mPostDetailHandler = new Api.ApiHandler<Post>() {
 
@@ -49,6 +52,10 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         public void onSuccess(Post post) {
             mPost = post;
             mPagerAdapter.update(mPost);
+            mCommentTitle = String.format("%s(%d)", getString(R.string.title_comment), mPost.commentCount());
+            if (mViewPager.getCurrentItem() == 1) {
+                setTitle(mCommentTitle);
+            }
         }
 
         @Override
@@ -95,10 +102,12 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             /* 有缓存数据时不在显示载入进度条 */
             mProgressBar.setVisibility(View.GONE);
             mPagerAdapter.update(mPost);
-            if (mPost.commentCount() == mPostItem.commentCount) {   /* 当评论数量没有改变时不更新 */
-                return;
-            }
+            mCommentTitle = String.format("%s(%d)", getString(R.string.title_comment), mPost.commentCount());
+//            if (mPost.commentCount() == mPostItem.commentCount) {   /* 当评论数量没有改变时不更新 */
+//                return;
+//            }
         } else {
+            mCommentTitle = String.format("%s(%d)", getString(R.string.title_comment), mPostItem.commentCount);
             mProgressBar.setVisibility(View.VISIBLE);
         }
 
@@ -159,10 +168,10 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             setTitle(mPostItem.title);
             mToolBar.setAlpha((0.5f - positionOffset) * 2);
         } else if (position == 0 && positionOffset >= 0.5f) {
-            setTitle(R.string.title_comment);
+            setTitle(mCommentTitle);
             mToolBar.setAlpha((positionOffset - 0.5f) * 2);
         } else if (position == 1) {
-            setTitle(R.string.title_comment);
+            setTitle(mCommentTitle);
             mToolBar.setAlpha(1.0f);
         }
     }
@@ -275,10 +284,12 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
     }
 
     /* 文章评论页面 */
-    public static class PostCommentFragment extends Fragment {
+    public static class PostCommentFragment extends Fragment implements View.OnClickListener {
         private static final String ARG_COMMENTS = "comments";
 
         private CommentListView mCommentList;
+        private FloatingActionButton mAction;
+        private boolean mShowAction = true;
         private List<Comment> mData;
 
         public PostCommentFragment() {
@@ -297,10 +308,62 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_comment, container, false);
             mCommentList = (CommentListView) rootView.findViewById(R.id.post_comment_list);
+            mAction = (FloatingActionButton) rootView.findViewById(R.id.post_add_comment);
             if (mData != null) {
                 update(mData);
             }
+            mAction.setOnClickListener(this);
+            mCommentList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (dy > 0 && mShowAction) {
+                        hideAction();
+                    } else if (dy < 0 && !mShowAction) {
+                        showAction();
+                    }
+                }
+            });
             return rootView;
+        }
+
+        private void hideAction() {
+            mShowAction = false;
+            mAction.clearAnimation();
+            mAction.animate()
+                    .scaleY(0.0f)
+                    .scaleX(0.0f)
+                    .setDuration(150)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            if (!mShowAction) {
+                                mAction.setVisibility(View.GONE);
+                            }
+                        }
+                    })
+                    .start();
+        }
+
+        private void showAction() {
+            mShowAction = true;
+            mAction.clearAnimation();
+            mAction.setVisibility(View.VISIBLE);
+            mAction.animate()
+                    .scaleX(1.0f)
+                    .scaleY(1.0f)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            if (mShowAction) {
+                                mAction.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    })
+                    .setDuration(150)
+                    .start();
         }
 
         public void updateData(List<Comment> comments) {
@@ -313,6 +376,11 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
 
         private void update(List<Comment> comments) {
             mCommentList.setComments(comments);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getContext(), "comment", Toast.LENGTH_SHORT).show();
         }
     }
 

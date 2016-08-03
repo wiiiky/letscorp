@@ -10,6 +10,21 @@ import org.wiky.letscorp.Application;
 /* 评论列表的动画 */
 public class CommentAnimator extends DefaultItemAnimator {
 
+//    @Override
+//    public boolean animateChange(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder,
+//                                 int fromX, int fromY, int toX, int toY) {
+//        if (oldHolder == newHolder) {
+//            dispatchChangeFinished(oldHolder, false);
+//        } else {
+//            if (oldHolder != null) {
+//                dispatchChangeFinished(oldHolder, true);
+//            }
+//            if (newHolder != null) {
+//                dispatchChangeFinished(newHolder, false);
+//            }
+//        }
+//        return false;
+//    }
 
     @Override
     public boolean animateAdd(RecyclerView.ViewHolder viewHolder) {

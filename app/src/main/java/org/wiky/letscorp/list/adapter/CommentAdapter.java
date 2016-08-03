@@ -15,6 +15,7 @@ import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.CircleImageView;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class CommentAdapter extends RecyclerView.Adapter {
@@ -63,10 +64,18 @@ public class CommentAdapter extends RecyclerView.Adapter {
         List<Comment> oldData = mData;
         mData = comments;
         if (mData.size() > oldData.size()) {
-            notifyItemRangeChanged(0, oldData.size());
+            for (int i=0;i<oldData.size();i++){
+                if(!Objects.equals(oldData.get(i).id, mData.get(i).id)){
+                    notifyItemChanged(i);
+                }
+            }
             notifyItemRangeInserted(oldData.size(), mData.size() - oldData.size());
         } else {
-            notifyItemRangeChanged(0, mData.size());
+            for (int i=0;i<mData.size();i++){
+                if(!Objects.equals(oldData.get(i).id, mData.get(i).id)){
+                    notifyItemChanged(i);
+                }
+            }
             notifyItemRangeRemoved(mData.size(), oldData.size() - mData.size());
         }
     }
