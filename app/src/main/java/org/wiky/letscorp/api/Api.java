@@ -14,6 +14,8 @@ import org.wiky.letscorp.signal.Signal;
 import java.util.List;
 
 import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
 
 public class Api {
@@ -105,6 +107,38 @@ public class Api {
 
             @Override
             public void onCancelled() {
+            }
+
+            @Override
+            public void onError(Exception e) {
+                apiHandler.onError(e);
+            }
+        });
+    }
+
+    /* 发表评论 */
+    public static void postComment(final Post post, String author, String comment, int parentid, final ApiHandler<Post> apiHandler) {
+        RequestBody body = new FormBody.Builder()
+                .add("author", author)
+                .add("comment", comment)
+                .add("comment_post_ID", String.valueOf(post.id))
+                .add("comment_parent", String.valueOf(parentid))
+                .add("email", "")
+                .add("url", "")
+                .build();
+        Request.post(Const.URL_POST_COMMENT, body, new Request.Callback() {
+            @Override
+            public void onSuccess(Document doc) {
+                Post p = Parser.parsePost(doc, post.href);
+                PostHelper.savePost(p);
+                PostItemHelper.updatePostItem(p.href, p.commentCount(), p.date);
+                apiHandler.onSuccess(p);
+                apiHandler.onFinally();
+            }
+
+            @Override
+            public void onCancelled() {
+                apiHandler.onFinally();
             }
 
             @Override

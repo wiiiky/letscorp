@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "letscorp";
 
     public DBHelper(Context context) {
@@ -23,13 +23,27 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(QueryHelper.SQL_CREATE_TABLE);
     }
 
+    private void recreate(SQLiteDatabase db) {
+        db.execSQL(PostItemHelper.SQL_DELETE_TABLE);
+        db.execSQL(PostHelper.SQL_DELETE_TABLE);
+        db.execSQL(QueryHelper.SQL_DELETE_TABLE);
+
+        db.execSQL(PostItemHelper.SQL_CREATE_TABLE);
+        db.execSQL(PostHelper.SQL_CREATE_TABLE);
+        db.execSQL(QueryHelper.SQL_CREATE_TABLE);
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if(oldVersion==1&&newVersion==2){
             db.execSQL(QueryHelper.SQL_CREATE_TABLE);
-        } else if (newVersion == 3) {
+        } else if (newVersion == 3 && oldVersion == 2) {
             db.execSQL(PostItemHelper.SQL_DELETE_TABLE);
             db.execSQL(PostItemHelper.SQL_CREATE_TABLE);
+        } else if (newVersion == 4 && oldVersion == 3) {
+            db.execSQL(String.format("ALTER TABLE %s ADD %s INTEGER NOT NULL DEFAULT 0", PostHelper.TABLE_NAME, PostHelper.COLUMN_NAME_ID));
+        } else {
+            recreate(db);
         }
     }
 }

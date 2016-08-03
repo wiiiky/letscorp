@@ -111,7 +111,7 @@ public class Parser {
     public static Comment parseComment(Element li) {
         try {
             Element article = li.select(">article").first();
-            String id = article.attr("id").substring(4);
+            int id = Util.parseInt(article.attr("id").substring(12));
             String avatar = article.select("div.vcard > img").first().attr("data-original");
             String username = article.select("div.vcard > b.fn").first().text();
             String datetime = article.select("time").first().text();
@@ -132,6 +132,7 @@ public class Parser {
     /* 解析文章详情 */
     public static Post parsePost(Element doc, String href) {
         Element article = doc.select("article.post").first();
+        int id = Util.parseInt(article.id().substring(5));
         String title = article.select("div.entry-title > h2").text();
         String content = article.select("div.entry-content").html();
         ArrayList<String> tags = new ArrayList<>();
@@ -153,6 +154,6 @@ public class Parser {
                 comments.add(comment);
             }
         }
-        return new Post(href, title, content, tags, categories, date, author, comments);
+        return new Post(id, href, title, content, tags, categories, date, author, comments);
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
  * 文章评论
  */
 public class Comment {
-    public String id;
+    public int id;
     public String username;
     public String avatar;
     public String datetime;
@@ -15,11 +15,11 @@ public class Comment {
     public CommentCite cite;
     public List<Comment> children;
 
-    public Comment(String id, String username, String avatar, String datetime, String content) {
+    public Comment(int id, String username, String avatar, String datetime, String content) {
         this(id, username, avatar, datetime, content, null, new ArrayList<Comment>());
     }
 
-    public Comment(String id, String username, String avatar, String datetime, String content, CommentCite cite,
+    public Comment(int id, String username, String avatar, String datetime, String content, CommentCite cite,
                    List<Comment> children) {
         this.id = id;
         this.username = username;

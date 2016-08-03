@@ -4,13 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 文章详情
  */
 public class Post {
+    public int id;
     public String href;
     public String title;
     public String content;
@@ -20,13 +20,9 @@ public class Post {
     public String author;
     public List<Comment> comments;
 
-    public Post(String href, String title, String content, List<String> tags,
-                List<String> categories, String date, String author) {
-        this(href, title, content, tags, categories, date, author, new ArrayList<Comment>());
-    }
-
-    public Post(String href, String title, String content, List<String> tags,
+    public Post(int id, String href, String title, String content, List<String> tags,
                 List<String> categories, String date, String author, List<Comment> comments) {
+        this.id = id;
         this.href = href;
         this.title = title;
         this.content = content;

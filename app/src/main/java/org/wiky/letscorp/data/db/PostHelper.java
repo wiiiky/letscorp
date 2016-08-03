@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class PostHelper implements BaseColumns {
     public static final String TABLE_NAME = "post";
+    public static final String COLUMN_NAME_ID = "id";
     public static final String COLUMN_NAME_HREF = "href";
     public static final String COLUMN_NAME_TITLE = "title";
     public static final String COLUMN_NAME_CONTENT = "content";
@@ -74,6 +75,7 @@ public class PostHelper implements BaseColumns {
     }
 
     private static Post getPost(Cursor c) {
+        int id = c.getInt(c.getColumnIndex(COLUMN_NAME_ID));
         String href = c.getString(c.getColumnIndex(COLUMN_NAME_HREF));
         String title = c.getString(c.getColumnIndex(COLUMN_NAME_TITLE));
         String content = c.getString(c.getColumnIndex(COLUMN_NAME_CONTENT));
@@ -82,7 +84,7 @@ public class PostHelper implements BaseColumns {
         String date = c.getString(c.getColumnIndex(COLUMN_NAME_DATETIME));
         String author = c.getString(c.getColumnIndex(COLUMN_NAME_AUTHOR));
         String commentData = c.getString(c.getColumnIndex(COLUMN_NAME_COMMENTS));
-        return new Post(href, title, content, tags, categories, date, author, Post.parseComments(commentData));
+        return new Post(id, href, title, content, tags, categories, date, author, Post.parseComments(commentData));
     }
 
     public static Post getPost(String href) {

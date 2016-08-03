@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -25,16 +26,31 @@ public class Request {
             .connectTimeout(20, TimeUnit.SECONDS)
             .build();
 
+    private static Call execute(okhttp3.Request request, Callback callback) {
+        Call call = mClient.newCall(request);
+        new RequestTask().execute(new TaskData(call, callback));
+        return call;
+    }
+
     public static Call get(String url, Callback callback) {
-        Log.d("call", url);
+        Log.d("get", url);
         okhttp3.Request request = new okhttp3.Request.Builder()
                 .addHeader("User-Agent", Const.HTTP_USER_AGENT)
                 .addHeader("Accept", Const.HTTP_ACCEPT)
                 .url(url)
                 .build();
-        Call call = mClient.newCall(request);
-        new RequestTask().execute(new TaskData(call, callback));
-        return call;
+        return execute(request, callback);
+    }
+
+    public static Call post(String url, RequestBody body, Callback callback) {
+        Log.d("post", url);
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .addHeader("User-Agent", Const.HTTP_USER_AGENT)
+                .addHeader("Accept", Const.HTTP_ACCEPT)
+                .url(url)
+                .method("POST", body)
+                .build();
+        return execute(request, callback);
     }
 
     public interface Callback {
