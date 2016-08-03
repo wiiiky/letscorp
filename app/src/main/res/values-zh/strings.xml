@@ -13,14 +13,14 @@
     <string name="category_history">历史</string>
     <string name="action_settings">设置</string>
     <string name="settings">设置</string>
-    <string name="app_description">非官方</string>
+    <string name="app_description">墙外楼非官方APP</string>
     <string name="clear_cache">清除缓存</string>
     <string name="settings_clear_cache">杀出缓存，包括文章以及搜索记录</string>
     <string name="toast_cache_deleted">缓存已删除</string>
     <string name="ok">确认</string>
     <string name="action_about">关于</string>
     <string name="published_on">发表于</string>
-    <string name="title_comment">评论</string>
+    <string name="comment">评论</string>
     <string name="comment_cite">引用</string>
     <string name="open_with_browser">浏览器中打开</string>
     <string name="search">搜索</string>
@@ -29,4 +29,9 @@
     <string name="reload_post_failure">刷新文章失败: %s</string>
     <string name="network_error">网络错误: %s</string>
     <string name="comment_count">%d条评论</string>
+    <string name="do_comment">发布</string>
+    <string name="cancel">取消</string>
+    <string name="username">用户名</string>
+    <string name="anonymous">匿名</string>
+    <string name="content">内容</string>
 </resources>

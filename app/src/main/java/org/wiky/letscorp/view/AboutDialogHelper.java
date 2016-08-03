@@ -1,11 +1,11 @@
 package org.wiky.letscorp.view;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.util.Util;
@@ -29,18 +29,11 @@ public class AboutDialogHelper {
     };
 
     public static void showDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(context.getString(R.string.action_about));
-        builder.setView(R.layout.dialog_about);
-        builder.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        MaterialDialog dialog = new MaterialDialog.Builder(context)
+                .title(R.string.action_about)
+                .customView(R.layout.dialog_about, true)
+                .positiveText(R.string.ok)
+                .show();
 
         View twitter = dialog.findViewById(R.id.about_twitter);
         View gplus = dialog.findViewById(R.id.about_gplus);

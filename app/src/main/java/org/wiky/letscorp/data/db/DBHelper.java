@@ -41,7 +41,7 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL(PostItemHelper.SQL_DELETE_TABLE);
             db.execSQL(PostItemHelper.SQL_CREATE_TABLE);
         } else if (newVersion == 4 && oldVersion == 3) {
-            db.execSQL(String.format("ALTER TABLE %s ADD %s INTEGER NOT NULL DEFAULT 0", PostHelper.TABLE_NAME, PostHelper.COLUMN_NAME_ID));
+            recreate(db);
         } else {
             recreate(db);
         }

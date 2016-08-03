@@ -5,7 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,8 +21,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.Api;
@@ -28,6 +35,7 @@ import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.list.CommentListView;
+import org.wiky.letscorp.util.Username;
 import org.wiky.letscorp.util.Util;
 import org.wiky.letscorp.view.PhotoView;
 import org.wiky.letscorp.view.PostContent;
@@ -52,7 +60,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         public void onSuccess(Post post) {
             mPost = post;
             mPagerAdapter.update(mPost);
-            mCommentTitle = String.format("%s(%d)", getString(R.string.title_comment), mPost.commentCount());
+            mCommentTitle = String.format("%s(%d)", getString(R.string.comment), mPost.commentCount());
             if (mViewPager.getCurrentItem() == 1) {
                 setTitle(mCommentTitle);
             }
@@ -102,12 +110,12 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             /* 有缓存数据时不在显示载入进度条 */
             mProgressBar.setVisibility(View.GONE);
             mPagerAdapter.update(mPost);
-            mCommentTitle = String.format("%s(%d)", getString(R.string.title_comment), mPost.commentCount());
+            mCommentTitle = String.format("%s(%d)", getString(R.string.comment), mPost.commentCount());
 //            if (mPost.commentCount() == mPostItem.commentCount) {   /* 当评论数量没有改变时不更新 */
 //                return;
 //            }
         } else {
-            mCommentTitle = String.format("%s(%d)", getString(R.string.title_comment), mPostItem.commentCount);
+            mCommentTitle = String.format("%s(%d)", getString(R.string.comment), mPostItem.commentCount);
             mProgressBar.setVisibility(View.VISIBLE);
         }
 
@@ -283,7 +291,10 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         }
     }
 
-    /* 文章评论页面 */
+    /*
+     * 文章评论页面
+     * 评论列表，以及添加评论
+     */
     public static class PostCommentFragment extends Fragment implements View.OnClickListener {
         private static final String ARG_COMMENTS = "comments";
 
@@ -380,7 +391,55 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getContext(), "comment", Toast.LENGTH_SHORT).show();
+            View root = LayoutInflater.from(getContext()).inflate(R.layout.dialog_comment, null);
+            final AutoCompleteTextView author = (AutoCompleteTextView) root.findViewById(R.id.comment_author);
+            final TextInputEditText content = (TextInputEditText) root.findViewById(R.id.comment_content);
+            final ImageView renew = (ImageView) root.findViewById(R.id.comment_author_renew);
+            new MaterialDialog.Builder(getContext())
+                    .title("Add Comment")
+                    .customView(root, true)
+                    .negativeText(R.string.cancel)
+                    .negativeColorRes(R.color.colorSecondaryText)
+                    .positiveText(R.string.do_comment)
+                    .autoDismiss(false)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            content.getText().toString();
+                        }
+                    })
+                    .show();
+            renew.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    renew.clearAnimation();
+                    renew.animate()
+                            .rotation(360)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    renew.setRotation(0);
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                    super.onAnimationCancel(animation);
+                                    renew.setRotation(0);
+                                }
+                            })
+                            .start();
+                    String name = Username.random();
+                    author.setText(name);
+                    author.setSelection(name.length());
+                }
+            });
         }
     }
 

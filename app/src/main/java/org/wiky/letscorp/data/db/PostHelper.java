@@ -27,7 +27,8 @@ public class PostHelper implements BaseColumns {
     public static final String COLUMN_NAME_COMMENTS = "comments";
 
     public static final String SQL_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            COLUMN_NAME_HREF + " TEXT PRIMARY KEY, " +
+            COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
+            COLUMN_NAME_HREF + " TEXT," +
             COLUMN_NAME_TITLE + " TEXT," +
             COLUMN_NAME_CONTENT + " TEXT," +
             COLUMN_NAME_TAGS + " TEXT," +
