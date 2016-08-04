@@ -34,4 +34,5 @@
     <string name="username">用户名</string>
     <string name="anonymous">匿名</string>
     <string name="content">内容</string>
+    <string name="add_comment">发表评论</string>
 </resources>

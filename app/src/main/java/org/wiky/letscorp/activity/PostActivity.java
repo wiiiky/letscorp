@@ -399,7 +399,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             author.setText(name);
             author.setSelection(name.length());
             new MaterialDialog.Builder(getContext())
-                    .title("Add Comment")
+                    .title(R.string.add_comment)
                     .customView(root, true)
                     .negativeText(R.string.cancel)
                     .negativeColorRes(R.color.colorSecondaryText)
