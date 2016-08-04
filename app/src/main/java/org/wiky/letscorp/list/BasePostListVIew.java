@@ -10,7 +10,6 @@ import org.wiky.letscorp.api.Const;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.list.adapter.PostItemAdapter;
 import org.wiky.letscorp.list.anim.PostAnimator;
-import org.wiky.letscorp.util.CardItemDecoration;
 
 
 public abstract class BasePostListVIew extends RecyclerView {

@@ -1,5 +1,6 @@
 package org.wiky.letscorp.api;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import org.jsoup.nodes.Document;
@@ -118,22 +119,27 @@ public class Api {
 
     /* 发表评论 */
     public static void postComment(final Post post, String author, String comment, int parentid, final ApiHandler<Post> apiHandler) {
+        Log.d("postComment", String.format("%d, %s, %s, %d", post.id, author, comment, parentid));
         RequestBody body = new FormBody.Builder()
-                .add("author", author)
-                .add("comment", comment)
-                .add("comment_post_ID", String.valueOf(post.id))
-                .add("comment_parent", String.valueOf(parentid))
-                .add("email", "")
-                .add("url", "")
+                .addEncoded("author", author)
+                .addEncoded("comment", comment)
+                .addEncoded("comment_post_ID", String.valueOf(post.id))
+                .addEncoded("comment_parent", String.valueOf(parentid))
+                .addEncoded("email", "")
+                .addEncoded("url", "")
                 .build();
         Request.post(Const.URL_POST_COMMENT, body, new Request.Callback() {
             @Override
             public void onSuccess(Document doc) {
-                Post p = Parser.parsePost(doc, post.href);
-                PostHelper.savePost(p);
-                PostItemHelper.updatePostItem(p.href, p.commentCount(), p.date);
-                apiHandler.onSuccess(p);
-                apiHandler.onFinally();
+                try {
+                    Post p = Parser.parsePost(doc, post.href);
+                    PostHelper.savePost(p);
+                    PostItemHelper.updatePostItem(p.href, p.commentCount(), p.date);
+                    apiHandler.onSuccess(p);
+                    apiHandler.onFinally();
+                } catch (Exception e) {
+                    onError(e);
+                }
             }
 
             @Override

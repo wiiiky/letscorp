@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,9 +30,9 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.Api;
-import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.list.CommentListView;
@@ -111,9 +112,6 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             mProgressBar.setVisibility(View.GONE);
             mPagerAdapter.update(mPost);
             mCommentTitle = String.format("%s(%d)", getString(R.string.comment), mPost.commentCount());
-//            if (mPost.commentCount() == mPostItem.commentCount) {   /* 当评论数量没有改变时不更新 */
-//                return;
-//            }
         } else {
             mCommentTitle = String.format("%s(%d)", getString(R.string.comment), mPostItem.commentCount);
             mProgressBar.setVisibility(View.VISIBLE);
@@ -237,32 +235,31 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             assert item != null;
             mTitle.setText(item.title);
             if (mData != null) {
-                update(mData);
+                update();
             }
             return rootView;
         }
 
         public void updateData(Post post) {
-            if (!isAdded() || mAuthor == null) {
-                mData = post;
-            } else {
-                update(post);
+            mData = post;
+            if (isAdded() && mAuthor != null) {
+                update();
             }
         }
 
-        private void update(Post post) {
-            mAuthor.setText(String.format("%s %s %s", post.author, getString(R.string.published_on), post.date));
-            if (!post.categories.isEmpty()) {
-                mCategory.setText(String.format("分类：%s", Util.joinString(post.categories)));
+        private void update() {
+            mAuthor.setText(String.format("%s %s %s", mData.author, getString(R.string.published_on), mData.date));
+            if (!mData.categories.isEmpty()) {
+                mCategory.setText(String.format("分类：%s", Util.joinString(mData.categories)));
             } else {
                 mCategory.setVisibility(View.GONE);
             }
-            if (!post.tags.isEmpty()) {
-                mTag.setText(String.format("标签：%s", Util.joinString(post.tags)));
+            if (!mData.tags.isEmpty()) {
+                mTag.setText(String.format("标签：%s", Util.joinString(mData.tags)));
             } else {
                 mTag.setVisibility(View.GONE);
             }
-            mContent.setContent(post.content);
+            mContent.setContent(mData.content);
         }
 
         @Override
@@ -301,7 +298,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         private CommentListView mCommentList;
         private FloatingActionButton mAction;
         private boolean mShowAction = true;
-        private List<Comment> mData;
+        private Post mData;
 
         public PostCommentFragment() {
         }
@@ -321,7 +318,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             mCommentList = (CommentListView) rootView.findViewById(R.id.post_comment_list);
             mAction = (FloatingActionButton) rootView.findViewById(R.id.post_add_comment);
             if (mData != null) {
-                update(mData);
+                update();
             }
             mAction.setOnClickListener(this);
             mCommentList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -377,24 +374,30 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
                     .start();
         }
 
-        public void updateData(List<Comment> comments) {
+        public void updateData(Post post) {
+            mData = post;
             if (isAdded() && mCommentList != null) {
-                update(comments);
-            } else {
-                mData = comments;
+                update();
             }
         }
 
-        private void update(List<Comment> comments) {
-            mCommentList.setComments(comments);
+        private void update() {
+            mCommentList.setComments(mData.comments);
         }
 
         @Override
         public void onClick(View view) {
+            if (mData == null) {
+                return;
+            }
             View root = LayoutInflater.from(getContext()).inflate(R.layout.dialog_comment, null);
             final AutoCompleteTextView author = (AutoCompleteTextView) root.findViewById(R.id.comment_author);
             final TextInputEditText content = (TextInputEditText) root.findViewById(R.id.comment_content);
             final ImageView renew = (ImageView) root.findViewById(R.id.comment_author_renew);
+
+            String name = Username.random();
+            author.setText(name);
+            author.setSelection(name.length());
             new MaterialDialog.Builder(getContext())
                     .title("Add Comment")
                     .customView(root, true)
@@ -410,8 +413,36 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
                     })
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            content.getText().toString();
+                        public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
+                            String a = author.getText().toString();
+                            String c = content.getText().toString();
+                            dialog.dismiss();
+                            final MaterialDialog p = new MaterialDialog.Builder(getContext())
+                                    .content("发布中")
+                                    .autoDismiss(false)
+                                    .progress(true, 0)
+                                    .cancelable(false)
+                                    .show();
+                            Api.postComment(mData, a, c, 0, new Api.ApiHandler<Post>() {
+                                @Override
+                                public void onSuccess(Post data) {
+                                    mData = data;
+                                    update();
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    Log.d("onError", e != null ? e.toString() : "null");
+                                    Toast.makeText(Application.getApplication(), "发布失败", Toast.LENGTH_SHORT).show();
+                                    onFinally();
+                                    dialog.show();
+                                }
+
+                                @Override
+                                public void onFinally() {
+                                    p.dismiss();
+                                }
+                            });
                         }
                     })
                     .show();
@@ -426,6 +457,9 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
                                 public void onAnimationEnd(Animator animation) {
                                     super.onAnimationEnd(animation);
                                     renew.setRotation(0);
+                                    String name = Username.random();
+                                    author.setText(name);
+                                    author.setSelection(name.length());
                                 }
 
                                 @Override
@@ -435,9 +469,6 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
                                 }
                             })
                             .start();
-                    String name = Username.random();
-                    author.setText(name);
-                    author.setSelection(name.length());
                 }
             });
         }
@@ -456,7 +487,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
 
         public void update(Post post) {
             mPostFragment.updateData(post);
-            mCommentFragment.updateData(post.comments);
+            mCommentFragment.updateData(post);
         }
 
         @Override

@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.list.adapter.CommentAdapter;
 import org.wiky.letscorp.list.anim.CommentAnimator;
-import org.wiky.letscorp.util.CardItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
