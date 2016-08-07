@@ -22,7 +22,7 @@ public class PostHelper implements BaseColumns {
     public static final String COLUMN_NAME_CONTENT = "content";
     public static final String COLUMN_NAME_TAGS = "tags";
     public static final String COLUMN_NAME_CATEGORIES = "categories";
-    public static final String COLUMN_NAME_DATETIME = "datetime";
+    public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
     public static final String COLUMN_NAME_AUTHOR = "author";
     public static final String COLUMN_NAME_COMMENTS = "comments";
 
@@ -33,7 +33,7 @@ public class PostHelper implements BaseColumns {
             COLUMN_NAME_CONTENT + " TEXT," +
             COLUMN_NAME_TAGS + " TEXT," +
             COLUMN_NAME_CATEGORIES + " TEXT," +
-            COLUMN_NAME_DATETIME + " TEXT," +
+            COLUMN_NAME_TIMESTAMP + " INTEGER," +
             COLUMN_NAME_AUTHOR + " TEXT," +
             COLUMN_NAME_COMMENTS + " TEXT" +
             ")";
@@ -46,7 +46,7 @@ public class PostHelper implements BaseColumns {
         values.put(COLUMN_NAME_CONTENT, post.content);
         values.put(COLUMN_NAME_TAGS, Util.serializeStringList(post.tags));
         values.put(COLUMN_NAME_CATEGORIES, Util.serializeStringList(post.categories));
-        values.put(COLUMN_NAME_DATETIME, post.date);
+        values.put(COLUMN_NAME_TIMESTAMP, post.timestamp);
         values.put(COLUMN_NAME_AUTHOR, post.author);
         values.put(COLUMN_NAME_COMMENTS, post.getComments());
         return values;
@@ -82,10 +82,10 @@ public class PostHelper implements BaseColumns {
         String content = c.getString(c.getColumnIndex(COLUMN_NAME_CONTENT));
         List<String> tags = Util.deserializeStringList(c.getString(c.getColumnIndex(COLUMN_NAME_TAGS)));
         List<String> categories = Util.deserializeStringList(c.getString(c.getColumnIndex(COLUMN_NAME_CATEGORIES)));
-        String date = c.getString(c.getColumnIndex(COLUMN_NAME_DATETIME));
+        long timestamp = c.getLong(c.getColumnIndex(COLUMN_NAME_TIMESTAMP));
         String author = c.getString(c.getColumnIndex(COLUMN_NAME_AUTHOR));
         String commentData = c.getString(c.getColumnIndex(COLUMN_NAME_COMMENTS));
-        return new Post(id, href, title, content, tags, categories, date, author, Post.parseComments(commentData));
+        return new Post(id, href, title, content, tags, categories, timestamp, author, Post.parseComments(commentData));
     }
 
     public static Post getPost(String href) {

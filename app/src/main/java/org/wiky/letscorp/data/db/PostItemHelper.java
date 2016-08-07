@@ -23,7 +23,7 @@ public class PostItemHelper implements BaseColumns {
     public static final String COLUMN_NAME_IMG = "img";
     public static final String COLUMN_NAME_CONTENT = "content";
     public static final String COLUMN_NAME_COMMENT_COUNT = "comment_count";
-    public static final String COLUMN_NAME_DATE = "date";
+    public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
     public static final String COLUMN_NAME_CATEGORY = "category";
 
     public static final String SQL_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -33,7 +33,7 @@ public class PostItemHelper implements BaseColumns {
             COLUMN_NAME_IMG + " TEXT," +
             COLUMN_NAME_CONTENT + " TEXT," +
             COLUMN_NAME_COMMENT_COUNT + " INTEGER," +
-            COLUMN_NAME_DATE + " TEXT," +
+            COLUMN_NAME_TIMESTAMP + " INTEGER," +
             COLUMN_NAME_CATEGORY + " INTEGER," +
             "PRIMARY KEY(" + COLUMN_NAME_ITEM_ID + "," + COLUMN_NAME_CATEGORY + ")" +
             ")";
@@ -47,7 +47,7 @@ public class PostItemHelper implements BaseColumns {
         values.put(COLUMN_NAME_IMG, item.img);
         values.put(COLUMN_NAME_CONTENT, item.content);
         values.put(COLUMN_NAME_COMMENT_COUNT, item.commentCount);
-        values.put(COLUMN_NAME_DATE, item.date);
+        values.put(COLUMN_NAME_TIMESTAMP, item.timestamp);
         values.put(COLUMN_NAME_CATEGORY, item.category);
         return values;
     }
@@ -59,9 +59,9 @@ public class PostItemHelper implements BaseColumns {
         String img = c.getString(c.getColumnIndex(COLUMN_NAME_IMG));
         String content = c.getString(c.getColumnIndex(COLUMN_NAME_CONTENT));
         int commentCount = c.getInt(c.getColumnIndex(COLUMN_NAME_COMMENT_COUNT));
-        String date = c.getString(c.getColumnIndex(COLUMN_NAME_DATE));
+        long timestamp = c.getLong(c.getColumnIndex(COLUMN_NAME_TIMESTAMP));
         int category = c.getInt(c.getColumnIndex(COLUMN_NAME_CATEGORY));
-        PostItem p = new PostItem(id, title, href, img, content, commentCount, date, category);
+        PostItem p = new PostItem(id, title, href, img, content, commentCount, timestamp, category);
         if (c.getColumnIndex("readn") >= 0) {
             p.readn = c.getInt(c.getColumnIndex("readn")) != 0;
         }
@@ -74,8 +74,8 @@ public class PostItemHelper implements BaseColumns {
     }
 
     public static List<PostItem> getPostItems(int category, int page, int count) {
-        String sql = String.format("SELECT *, IFNULL((SELECT 1 FROM %s AS `B` WHERE `A`.`%s`=`B`.`%s`), 0) AS `readn` FROM %s AS `A` WHERE `A`.`%s`=%s ORDER BY %s DESC LIMIT %d OFFSET %d",
-                PostHelper.TABLE_NAME, COLUMN_NAME_HREF, PostHelper.COLUMN_NAME_HREF, TABLE_NAME, COLUMN_NAME_CATEGORY, category, COLUMN_NAME_ITEM_ID, count, (page - 1) * count);
+        String sql = String.format("SELECT *, IFNULL((SELECT 1 FROM %s AS `B` WHERE `A`.`%s`=`B`.`%s`), 0) AS `readn` FROM %s AS `A` WHERE `A`.`%s`=%s ORDER BY %s DESC, %s DESC LIMIT %d OFFSET %d",
+                PostHelper.TABLE_NAME, COLUMN_NAME_HREF, PostHelper.COLUMN_NAME_HREF, TABLE_NAME, COLUMN_NAME_CATEGORY, category, COLUMN_NAME_TIMESTAMP, COLUMN_NAME_ITEM_ID, count, (page - 1) * count);
         return getPostItems(sql);
     }
 
@@ -112,12 +112,12 @@ public class PostItemHelper implements BaseColumns {
     }
 
     /* 更新评论数和发布时间 */
-    public static void updatePostItem(String href, int ccount, String date) {
+    public static void updatePostItem(int id, int ccount, long timestamp) {
         SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME_COMMENT_COUNT, ccount);
-        values.put(COLUMN_NAME_DATE, date);
-        db.update(TABLE_NAME, values, String.format("%s=?", COLUMN_NAME_HREF), new String[]{href});
+        values.put(COLUMN_NAME_TIMESTAMP, timestamp);
+        db.update(TABLE_NAME, values, String.format("%s=?", COLUMN_NAME_ITEM_ID), new String[]{String.valueOf(id)});
     }
 
     public static void savePostItems(List<PostItem> items) {

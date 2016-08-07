@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -14,13 +15,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.wiky.letscorp.Application;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by wiky on 6/15/16.
  */
 public class Util {
+
+    public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:sszzz";
 
     public static float dp2px(float dp) {
         Resources r = Resources.getSystem();
@@ -141,5 +147,16 @@ public class Util {
             endRadius = 0;
         }
         return ViewAnimationUtils.createCircularReveal(view, cx, cy, startRadius, endRadius);
+    }
+
+    public static long parseDateTimeISO(String source) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT, Locale.US);
+            Date date = sdf.parse(source);
+            return date.getTime();
+        } catch (Exception e) {
+            Log.d("source", source);
+        }
+        return 0;
     }
 }

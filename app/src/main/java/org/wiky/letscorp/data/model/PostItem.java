@@ -7,6 +7,9 @@ import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.Const;
 
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
 /*
  * 文章列表页的一项
  */
@@ -28,25 +31,25 @@ public class PostItem implements Parcelable {
     public String img;
     public String content;
     public int commentCount;
-    public String date;
+    public long timestamp;
     public boolean readn;
     public int category;
 
 
-    public PostItem(int id, String title, String href, String img, String content, int ccount, String date) {
+    public PostItem(int id, String title, String href, String img, String content, int ccount, long timestamp) {
         this.id = id;
         this.title = title;
         this.href = href;
         this.img = img;
         this.content = content;
         this.commentCount = ccount;
-        this.date = date;
+        this.timestamp = timestamp;
         readn = false;
         category = Const.LETSCORP_CATEGORY_ALL;
     }
 
-    public PostItem(int id, String title, String href, String img, String content, int ccount, String date, int cate) {
-        this(id, title, href, img, content, ccount, date);
+    public PostItem(int id, String title, String href, String img, String content, int ccount, long timestamp, int cate) {
+        this(id, title, href, img, content, ccount, timestamp);
         category = cate;
     }
 
@@ -57,9 +60,18 @@ public class PostItem implements Parcelable {
         img = in.readString();
         content = in.readString();
         commentCount = in.readInt();
-        date = in.readString();
+        timestamp = in.readLong();
         readn = in.readInt() > 0;
         category = in.readInt();
+    }
+
+    public String getDatetime() {
+        if (timestamp <= 0) {
+            return "";
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return formatter.format(timestamp);
     }
 
     @Override
@@ -75,7 +87,7 @@ public class PostItem implements Parcelable {
         dest.writeString(img);
         dest.writeString(content);
         dest.writeInt(commentCount);
-        dest.writeString(date);
+        dest.writeLong(timestamp);
         dest.writeInt(readn ? 1 : 0);
         dest.writeInt(category);
     }

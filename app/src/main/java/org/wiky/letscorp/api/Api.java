@@ -66,7 +66,7 @@ public class Api {
             public void onSuccess(Document doc) {
                 Post post = Parser.parsePost(doc, url);
                 PostHelper.savePost(post);
-                PostItemHelper.updatePostItem(post.href, post.commentCount(), post.date);
+                PostItemHelper.updatePostItem(post.id, post.commentCount(), post.timestamp);
                 Signal.trigger(Signal.SIGINT_ITEM_READN, post);
                 apiHandler.onSuccess(post);
                 apiHandler.onFinally();
@@ -99,7 +99,6 @@ public class Api {
                     if (post != null) {
                         item.readn = true;
                         item.commentCount = post.commentCount();
-                        item.date = post.date;
                     }
                 }
                 apiHandler.onSuccess(items);
@@ -134,7 +133,7 @@ public class Api {
                 try {
                     Post p = Parser.parsePost(doc, post.href);
                     PostHelper.savePost(p);
-                    PostItemHelper.updatePostItem(p.href, p.commentCount(), p.date);
+                    PostItemHelper.updatePostItem(p.id, p.commentCount(), p.timestamp);
                     apiHandler.onSuccess(p);
                     apiHandler.onFinally();
                 } catch (Exception e) {

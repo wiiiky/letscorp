@@ -74,7 +74,7 @@ public abstract class BasePostListVIew extends RecyclerView {
     }
 
     public void updateItem(Post post) {
-        mAdapter.updateItem(post.href, post.commentCount(), post.date);
+        mAdapter.updateItem(post.href, post.commentCount(), post.timestamp);
     }
 
     public void setCategory(int category) {

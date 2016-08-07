@@ -23,7 +23,8 @@ public class Parser {
         String href = article.select(">header>div.entry-title a").attr("href");
         String img = article.select(">header img").attr("data-original");
         int commentCount = Util.parseInt(article.select(">footer div.comments-link a").text());
-        String date = article.select(">footer time.entry-date").text();
+        String datetime = article.select(">footer time.entry-date.published").attr("datetime");
+        long timestamp = Util.parseDateTimeISO(datetime);
         Element contentElement = article.select("div.entry-content").first();
         if (contentElement == null) {
             if ((contentElement = article.select("div.entry-summary").first()) == null) {
@@ -37,7 +38,7 @@ public class Parser {
         }
         String content = contentElement.html();
 
-        return new PostItem(id, title, href, img, content, commentCount, date, category);
+        return new PostItem(id, title, href, img, content, commentCount, timestamp, category);
     }
 
     /* 解析文章列表 */
@@ -58,7 +59,7 @@ public class Parser {
             String title = root.select("div.entry-title > h3").text();
             String href = root.select("a.search-entry").attr("href");
             String content = root.select("div.entry-summary").html();
-            return new PostItem(id, title, href, "", content, 0, "", Const.LETSCORP_CATEGORY_SEARCH);
+            return new PostItem(id, title, href, "", content, 0, 0, Const.LETSCORP_CATEGORY_SEARCH);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -143,7 +144,8 @@ public class Parser {
         for (Element t : article.select("p.categories > a")) {
             categories.add(t.text());
         }
-        String date = article.select("p.date time.entry-date").text();
+        String datetime = article.select("p.date time.entry-date.published").attr("datetime");
+        long timestamp = Util.parseDateTimeISO(datetime);
         String author = article.select("p.date a[rel=author]").text();
 
         List<Comment> comments = new ArrayList<>();
@@ -154,6 +156,6 @@ public class Parser {
                 comments.add(comment);
             }
         }
-        return new Post(id, href, title, content, tags, categories, date, author, comments);
+        return new Post(id, href, title, content, tags, categories, timestamp, author, comments);
     }
 }

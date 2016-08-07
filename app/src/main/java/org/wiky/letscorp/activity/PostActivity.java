@@ -248,7 +248,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         }
 
         private void update() {
-            mAuthor.setText(String.format("%s %s %s", mData.author, getString(R.string.published_on), mData.date));
+            mAuthor.setText(String.format("%s %s %s", mData.author, getString(R.string.published_on), mData.getDatetime()));
             if (!mData.categories.isEmpty()) {
                 mCategory.setText(String.format("分类：%s", Util.joinString(mData.categories)));
             } else {

@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * 文章详情
@@ -16,19 +18,19 @@ public class Post {
     public String content;
     public List<String> tags;
     public List<String> categories;
-    public String date;
+    public long timestamp;
     public String author;
     public List<Comment> comments;
 
     public Post(int id, String href, String title, String content, List<String> tags,
-                List<String> categories, String date, String author, List<Comment> comments) {
+                List<String> categories, long timestamp, String author, List<Comment> comments) {
         this.id = id;
         this.href = href;
         this.title = title;
         this.content = content;
         this.tags = tags;
         this.categories = categories;
-        this.date = date;
+        this.timestamp = timestamp;
         this.author = author;
         this.comments = comments;
     }
@@ -38,6 +40,15 @@ public class Post {
         Type listType = new TypeToken<List<Comment>>() {
         }.getType();
         return gson.fromJson(data, listType);
+    }
+
+    public String getDatetime() {
+        if (timestamp <= 0) {
+            return "";
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return formatter.format(timestamp);
     }
 
     public int commentCount() {

@@ -8,8 +8,8 @@ android {
         applicationId "org.wiky.letscorp"
         minSdkVersion 21
         targetSdkVersion 21
-        versionCode 3
-        versionName "v1.2.0"
+        versionCode 4
+        versionName "v1.2.1"
     }
     buildTypes {
         release {
