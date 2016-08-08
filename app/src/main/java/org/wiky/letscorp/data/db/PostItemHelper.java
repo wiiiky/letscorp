@@ -68,7 +68,7 @@ public class PostItemHelper implements BaseColumns {
         return p;
     }
 
-    public static void deletePostItems() {
+    public static void clear() {
         SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
     }

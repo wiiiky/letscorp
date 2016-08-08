@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Created by wiky on 7/24/16.
+ * 搜索关键字的历史记录
  */
 public class QueryHelper implements BaseColumns {
 

@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.view.Display;
 import android.view.WindowManager;
 
-import org.wiky.letscorp.data.db.DBHelper;
+import org.wiky.letscorp.data.db.SQLHelper;
 
 /**
  * Created by wiky on 6/11/16.
@@ -15,7 +15,7 @@ public class Application extends android.app.Application {
 
     private static Application mApplication = null;
     private static Handler muiHandler = null;
-    private static DBHelper mdbHelper = null;
+    private static SQLHelper mdbHelper = null;
 
     public static Application getApplication() {
         return mApplication;
@@ -28,9 +28,9 @@ public class Application extends android.app.Application {
         return muiHandler;
     }
 
-    public static DBHelper getDBHelper() {
+    public static SQLHelper getDBHelper() {
         if (mdbHelper == null) {
-            mdbHelper = new DBHelper(mApplication);
+            mdbHelper = new SQLHelper(mApplication);
         }
         return mdbHelper;
     }

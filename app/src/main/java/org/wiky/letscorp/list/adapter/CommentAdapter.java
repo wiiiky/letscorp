@@ -38,7 +38,7 @@ public class CommentAdapter extends RecyclerView.Adapter {
         final Comment data = mData.get(position);
         viewHolder.avatar.setImageResource(R.mipmap.ic_face_black);
         viewHolder.username.setText(data.username);
-        viewHolder.datetime.setText(data.datetime);
+        viewHolder.datetime.setText(data.getDatetime());
         viewHolder.content.setText(Util.trim(Html.fromHtml(data.content)));
         if (data.cite != null) {
             viewHolder.citeLayout.setVisibility(View.VISIBLE);

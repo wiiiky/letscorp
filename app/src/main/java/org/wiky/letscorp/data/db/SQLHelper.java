@@ -6,13 +6,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Created by wiky on 7/13/16.
+ * 数据库处理
  */
-public class DBHelper extends SQLiteOpenHelper {
+public class SQLHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "letscorp";
 
-    public DBHelper(Context context) {
+    public SQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -40,6 +41,9 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL(PostItemHelper.SQL_DELETE_TABLE);
             db.execSQL(PostItemHelper.SQL_CREATE_TABLE);
             db.execSQL(PostHelper.SQL_CREATE_TABLE);
+        } else if (oldVersion == 2 && newVersion == 3) {
+            PostHelper.clear();
+            PostItemHelper.clear();
         }
     }
 }

@@ -23,8 +23,7 @@ public class Parser {
         String href = article.select(">header>div.entry-title a").attr("href");
         String img = article.select(">header img").attr("data-original");
         int commentCount = Util.parseInt(article.select(">footer div.comments-link a").text());
-        String datetime = article.select(">footer time.entry-date.published").attr("datetime");
-        long timestamp = Util.parseDateTimeISO(datetime);
+        long timestamp = Util.parseDateTime(article.select(">footer time.entry-date.published").attr("datetime"));
         Element contentElement = article.select("div.entry-content").first();
         if (contentElement == null) {
             if ((contentElement = article.select("div.entry-summary").first()) == null) {
@@ -115,7 +114,7 @@ public class Parser {
             int id = Util.parseInt(article.attr("id").substring(12));
             String avatar = article.select("div.vcard > img").first().attr("data-original");
             String username = article.select("div.vcard > b.fn").first().text();
-            String datetime = article.select("time").first().text();
+            long timestamp = Util.parseDateTime(article.select("time").attr("datetime"));
             String content = article.select("div.comment-content > p").outerHtml();
             Comment.CommentCite commentCite = null;
             Element blockquote = article.select("blockquote").first();
@@ -123,7 +122,7 @@ public class Parser {
                 commentCite = parseCommentCite(blockquote);
             }
             List<Comment> children = parseCommentChildren(li.select(">ol.children").first());
-            return new Comment(id, username, avatar, datetime, content, commentCite, children);
+            return new Comment(id, username, avatar, timestamp, content, commentCite, children);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -145,7 +144,7 @@ public class Parser {
             categories.add(t.text());
         }
         String datetime = article.select("p.date time.entry-date.published").attr("datetime");
-        long timestamp = Util.parseDateTimeISO(datetime);
+        long timestamp = Util.parseDateTime(datetime);
         String author = article.select("p.date a[rel=author]").text();
 
         List<Comment> comments = new ArrayList<>();

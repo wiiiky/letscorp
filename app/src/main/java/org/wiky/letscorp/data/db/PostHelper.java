@@ -70,7 +70,7 @@ public class PostHelper implements BaseColumns {
         }
     }
 
-    public static void deletePosts() {
+    public static void clear() {
         SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
     }

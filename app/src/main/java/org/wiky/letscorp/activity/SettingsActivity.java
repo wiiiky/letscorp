@@ -38,8 +38,8 @@ public class SettingsActivity extends BaseActivity {
         public boolean onPreferenceClick(Preference preference) {
             String key = preference.getKey();
             if (Objects.equals(key, getString(R.string.key_clear_cache))) {
-                PostHelper.deletePosts();
-                PostItemHelper.deletePostItems();
+                PostHelper.clear();
+                PostItemHelper.clear();
                 QueryHelper.deleteQueries();
                 Toast.makeText(getActivity(), R.string.toast_cache_deleted, Toast.LENGTH_SHORT).show();
             } else {

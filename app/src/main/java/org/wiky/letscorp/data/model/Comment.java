@@ -1,7 +1,8 @@
 package org.wiky.letscorp.data.model;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * 文章评论
@@ -10,21 +11,18 @@ public class Comment {
     public int id;
     public String username;
     public String avatar;
-    public String datetime;
+    public long timestamp;
     public String content;
     public CommentCite cite;
     public List<Comment> children;
 
-    public Comment(int id, String username, String avatar, String datetime, String content) {
-        this(id, username, avatar, datetime, content, null, new ArrayList<Comment>());
-    }
 
-    public Comment(int id, String username, String avatar, String datetime, String content, CommentCite cite,
+    public Comment(int id, String username, String avatar, long timestamp, String content, CommentCite cite,
                    List<Comment> children) {
         this.id = id;
         this.username = username;
         this.avatar = avatar;
-        this.datetime = datetime;
+        this.timestamp = timestamp;
         this.content = content;
         this.cite = cite;
         this.children = children;
@@ -36,6 +34,15 @@ public class Comment {
             size += c.size();
         }
         return size;
+    }
+
+    public String getDatetime() {
+        if (timestamp <= 0) {
+            return "";
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return formatter.format(timestamp);
     }
 
     public int size() {

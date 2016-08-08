@@ -11,12 +11,13 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.wiky.letscorp.Application;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -35,25 +36,15 @@ public class Util {
 
     /* 将字符串数组序列化为JSON数组，用于数据库保存 */
     public static String serializeStringList(List<String> list) {
-        JSONArray array = new JSONArray();
-        for (String s : list) {
-            array.put(s);
-        }
-        return array.toString();
+        return new Gson().toJson(list);
     }
 
     /* 将JSON数组的解析为字符串数组 */
     public static List<String> deserializeStringList(String data) {
-        ArrayList<String> list = new ArrayList<>();
-        try {
-            JSONArray array = new JSONArray(data);
-            for (int i = 0; i < array.length(); i++) {
-                list.add(array.getString(i));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return list;
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<String>>() {
+        }.getType();
+        return gson.fromJson(data, listType);
     }
 
     public static String joinString(List<String> strings) {
@@ -149,7 +140,7 @@ public class Util {
         return ViewAnimationUtils.createCircularReveal(view, cx, cy, startRadius, endRadius);
     }
 
-    public static long parseDateTimeISO(String source) {
+    public static long parseDateTime(String source) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT, Locale.US);
             Date date = sdf.parse(source);
