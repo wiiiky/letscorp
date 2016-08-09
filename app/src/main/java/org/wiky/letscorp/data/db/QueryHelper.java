@@ -78,7 +78,7 @@ public class QueryHelper implements BaseColumns {
         db.execSQL(sql);
     }
 
-    public static void deleteQueries() {
+    public static void clear() {
         SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
     }

@@ -9,4 +9,15 @@
         <attr name="metaButtonBarButtonStyle" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="ListFontStyle">
+        <attr name="item_title_size" format="dimension" />
+        <attr name="item_content_size" format="dimension" />
+        <attr name="item_info_size" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="PostFontStyle">
+        <attr name="post_title_size" format="dimension" />
+        <attr name="post_content_size" format="dimension" />
+        <attr name="post_info_size" format="dimension" />
+    </declare-styleable>
 </resources>

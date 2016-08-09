@@ -1,16 +1,26 @@
 package org.wiky.letscorp.activity;
 
+import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.style.StylePreferences;
 import org.wiky.letscorp.util.Util;
 
 
 public class BaseActivity extends AppCompatActivity {
     protected Toolbar mToolBar;
     protected AppBarLayout mAppBar;
+    protected StylePreferences mStylePref;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mStylePref = new StylePreferences(this);
+        getTheme().applyStyle(mStylePref.getListFontStyle().resid(), true);
+    }
 
     @Override
     public void setContentView(int layoutResID) {

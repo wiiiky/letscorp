@@ -14,25 +14,19 @@ import org.wiky.letscorp.data.db.SQLHelper;
 public class Application extends android.app.Application {
 
     private static Application mApplication = null;
-    private static Handler muiHandler = null;
-    private static SQLHelper mdbHelper = null;
+    private Handler muiHandler = null;
+    private SQLHelper msqlHelper = null;
 
     public static Application getApplication() {
         return mApplication;
     }
 
     public static Handler getUIHandler() {
-        if (muiHandler == null) {
-            muiHandler = new Handler(mApplication.getMainLooper());
-        }
-        return muiHandler;
+        return mApplication.muiHandler;
     }
 
     public static SQLHelper getDBHelper() {
-        if (mdbHelper == null) {
-            mdbHelper = new SQLHelper(mApplication);
-        }
-        return mdbHelper;
+        return mApplication.msqlHelper;
     }
 
     public static int getScreenHeight() {
@@ -51,9 +45,12 @@ public class Application extends android.app.Application {
         return size.x;
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();
+        muiHandler = new Handler(getMainLooper());
+        msqlHelper = new SQLHelper(this);
         mApplication = this;
     }
 }

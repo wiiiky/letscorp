@@ -60,6 +60,12 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     }
 
     @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        recreate();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;

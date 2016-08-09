@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/md_black_1000"
-            android:textSize="22sp" />
+            android:textSize="?attr/item_title_size" />
 
         <TextView
             android:id="@+id/item.content"
@@ -27,7 +27,7 @@
             android:layout_marginTop="2dp"
             android:ellipsize="end"
             android:maxLines="5"
-            android:textSize="16sp" />
+            android:textSize="?attr/item_content_size" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -41,7 +41,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="4dp" />
+                android:layout_marginStart="4dp"
+                android:textSize="?attr/item_info_size" />
 
             <TextView
                 android:id="@+id/item.date"
@@ -49,7 +50,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="4dp" />
+                android:layout_marginEnd="4dp"
+                android:textSize="?attr/item_info_size" />
 
         </RelativeLayout>
 
