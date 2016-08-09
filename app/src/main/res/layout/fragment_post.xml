@@ -1,74 +1,21 @@
-<org.wiky.letscorp.view.OverScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/post.scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@id/appbar"
-    android:background="#EEEEEE"
     android:overScrollMode="never"
     android:scrollbars="none"
     tools:context=".activity.PostActivity$PostFragment">
 
-    <RelativeLayout
-        android:id="@+id/post.scrollview_layout"
+    <org.wiky.letscorp.list.PostView
+        android:id="@+id/post.view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="#EEEEEE"
+        android:clipToPadding="false"
+        android:paddingBottom="20dp"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp" />
 
-        <TextView
-            android:id="@+id/post.title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="20dp"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="@color/md_black_1000"
-            android:textSize="26sp" />
-
-        <TextView
-            android:id="@+id/post.category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/post.title"
-            android:layout_centerHorizontal="false"
-            android:layout_marginEnd="15dp"
-            android:layout_marginTop="4dp"
-            android:text="" />
-
-        <TextView
-            android:id="@+id/post.tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/post.category"
-            android:layout_centerHorizontal="false"
-            android:layout_marginEnd="15dp"
-            android:layout_marginTop="2dp" />
-
-        <TextView
-            android:id="@+id/post.author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/post.tag"
-            android:layout_centerHorizontal="false"
-            android:layout_marginEnd="15dp"
-            android:layout_marginTop="5dp"
-            android:text="" />
-
-        <org.wiky.letscorp.view.PostContent
-            android:id="@+id/post.content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/post.author"
-            android:layout_marginBottom="25dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="6dp" />
-
-    </RelativeLayout>
-
-</org.wiky.letscorp.view.OverScrollView>
+</RelativeLayout>

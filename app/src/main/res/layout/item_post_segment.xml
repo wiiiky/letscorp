@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="2dp"
+    android:paddingTop="2dp">
+
+    <TextView
+        android:id="@+id/post.content.text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/post.content.quote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/blockquote"
+        android:paddingStart="18dp"
+        android:textStyle="italic" />
+
+    <org.wiky.letscorp.view.ImageViewer
+        android:id="@+id/post.content.image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter" />
+
+</RelativeLayout>

@@ -33,7 +33,6 @@ public class SearchBox extends FrameLayout implements View.OnClickListener, Text
     private ImageView mClearImage;
     private EditText mQueryEdit;
     private QueryListView mQueryList;
-    //    private QueryAdapter mQueryAdapter;
     private OnSearchListener mOnSearchListener = null;
 
     public SearchBox(Context context) {

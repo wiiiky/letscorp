@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -36,10 +35,10 @@ import org.wiky.letscorp.api.Api;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.list.CommentListView;
+import org.wiky.letscorp.list.PostView;
 import org.wiky.letscorp.util.Username;
 import org.wiky.letscorp.util.Util;
-import org.wiky.letscorp.view.PhotoView;
-import org.wiky.letscorp.view.PostContent;
+import org.wiky.letscorp.view.ImageViewer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -200,11 +199,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         private static final String ARG_POST_ITEM = "item";
 
         private Post mData;
-        private TextView mTitle;
-        private TextView mAuthor;
-        private TextView mCategory;
-        private TextView mTag;
-        private PostContent mContent;
+        private PostView mView;
 
         public PostFragment() {
         }
@@ -222,50 +217,29 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_post, container, false);
-            mTitle = (TextView) rootView.findViewById(R.id.post_title);
-            mAuthor = (TextView) rootView.findViewById(R.id.post_author);
-            mCategory = (TextView) rootView.findViewById(R.id.post_category);
-            mContent = (PostContent) rootView.findViewById(R.id.post_content);
-            mTag = (TextView) rootView.findViewById(R.id.post_tag);
-
-            mContent.setOnImageClickListener(this);
-
+            mView = (PostView) rootView.findViewById(R.id.post_view);
             PostItem item = getArguments().getParcelable(ARG_POST_ITEM);
 
-            assert item != null;
-            mTitle.setText(item.title);
             if (mData != null) {
-                update();
+                mView.setPost(mData, this);
+            } else {
+                mView.setItem(item, this);
             }
             return rootView;
         }
 
         public void updateData(Post post) {
             mData = post;
-            if (isAdded() && mAuthor != null) {
-                update();
+            if (isAdded() && mView != null) {
+                mView.setPost(mData, this);
             }
         }
 
-        private void update() {
-            mAuthor.setText(String.format("%s %s %s", mData.author, getString(R.string.published_on), mData.getDatetime()));
-            if (!mData.categories.isEmpty()) {
-                mCategory.setText(String.format("分类：%s", Util.joinString(mData.categories)));
-            } else {
-                mCategory.setVisibility(View.GONE);
-            }
-            if (!mData.tags.isEmpty()) {
-                mTag.setText(String.format("标签：%s", Util.joinString(mData.tags)));
-            } else {
-                mTag.setVisibility(View.GONE);
-            }
-            mContent.setContent(mData.content);
-        }
 
         @Override
         public void onClick(View v) {
-            if (v instanceof PhotoView) {
-                PhotoView photoView = (PhotoView) v;
+            if (v instanceof ImageViewer) {
+                ImageViewer photoView = (ImageViewer) v;
                 Activity activity = getActivity();
                 Intent intent = new Intent(activity, ImageActivity.class);
                 intent.putExtra("url", photoView.getUrl());
