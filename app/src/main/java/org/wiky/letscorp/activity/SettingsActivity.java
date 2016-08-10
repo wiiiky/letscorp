@@ -1,6 +1,5 @@
 package org.wiky.letscorp.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -19,13 +18,11 @@ import org.wiky.letscorp.data.db.PostItemHelper;
 import org.wiky.letscorp.data.db.QueryHelper;
 import org.wiky.letscorp.style.ListFontStyle;
 import org.wiky.letscorp.style.PostFontStyle;
-import org.wiky.letscorp.style.StylePreferences;
 
 import java.util.Objects;
 
 public class SettingsActivity extends BaseActivity {
 
-    private StylePreferences mStylePref;
     private ListFontStyle mPrevListFontStyle;
 
     @Override
@@ -33,7 +30,6 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        mStylePref = new StylePreferences(this);
         mPrevListFontStyle = mStylePref.getListFontStyle();
 
         setTitle(R.string.settings);
@@ -51,8 +47,6 @@ public class SettingsActivity extends BaseActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
-
-        private StylePreferences mStylePref;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -72,14 +66,9 @@ public class SettingsActivity extends BaseActivity {
             findPreference(getString(R.string.pref_key_clear_query)).setOnPreferenceClickListener(this);
         }
 
-        @Override
-        public void onAttach(Context context) {
-            super.onAttach(context);
-            mStylePref = new StylePreferences(context);
-        }
 
         private ListFontStyle getListFontStyle() {
-            return mStylePref.getListFontStyle();
+            return Application.getStylePreferences().getListFontStyle();
         }
 
         private void setListFontStyle(int index) {
@@ -87,14 +76,14 @@ public class SettingsActivity extends BaseActivity {
             for (int i = 0; i < styles.length; i++) {
                 if (i == index) {
                     findPreference(getString(R.string.pref_key_list_font)).setSummary(styles[i].title());
-                    mStylePref.setListFontStyle(styles[i]);
+                    Application.getStylePreferences().setListFontStyle(styles[i]);
                     break;
                 }
             }
         }
 
         private PostFontStyle getPostFontStyle() {
-            return mStylePref.getPostFontStyle();
+            return Application.getStylePreferences().getPostFontStyle();
         }
 
         private void setPostFontStyle(int index) {
@@ -102,7 +91,7 @@ public class SettingsActivity extends BaseActivity {
             for (int i = 0; i < styles.length; i++) {
                 if (i == index) {
                     findPreference(getString(R.string.pref_key_post_font)).setSummary(styles[i].title());
-                    mStylePref.setPostFontStyle(styles[i]);
+                    Application.getStylePreferences().setPostFontStyle(styles[i]);
                     break;
                 }
             }

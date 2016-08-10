@@ -7,6 +7,7 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import org.wiky.letscorp.data.db.SQLHelper;
+import org.wiky.letscorp.style.StylePreferences;
 
 /**
  * Created by wiky on 6/11/16.
@@ -16,6 +17,7 @@ public class Application extends android.app.Application {
     private static Application mApplication = null;
     private Handler muiHandler = null;
     private SQLHelper msqlHelper = null;
+    private StylePreferences mstylePref = null;
 
     public static Application getApplication() {
         return mApplication;
@@ -27,6 +29,10 @@ public class Application extends android.app.Application {
 
     public static SQLHelper getDBHelper() {
         return mApplication.msqlHelper;
+    }
+
+    public static StylePreferences getStylePreferences() {
+        return mApplication.mstylePref;
     }
 
     public static int getScreenHeight() {
@@ -51,6 +57,7 @@ public class Application extends android.app.Application {
         super.onCreate();
         muiHandler = new Handler(getMainLooper());
         msqlHelper = new SQLHelper(this);
+        mstylePref = new StylePreferences(this);
         mApplication = this;
     }
 }

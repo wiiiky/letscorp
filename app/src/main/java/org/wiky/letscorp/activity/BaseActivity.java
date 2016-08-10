@@ -5,6 +5,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.style.StylePreferences;
 import org.wiky.letscorp.util.Util;
@@ -18,7 +19,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mStylePref = new StylePreferences(this);
+        mStylePref = Application.getStylePreferences();
         getTheme().applyStyle(mStylePref.getListFontStyle().resid(), true);
         getTheme().applyStyle(mStylePref.getPostFontStyle().resid(), true);
     }
