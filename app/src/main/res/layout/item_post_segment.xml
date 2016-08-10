@@ -9,14 +9,16 @@
     <TextView
         android:id="@+id/post.content.text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textSize="?attr/post_content_size" />
 
     <TextView
         android:id="@+id/post.content.quote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/blockquote"
-        android:paddingStart="18dp"
+        android:paddingStart="20dp"
+        android:textSize="?attr/post_content_size"
         android:textStyle="italic" />
 
     <org.wiky.letscorp.view.ImageViewer

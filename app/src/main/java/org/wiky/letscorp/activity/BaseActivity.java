@@ -20,6 +20,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mStylePref = new StylePreferences(this);
         getTheme().applyStyle(mStylePref.getListFontStyle().resid(), true);
+        getTheme().applyStyle(mStylePref.getPostFontStyle().resid(), true);
     }
 
     @Override

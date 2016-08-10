@@ -1,5 +1,6 @@
 package org.wiky.letscorp.style;
 
+import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
 
 import java.util.ArrayList;
@@ -9,17 +10,15 @@ import java.util.Collection;
  * Created by wiky on 8/9/16.
  */
 public enum ListFontStyle {
-    Small(R.style.ListFontStyle_Small, "Small", 0),
-    Medium(R.style.ListFontStyle_Medium, "Medium", 1),
-    Large(R.style.ListFontStyle_Large, "Large", 2);
+    Small(R.style.ListFontStyle_Small, 0),
+    Medium(R.style.ListFontStyle_Medium, 1),
+    Large(R.style.ListFontStyle_Large, 2);
 
     private int resId;
-    private String title;
     private int index;
 
-    ListFontStyle(int resId, String title, int index) {
+    ListFontStyle(int resId, int index) {
         this.resId = resId;
-        this.title = title;
         this.index = index;
     }
 
@@ -36,7 +35,15 @@ public enum ListFontStyle {
     }
 
     public String title() {
-        return title;
+        switch (resId) {
+            case R.style.ListFontStyle_Small:
+                return Application.getApplication().getString(R.string.small);
+            case R.style.ListFontStyle_Medium:
+                return Application.getApplication().getString(R.string.medium);
+            case R.style.ListFontStyle_Large:
+                return Application.getApplication().getString(R.string.large);
+        }
+        return "Unknown";
     }
 
     public int index() {

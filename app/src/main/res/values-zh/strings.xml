@@ -16,7 +16,7 @@
     <string name="app_description">墙外楼非官方APP</string>
     <string name="clear_cache">清除缓存</string>
     <string name="settings_clear_cache">删除缓存，包括文章以及搜索记录</string>
-    <string name="toast_cache_deleted">缓存已删除</string>
+    <string name="cache_deleted">缓存已删除</string>
     <string name="ok">确认</string>
     <string name="action_about">关于</string>
     <string name="published_on">发表于</string>
@@ -38,4 +38,11 @@
     <string name="list_font_size">列表字体大小</string>
     <string name="appearance">外观</string>
     <string name="post_font_size">文章字体大小</string>
+    <string name="medium">中</string>
+    <string name="small">小</string>
+    <string name="large">大</string>
+    <string name="data">数据</string>
+    <string name="clear_search_history">删除搜索历史</string>
+    <string name="clear_search_history_only">删除搜索历史</string>
+    <string name="search_history_deleted">搜索记录已删除</string>
 </resources>

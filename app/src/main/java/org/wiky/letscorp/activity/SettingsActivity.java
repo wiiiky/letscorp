@@ -69,6 +69,7 @@ public class SettingsActivity extends BaseActivity {
             pref.setOnPreferenceClickListener(this);
 
             findPreference(getString(R.string.pref_key_clear_cache)).setOnPreferenceClickListener(this);
+            findPreference(getString(R.string.pref_key_clear_query)).setOnPreferenceClickListener(this);
         }
 
         @Override
@@ -112,6 +113,8 @@ public class SettingsActivity extends BaseActivity {
             String key = preference.getKey();
             if (Objects.equals(key, getString(R.string.pref_key_clear_cache))) {
                 clearCache();
+            } else if (Objects.equals(key, getString(R.string.pref_key_clear_query))) {
+                clearQuery();
             } else if (Objects.equals(key, getString(R.string.pref_key_list_font))) {
                 changeListFontStyle();
             } else if (Objects.equals(key, getString(R.string.pref_key_post_font))) {
@@ -182,8 +185,12 @@ public class SettingsActivity extends BaseActivity {
         private void clearCache() {
             PostHelper.clear();
             PostItemHelper.clear();
+            Toast.makeText(getActivity(), R.string.cache_deleted, Toast.LENGTH_SHORT).show();
+        }
+
+        private void clearQuery() {
             QueryHelper.clear();
-            Toast.makeText(getActivity(), R.string.toast_cache_deleted, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.search_history_deleted, Toast.LENGTH_SHORT).show();
         }
     }
 }
