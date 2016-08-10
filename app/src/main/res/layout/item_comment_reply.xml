@@ -22,14 +22,16 @@
             android:id="@+id/comment.username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorSecondaryText" />
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="?attr/comment_primary_size" />
 
         <TextView
             android:id="@+id/comment.datetime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/colorAccent"
+            android:textSize="?attr/comment_primary_size" />
 
         <RelativeLayout
             android:id="@+id/comment.cite"
@@ -46,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/comment_cite"
-                android:textSize="12sp" />
+                android:textSize="?attr/comment_secondary_size" />
 
             <TextView
                 android:id="@+id/comment.cite.username"
@@ -54,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:layout_toEndOf="@id/comment.cite.cite"
-                android:textSize="12sp" />
+                android:textSize="?attr/comment_secondary_size" />
 
             <TextView
                 android:id="@+id/comment.cite.content"
@@ -63,7 +65,7 @@
                 android:layout_below="@id/comment.cite.username"
                 android:layout_marginStart="3dp"
                 android:layout_toEndOf="@id/comment.cite.cite"
-                android:textSize="12sp" />
+                android:textSize="?attr/comment_secondary_size" />
 
         </RelativeLayout>
 
