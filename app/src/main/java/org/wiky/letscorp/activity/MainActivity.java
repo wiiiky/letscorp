@@ -119,17 +119,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
         intent.putExtra("cx", pos[0]);
         intent.putExtra("cy", pos[1]);
 
-        View statusBar = findViewById(android.R.id.statusBarBackground);
-        View navigationBar = findViewById(android.R.id.navigationBarBackground);
-
-        List<Pair<View, String>> pairs = new ArrayList<>();
-        pairs.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-        pairs.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-        pairs.add(Pair.create((View) mAppBar, mAppBar.getTransitionName()));
-        pairs.add(Pair.create((View) mToolBar, mToolBar.getTransitionName()));
-
-        Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                pairs.toArray(new Pair[pairs.size()])).toBundle();
+        Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, makeSceneTransitionPairs(mToolBar, mAppBar)).toBundle();
         startActivity(intent, options);
     }
 

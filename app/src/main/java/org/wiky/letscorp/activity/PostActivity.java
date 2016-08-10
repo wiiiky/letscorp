@@ -240,23 +240,13 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         public void onClick(View v) {
             if (v instanceof ImageViewer) {
                 ImageViewer photoView = (ImageViewer) v;
-                Activity activity = getActivity();
+                BaseActivity activity = (BaseActivity) getActivity();
                 Intent intent = new Intent(activity, ImageActivity.class);
                 intent.putExtra("url", photoView.getUrl());
                 intent.putExtra("title", activity.getTitle());
 
-                View statusBar = activity.findViewById(android.R.id.statusBarBackground);
-                View navigationBar = activity.findViewById(android.R.id.navigationBarBackground);
-                View appBar = activity.findViewById(R.id.appbar);
-
-                List<Pair<View, String>> pairs = new ArrayList<>();
-                pairs.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-                pairs.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-                pairs.add(Pair.create((View) photoView, photoView.getTransitionName()));
-                pairs.add(Pair.create(appBar, appBar.getTransitionName()));
-
                 Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-                        pairs.toArray(new Pair[pairs.size()])).toBundle();
+                        activity.makeSceneTransitionPairs(photoView, activity.mAppBar)).toBundle();
                 startActivity(intent, options);
             }
         }
