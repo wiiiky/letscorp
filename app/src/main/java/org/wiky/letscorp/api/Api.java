@@ -1,6 +1,5 @@
 package org.wiky.letscorp.api;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import org.jsoup.nodes.Document;
@@ -118,7 +117,6 @@ public class Api {
 
     /* 发表评论 */
     public static void postComment(final Post post, String author, String comment, int parentid, final ApiHandler<Post> apiHandler) {
-        Log.d("postComment", String.format("%d, %s, %s, %d", post.id, author, comment, parentid));
         RequestBody body = new FormBody.Builder()
                 .addEncoded("author", author)
                 .addEncoded("comment", comment)

@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -59,7 +62,12 @@ public class PostAdapter extends RecyclerView.Adapter {
                 Elements imgs = e.select(">a>img");
                 if (!imgs.isEmpty()) {
                     for (Element img : imgs) {
-                        segments.add(new Segment(SegmentType.IMAGE, img.attr("data-original")));
+                        String url = img.attr("data-original");
+                        Glide.with(mContext)
+                                .load(url)
+                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                .preload();
+                        segments.add(new Segment(SegmentType.IMAGE, url));
                     }
                 } else {
                     segments.add(new Segment(Objects.equals(tag, "blockquote") ? SegmentType.QUOTE : SegmentType.PLAIN, e.html()));
