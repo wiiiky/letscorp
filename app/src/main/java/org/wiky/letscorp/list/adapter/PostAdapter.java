@@ -52,6 +52,22 @@ public class PostAdapter extends RecyclerView.Adapter {
         mOnImageClickListener = listener;
     }
 
+    private void segmentsFromP(List<Segment> segments, Element e, boolean quote) {
+        Elements imgs = e.select(">a>img");
+        if (!imgs.isEmpty()) {
+            for (Element img : imgs) {
+                String url = img.attr("data-original");
+                Glide.with(mContext)
+                        .load(url)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .preload();
+                segments.add(new Segment(SegmentType.IMAGE, url));
+            }
+        } else {
+            segments.add(new Segment(quote ? SegmentType.QUOTE : SegmentType.PLAIN, e.html()));
+        }
+    }
+
     /* 将文章内容解析成不同成分 TODO */
     private List<Segment> parseContent(String content) {
         ArrayList<Segment> segments = new ArrayList<>();
@@ -59,25 +75,15 @@ public class PostAdapter extends RecyclerView.Adapter {
         for (Element e : doc.body().children()) {
             String tag = e.tagName();
             if (Objects.equals(tag, "p")) {
-                Elements imgs = e.select(">a>img");
-                if (!imgs.isEmpty()) {
-                    for (Element img : imgs) {
-                        String url = img.attr("data-original");
-                        Glide.with(mContext)
-                                .load(url)
-                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                .preload();
-                        segments.add(new Segment(SegmentType.IMAGE, url));
-                    }
-                } else {
-                    segments.add(new Segment(Objects.equals(tag, "blockquote") ? SegmentType.QUOTE : SegmentType.PLAIN, e.html()));
-                }
+                segmentsFromP(segments, e, false);
             } else if (Objects.equals(tag, "blockquote")) {
-                for (Element p : e.select(">p")) {
-                    segments.add(new Segment(Objects.equals(tag, "blockquote") ? SegmentType.QUOTE : SegmentType.PLAIN, p.html()));
+                for (Element p : e.children()) {
+                    if (Objects.equals(p.tagName(), "p")) {
+                        segmentsFromP(segments, p, true);
+                    }
                 }
             } else {
-                Toast.makeText(mContext, String.format("unknown tag %s", tag), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, String.format("unknown tag %s, please file a bug in the GITHUB", tag), Toast.LENGTH_LONG).show();
             }
         }
         return segments;
