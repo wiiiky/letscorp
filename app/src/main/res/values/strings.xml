@@ -49,4 +49,5 @@
     <string name="clear_search_history">Clear Search History</string>
     <string name="clear_search_history_only">clear search history</string>
     <string name="search_history_deleted">Search History Deleted</string>
+    <string name="action_share">Share</string>
 </resources>
