@@ -25,7 +25,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <org.wiky.letscorp.view.SwipeRefreshLayout
+    <org.wiky.letscorp.component.SwipeRefreshLayout
         android:id="@+id/search.swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,9 +36,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </org.wiky.letscorp.view.SwipeRefreshLayout>
+    </org.wiky.letscorp.component.SwipeRefreshLayout>
 
-    <org.wiky.letscorp.view.SearchBox
+    <org.wiky.letscorp.component.SearchBox
         android:id="@+id/search.search_box"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

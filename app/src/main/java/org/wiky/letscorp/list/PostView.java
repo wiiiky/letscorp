@@ -11,6 +11,7 @@ import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.list.adapter.PostAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.RecyclerViewOverScrollDecorAdapter;
@@ -59,5 +60,9 @@ public class PostView extends RecyclerView {
                     "", data.getDatetime(), "", listener);
             setAdapter(mAdapter);
         }
+    }
+
+    public List<PostAdapter.Segment> getSegments() {
+        return mAdapter.getSegments();
     }
 }

@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.component.CircleImageView;
 import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.list.CommentReplyListView;
 import org.wiky.letscorp.util.Util;
-import org.wiky.letscorp.view.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;

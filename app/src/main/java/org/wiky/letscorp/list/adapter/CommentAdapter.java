@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.component.CircleImageView;
 import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.list.CommentReplyListView;
 import org.wiky.letscorp.util.Util;
-import org.wiky.letscorp.view.CircleImageView;
 
 import java.util.List;
 import java.util.Objects;
@@ -64,15 +64,15 @@ public class CommentAdapter extends RecyclerView.Adapter {
         List<Comment> oldData = mData;
         mData = comments;
         if (mData.size() > oldData.size()) {
-            for (int i=0;i<oldData.size();i++){
-                if(!Objects.equals(oldData.get(i).id, mData.get(i).id)){
+            for (int i = 0; i < oldData.size(); i++) {
+                if (!Objects.equals(oldData.get(i).id, mData.get(i).id)) {
                     notifyItemChanged(i);
                 }
             }
             notifyItemRangeInserted(oldData.size(), mData.size() - oldData.size());
         } else {
-            for (int i=0;i<mData.size();i++){
-                if(!Objects.equals(oldData.get(i).id, mData.get(i).id)){
+            for (int i = 0; i < mData.size(); i++) {
+                if (!Objects.equals(oldData.get(i).id, mData.get(i).id)) {
                     notifyItemChanged(i);
                 }
             }

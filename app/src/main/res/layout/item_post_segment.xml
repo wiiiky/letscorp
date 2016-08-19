@@ -21,7 +21,7 @@
         android:textSize="?attr/post_content_size"
         android:textStyle="italic" />
 
-    <org.wiky.letscorp.view.ImageViewer
+    <org.wiky.letscorp.component.ImageViewer
         android:id="@+id/post.content.image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

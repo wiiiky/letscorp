@@ -1,4 +1,4 @@
-package org.wiky.letscorp.view;
+package org.wiky.letscorp.component;
 
 import android.content.Context;
 import android.content.pm.PackageManager;

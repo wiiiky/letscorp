@@ -6,14 +6,14 @@ import android.view.Menu;
 import android.widget.Toast;
 
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.component.SearchBox;
+import org.wiky.letscorp.component.SwipeRefreshLayout;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.list.BasePostListVIew;
 import org.wiky.letscorp.list.SearchListView;
 import org.wiky.letscorp.list.adapter.PostItemAdapter;
 import org.wiky.letscorp.signal.Signal;
-import org.wiky.letscorp.view.SearchBox;
-import org.wiky.letscorp.view.SwipeRefreshLayout;
 
 public class SearchActivity extends BaseActivity implements SearchBox.OnSearchListener,
         BasePostListVIew.OnRefreshListener,
@@ -34,7 +34,7 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
         setContentView(R.layout.activity_search);
 
         mSearchCX = getIntent().getIntExtra("cx", 0);
-        mSearchCY= getIntent().getIntExtra("cy", 0);
+        mSearchCY = getIntent().getIntExtra("cy", 0);
 
         mSearchBox = (SearchBox) findViewById(R.id.search_search_box);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.search_swipe_refresh);
@@ -58,7 +58,7 @@ public class SearchActivity extends BaseActivity implements SearchBox.OnSearchLi
 
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         super.onBackPressed();
         mSearchBox.hide(mSearchCX, mSearchCY);
     }

@@ -8,18 +8,18 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.Const;
+import org.wiky.letscorp.component.AboutDialogHelper;
+import org.wiky.letscorp.component.SwipeRefreshLayout;
 import org.wiky.letscorp.data.db.QueryHelper;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
@@ -27,13 +27,11 @@ import org.wiky.letscorp.list.PostListView;
 import org.wiky.letscorp.list.adapter.PostItemAdapter;
 import org.wiky.letscorp.signal.Signal;
 import org.wiky.letscorp.util.Util;
-import org.wiky.letscorp.view.AboutDialogHelper;
-import org.wiky.letscorp.view.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectedListener{
+public class MainActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
 
     private PageAdapter mPagerAdapter;
     private ViewPager mViewPager;
@@ -115,7 +113,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     /* 打开搜索界面 */
     public void startSearchActivity() {
         Intent intent = new Intent(this, SearchActivity.class);
-        int[] pos=Util.getViewCenterOnScreen(findViewById(R.id.action_search));
+        int[] pos = Util.getViewCenterOnScreen(findViewById(R.id.action_search));
         intent.putExtra("cx", pos[0]);
         intent.putExtra("cy", pos[1]);
 

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity$PostListFragment">
 
-    <org.wiky.letscorp.view.SwipeRefreshLayout
+    <org.wiky.letscorp.component.SwipeRefreshLayout
         android:id="@+id/main.swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,6 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </org.wiky.letscorp.view.SwipeRefreshLayout>
+    </org.wiky.letscorp.component.SwipeRefreshLayout>
 
 </RelativeLayout>

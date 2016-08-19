@@ -1,4 +1,4 @@
-package org.wiky.letscorp.view;
+package org.wiky.letscorp.component;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

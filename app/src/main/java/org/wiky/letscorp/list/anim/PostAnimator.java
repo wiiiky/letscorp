@@ -66,6 +66,7 @@ public class PostAnimator extends DefaultItemAnimator {
                         holder.itemView.setScaleY(1.0f);
                         dispatchAddFinished(holder);
                     }
+
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         end();
@@ -107,6 +108,7 @@ public class PostAnimator extends DefaultItemAnimator {
                         holder.itemView.setScaleY(1.0f);
                         dispatchRemoveFinished(holder);
                     }
+
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         end();

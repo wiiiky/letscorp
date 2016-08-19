@@ -84,7 +84,7 @@ public class PostItemHelper implements BaseColumns {
         Cursor c = db.rawQuery(sql, null);
         ArrayList<PostItem> items = new ArrayList<>();
         while (c.moveToNext()) {
-            PostItem item=getPostItem(c);
+            PostItem item = getPostItem(c);
             items.add(item);
         }
         c.close();
@@ -94,7 +94,7 @@ public class PostItemHelper implements BaseColumns {
     public static boolean checkPostItem(int category, int id) {
         SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, null, COLUMN_NAME_ITEM_ID + "=? AND " + COLUMN_NAME_CATEGORY + "=?",
-                new String[]{String.valueOf(id),String.valueOf(category)}, null, null, null);
+                new String[]{String.valueOf(id), String.valueOf(category)}, null, null, null);
         boolean exists = c.moveToNext();
         c.close();
         return exists;
@@ -103,9 +103,9 @@ public class PostItemHelper implements BaseColumns {
     public static void savePostItem(PostItem item) {
         SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
         ContentValues values = getContentValues(item);
-        if (checkPostItem(item.category,item.id)) { /* 已存在 */
+        if (checkPostItem(item.category, item.id)) { /* 已存在 */
             db.update(TABLE_NAME, values, COLUMN_NAME_ITEM_ID + "=? & " + COLUMN_NAME_CATEGORY + "=?",
-                    new String[]{String.valueOf(item.id),String.valueOf(item.category)});
+                    new String[]{String.valueOf(item.id), String.valueOf(item.category)});
         } else {
             db.insert(TABLE_NAME, null, values);
         }

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
 
-        <org.wiky.letscorp.view.CircleImageView
+        <org.wiky.letscorp.component.CircleImageView
             android:id="@+id/comment.avatar"
             android:layout_width="50dp"
             android:layout_height="50dp" />

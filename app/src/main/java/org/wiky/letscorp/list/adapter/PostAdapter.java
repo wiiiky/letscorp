@@ -17,8 +17,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.wiky.letscorp.R;
+import org.wiky.letscorp.component.ImageViewer;
 import org.wiky.letscorp.util.Util;
-import org.wiky.letscorp.view.ImageViewer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +66,10 @@ public class PostAdapter extends RecyclerView.Adapter {
         } else {
             segments.add(new Segment(quote ? SegmentType.QUOTE : SegmentType.PLAIN, e.html()));
         }
+    }
+
+    public List<Segment> getSegments() {
+        return mContent;
     }
 
     /* 将文章内容解析成不同成分 TODO */
@@ -171,13 +175,13 @@ public class PostAdapter extends RecyclerView.Adapter {
         return 1 + mContent.size();
     }
 
-    private enum SegmentType {
+    public enum SegmentType {
         PLAIN,
         QUOTE,
         IMAGE
     }
 
-    private static class Segment {
+    public static class Segment {
         public SegmentType type;
         public String data;
 

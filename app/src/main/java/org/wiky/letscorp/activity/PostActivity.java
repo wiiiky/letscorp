@@ -32,13 +32,17 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.Api;
+import org.wiky.letscorp.component.ImageViewer;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.list.CommentListView;
 import org.wiky.letscorp.list.PostView;
+import org.wiky.letscorp.list.adapter.PostAdapter;
 import org.wiky.letscorp.util.Username;
 import org.wiky.letscorp.util.Util;
-import org.wiky.letscorp.view.ImageViewer;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
@@ -251,14 +255,25 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         @Override
         public void onClick(View v) {
             if (v instanceof ImageViewer) {
-                ImageViewer photoView = (ImageViewer) v;
+                ImageViewer imageView = (ImageViewer) v;
                 BaseActivity activity = (BaseActivity) getActivity();
                 Intent intent = new Intent(activity, ImageActivity.class);
-                intent.putExtra("url", photoView.getUrl());
+                ArrayList<String> urls = new ArrayList<>();
+                int index = -1;
+                for (PostAdapter.Segment segment : mView.getSegments()) {
+                    if (segment.type == PostAdapter.SegmentType.IMAGE) {
+                        if (Objects.equals(segment.data, imageView.getUrl())) {
+                            index = urls.size();
+                        }
+                        urls.add(segment.data);
+                    }
+                }
+                intent.putStringArrayListExtra("urls", urls);
+                intent.putExtra("index", index);
                 intent.putExtra("title", activity.getTitle());
 
                 Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-                        activity.makeSceneTransitionPairs(photoView, activity.mAppBar)).toBundle();
+                        activity.makeSceneTransitionPairs(imageView, activity.mAppBar)).toBundle();
                 startActivity(intent, options);
             }
         }

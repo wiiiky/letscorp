@@ -56,20 +56,20 @@ public class BaseActivity extends AppCompatActivity {
                 .setStartDelay(300);
     }
 
-    protected Pair[] makeSceneTransitionPairs(View ...views){
+    protected Pair[] makeSceneTransitionPairs(View... views) {
         List<Pair<View, String>> pairs = new ArrayList<>();
 
         View statusBar = findViewById(android.R.id.statusBarBackground);
         View navigationBar = findViewById(android.R.id.navigationBarBackground);
 
-        if(statusBar!=null) {
+        if (statusBar != null) {
             pairs.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
         }
-        if(navigationBar!=null) {
+        if (navigationBar != null) {
             pairs.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
         }
-        for(View v:views){
-            if(v!=null) {
+        for (View v : views) {
+            if (v != null) {
                 pairs.add(Pair.create(v, v.getTransitionName()));
             }
         }

@@ -41,11 +41,11 @@ public class QueryHelper implements BaseColumns {
     }
 
     public static List<Query> getQueries(String query, int count) {
-        SQLiteDatabase db= Application.getDBHelper().getReadableDatabase();
+        SQLiteDatabase db = Application.getDBHelper().getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, null, String.format("%s like ?", COLUMN_NAME_QUERY), new String[]{query + "%"}, null, null, String.format("%s DESC", COLUMN_NAME_TIMESTAMP), String.valueOf(count));
 
-        List<Query> queries=new ArrayList<>();
-        while(c.moveToNext()){
+        List<Query> queries = new ArrayList<>();
+        while (c.moveToNext()) {
             queries.add(getQuery(c));
         }
         c.close();
@@ -61,19 +61,19 @@ public class QueryHelper implements BaseColumns {
         return exists;
     }
 
-    public static void saveQuery(Query query){
+    public static void saveQuery(Query query) {
         SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
-        ContentValues values=getContentValues(query);
-        if(checkQuery(query.query)){
+        ContentValues values = getContentValues(query);
+        if (checkQuery(query.query)) {
             db.update(TABLE_NAME, values, String.format("%s=?", COLUMN_NAME_QUERY), new String[]{query.query});
-        }else{
+        } else {
             db.insert(TABLE_NAME, null, values);
         }
     }
 
-    public static void clearQueries(int count){
+    public static void clearQueries(int count) {
         SQLiteDatabase db = Application.getDBHelper().getWritableDatabase();
-        String sql=String.format("DELETE FROM %s WHERE %s NOT IN (SELECT %s FROM %s ORDER BY %s DESC LIMIT %s)",
+        String sql = String.format("DELETE FROM %s WHERE %s NOT IN (SELECT %s FROM %s ORDER BY %s DESC LIMIT %s)",
                 TABLE_NAME, COLUMN_NAME_QUERY, COLUMN_NAME_QUERY, TABLE_NAME, COLUMN_NAME_TIMESTAMP, count);
         db.execSQL(sql);
     }
