@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="preferencescreen">
+    <PreferenceCategory android:title="@string/general">
+        <CheckBoxPreference
+            android:key="@string/pref_key_comment_username"
+            android:summary="@string/summary_random_username"
+            android:title="@string/random_username" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/appearance">
         <Preference
             android:key="@string/pref_key_list_font"

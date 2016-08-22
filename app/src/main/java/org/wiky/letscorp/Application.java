@@ -7,32 +7,39 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import org.wiky.letscorp.data.db.SQLHelper;
-import org.wiky.letscorp.style.StylePreferences;
+import org.wiky.letscorp.pref.GeneralPreferences;
+import org.wiky.letscorp.pref.StylePreferences;
 
 /**
  * Created by wiky on 6/11/16.
+ * 应用示例
  */
 public class Application extends android.app.Application {
 
     private static Application mApplication = null;
-    private Handler muiHandler = null;
-    private SQLHelper msqlHelper = null;
-    private StylePreferences mstylePref = null;
+    private Handler mUiHandler = null;
+    private SQLHelper mSqlHelper = null;
+    private StylePreferences mStylePref = null;
+    private GeneralPreferences mGeneralPref = null;
 
     public static Application getApplication() {
         return mApplication;
     }
 
     public static Handler getUIHandler() {
-        return mApplication.muiHandler;
+        return mApplication.mUiHandler;
     }
 
     public static SQLHelper getDBHelper() {
-        return mApplication.msqlHelper;
+        return mApplication.mSqlHelper;
     }
 
     public static StylePreferences getStylePreferences() {
-        return mApplication.mstylePref;
+        return mApplication.mStylePref;
+    }
+
+    public static GeneralPreferences getGeneralPreferences() {
+        return mApplication.mGeneralPref;
     }
 
     public static int getScreenHeight() {
@@ -55,9 +62,10 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        muiHandler = new Handler(getMainLooper());
-        msqlHelper = new SQLHelper(this);
-        mstylePref = new StylePreferences(this);
+        mUiHandler = new Handler(getMainLooper());
+        mSqlHelper = new SQLHelper(this);
+        mStylePref = new StylePreferences(this);
+        mGeneralPref = new GeneralPreferences(this);
         mApplication = this;
     }
 }

@@ -1,28 +1,20 @@
-package org.wiky.letscorp.style;
+package org.wiky.letscorp.pref;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+
+import org.wiky.letscorp.pref.style.ListFontStyle;
+import org.wiky.letscorp.pref.style.PostFontStyle;
 
 /**
  * Created by wiky on 8/9/16.
  * 样式设置
  */
-public class StylePreferences {
+public class StylePreferences extends BasePreferences {
     private final static String LIST_FONT_STYLE = "LIST_FONT_STYLE";
     private final static String POST_FONT_STYLE = "POST_FONT_STYLE";
 
-    private final Context context;
-
     public StylePreferences(Context context) {
-        this.context = context;
-    }
-
-    protected SharedPreferences open() {
-        return context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
-    }
-
-    protected SharedPreferences.Editor edit() {
-        return open().edit();
+        super(context);
     }
 
     public ListFontStyle getListFontStyle() {

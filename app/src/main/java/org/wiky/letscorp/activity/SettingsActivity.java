@@ -2,6 +2,7 @@ package org.wiky.letscorp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
@@ -16,8 +17,8 @@ import org.wiky.letscorp.R;
 import org.wiky.letscorp.data.db.PostHelper;
 import org.wiky.letscorp.data.db.PostItemHelper;
 import org.wiky.letscorp.data.db.QueryHelper;
-import org.wiky.letscorp.style.ListFontStyle;
-import org.wiky.letscorp.style.PostFontStyle;
+import org.wiky.letscorp.pref.style.ListFontStyle;
+import org.wiky.letscorp.pref.style.PostFontStyle;
 
 import java.util.Objects;
 
@@ -46,14 +47,20 @@ public class SettingsActivity extends BaseActivity {
         }
     }
 
-    public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+    public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
+            Preference pref;
+            CheckBoxPreference checkPref;
+
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings);
 
-            Preference pref;
+            checkPref = (CheckBoxPreference) findPreference(getString(R.string.pref_key_comment_username));
+            checkPref.setChecked(Application.getGeneralPreferences().isRandomUsername());
+            checkPref.setOnPreferenceChangeListener(this);
+
             pref = findPreference(getString(R.string.pref_key_list_font));
             pref.setSummary(getListFontStyle().title());
             pref.setOnPreferenceClickListener(this);
@@ -180,6 +187,12 @@ public class SettingsActivity extends BaseActivity {
         private void clearQuery() {
             QueryHelper.clear();
             Toast.makeText(getActivity(), R.string.search_history_deleted, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object o) {
+            Application.getGeneralPreferences().setRandomUsername((Boolean) o);
+            return true;
         }
     }
 }

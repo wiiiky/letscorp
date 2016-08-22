@@ -46,4 +46,8 @@
     <string name="clear_search_history_only">删除搜索历史</string>
     <string name="search_history_deleted">搜索记录已删除</string>
     <string name="action_share">分享</string>
+    <string name="random_username">随机用户名</string>
+    <string name="processing">发布中</string>
+    <string name="summary_random_username">评论时使用随机用户名，否则使用上次使用的用户名</string>
+    <string name="general">通用</string>
 </resources>

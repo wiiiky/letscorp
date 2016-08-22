@@ -386,7 +386,12 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             final TextInputEditText content = (TextInputEditText) root.findViewById(R.id.comment_content);
             final ImageView renew = (ImageView) root.findViewById(R.id.comment_author_renew);
 
-            String name = Username.random();
+            String name;
+            if (Application.getGeneralPreferences().isRandomUsername()) {
+                name = Username.random();
+            } else {
+                name = Application.getGeneralPreferences().getUsername();
+            }
             author.setText(name);
             author.setSelection(name.length());
             new MaterialDialog.Builder(getContext())
@@ -407,9 +412,10 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
                         public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
                             String a = author.getText().toString();
                             String c = content.getText().toString();
+                            Application.getGeneralPreferences().setUsername(a);
                             dialog.dismiss();
                             final MaterialDialog p = new MaterialDialog.Builder(getContext())
-                                    .content("发布中")
+                                    .content(R.string.processing)
                                     .autoDismiss(false)
                                     .progress(true, 0)
                                     .cancelable(false)

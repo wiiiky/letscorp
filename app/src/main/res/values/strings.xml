@@ -36,7 +36,7 @@
     <string name="do_comment">Comment</string>
     <string name="cancel">Cancel</string>
     <string name="username">Username</string>
-    <string name="anonymous">anonymous</string>
+    <string name="anonymous">Anonymous</string>
     <string name="content">Content</string>
     <string name="add_comment">Add Comment</string>
     <string name="list_font_size">List Font Size</string>
@@ -50,4 +50,9 @@
     <string name="clear_search_history_only">clear search history</string>
     <string name="search_history_deleted">Search History Deleted</string>
     <string name="action_share">Share</string>
+    <string name="pref_key_comment_username">pref_key.comment_username</string>
+    <string name="random_username">Random Username</string>
+    <string name="processing">Processing</string>
+    <string name="summary_random_username">use a random username for comment, otherwise the one used last time</string>
+    <string name="general">General</string>
 </resources>

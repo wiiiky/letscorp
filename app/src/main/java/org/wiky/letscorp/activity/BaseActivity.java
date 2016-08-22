@@ -10,7 +10,8 @@ import android.view.Window;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
-import org.wiky.letscorp.style.StylePreferences;
+import org.wiky.letscorp.pref.GeneralPreferences;
+import org.wiky.letscorp.pref.StylePreferences;
 import org.wiky.letscorp.util.Util;
 
 import java.util.ArrayList;
@@ -21,11 +22,13 @@ public class BaseActivity extends AppCompatActivity {
     protected Toolbar mToolBar;
     protected AppBarLayout mAppBar;
     protected StylePreferences mStylePref;
+    protected GeneralPreferences mGeneralPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mStylePref = Application.getStylePreferences();
+        mGeneralPref = Application.getGeneralPreferences();
         getTheme().applyStyle(mStylePref.getListFontStyle().resid(), true);
         getTheme().applyStyle(mStylePref.getPostFontStyle().resid(), true);
     }

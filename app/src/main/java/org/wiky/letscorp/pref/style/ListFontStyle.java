@@ -1,4 +1,4 @@
-package org.wiky.letscorp.style;
+package org.wiky.letscorp.pref.style;
 
 import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
@@ -9,22 +9,22 @@ import java.util.Collection;
 /**
  * Created by wiky on 8/9/16.
  */
-public enum PostFontStyle {
-    Small(R.style.PostFontStyle_Small, 0),
-    Medium(R.style.PostFontStyle_Medium, 1),
-    Large(R.style.PostFontStyle_Large, 2);
+public enum ListFontStyle {
+    Small(R.style.ListFontStyle_Small, 0),
+    Medium(R.style.ListFontStyle_Medium, 1),
+    Large(R.style.ListFontStyle_Large, 2);
 
     private int resId;
     private int index;
 
-    PostFontStyle(int resId, int index) {
+    ListFontStyle(int resId, int index) {
         this.resId = resId;
         this.index = index;
     }
 
     public static Collection<String> items() {
         Collection<String> items = new ArrayList<>();
-        for (PostFontStyle style : PostFontStyle.values()) {
+        for (ListFontStyle style : ListFontStyle.values()) {
             items.add(style.title());
         }
         return items;
@@ -36,11 +36,11 @@ public enum PostFontStyle {
 
     public String title() {
         switch (resId) {
-            case R.style.PostFontStyle_Small:
+            case R.style.ListFontStyle_Small:
                 return Application.getApplication().getString(R.string.small);
-            case R.style.PostFontStyle_Medium:
+            case R.style.ListFontStyle_Medium:
                 return Application.getApplication().getString(R.string.medium);
-            case R.style.PostFontStyle_Large:
+            case R.style.ListFontStyle_Large:
                 return Application.getApplication().getString(R.string.large);
         }
         return "Unknown";
