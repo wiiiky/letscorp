@@ -19,12 +19,14 @@ import org.wiky.letscorp.data.db.PostItemHelper;
 import org.wiky.letscorp.data.db.QueryHelper;
 import org.wiky.letscorp.pref.style.ListFontStyle;
 import org.wiky.letscorp.pref.style.PostFontStyle;
+import org.wiky.letscorp.pref.style.ThemeStyle;
 
 import java.util.Objects;
 
 public class SettingsActivity extends BaseActivity {
 
     private ListFontStyle mPrevListFontStyle;
+    private ThemeStyle mPrevThemeStyle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class SettingsActivity extends BaseActivity {
         setContentView(R.layout.activity_settings);
 
         mPrevListFontStyle = mStylePref.getListFontStyle();
+        mPrevThemeStyle = mStylePref.getThemeStyle();
 
         setTitle(R.string.settings);
         getFragmentManager().beginTransaction().replace(R.id.settings_frame, new SettingsFragment()).commit();
@@ -41,7 +44,7 @@ public class SettingsActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         /* 如果列表页字体大小设置变化，则更新主页 */
-        if (mPrevListFontStyle != mStylePref.getListFontStyle()) {
+        if (mPrevThemeStyle != mStylePref.getThemeStyle() || mPrevListFontStyle != mStylePref.getListFontStyle()) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
@@ -61,6 +64,10 @@ public class SettingsActivity extends BaseActivity {
             checkPref.setChecked(Application.getGeneralPreferences().isRandomUsername());
             checkPref.setOnPreferenceChangeListener(this);
 
+            pref = findPreference(getString(R.string.pref_key_theme));
+            pref.setSummary(getThemeStyle().title());
+            pref.setOnPreferenceClickListener(this);
+
             pref = findPreference(getString(R.string.pref_key_list_font));
             pref.setSummary(getListFontStyle().title());
             pref.setOnPreferenceClickListener(this);
@@ -73,6 +80,20 @@ public class SettingsActivity extends BaseActivity {
             findPreference(getString(R.string.pref_key_clear_query)).setOnPreferenceClickListener(this);
         }
 
+        private ThemeStyle getThemeStyle() {
+            return Application.getStylePreferences().getThemeStyle();
+        }
+
+        private void setThemeStyle(int index) {
+            ThemeStyle[] styles = ThemeStyle.values();
+            for (int i = 0; i < styles.length; i++) {
+                if (i == index) {
+                    findPreference(getString(R.string.pref_key_theme)).setSummary(styles[i].title());
+                    Application.getStylePreferences().setThemeStyle(styles[i]);
+                    break;
+                }
+            }
+        }
 
         private ListFontStyle getListFontStyle() {
             return Application.getStylePreferences().getListFontStyle();
@@ -115,10 +136,40 @@ public class SettingsActivity extends BaseActivity {
                 changeListFontStyle();
             } else if (Objects.equals(key, getString(R.string.pref_key_post_font))) {
                 changePostFontStyle();
+            } else if (Objects.equals(key, getString(R.string.pref_key_theme))) {
+                changeThemeStyle();
             } else {
                 return false;
             }
             return true;
+        }
+
+        /* 更改主题 */
+        private void changeThemeStyle() {
+            new MaterialDialog.Builder(getActivity())
+                    .title(R.string.post_font_size)
+                    .items(ThemeStyle.items())
+                    .autoDismiss(false)
+                    .positiveText(R.string.ok)
+                    .itemsCallbackSingleChoice(getThemeStyle().index(), new MaterialDialog.ListCallbackSingleChoice() {
+                        @Override
+                        public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                            return true;
+                        }
+                    })
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
+                            setThemeStyle(dialog.getSelectedIndex());
+                            Application.getUIHandler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                }
+                            }, 250);
+                        }
+                    })
+                    .show();
         }
 
         /* 更改文章页面字体大小 */

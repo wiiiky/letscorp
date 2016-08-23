@@ -12,7 +12,8 @@
         <org.wiky.letscorp.list.PostListView
             android:id="@+id/main.post_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="?attr/list_background_color" />
 
     </org.wiky.letscorp.component.SwipeRefreshLayout>
 

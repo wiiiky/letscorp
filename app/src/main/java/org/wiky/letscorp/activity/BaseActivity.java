@@ -31,6 +31,7 @@ public class BaseActivity extends AppCompatActivity {
         mGeneralPref = Application.getGeneralPreferences();
         getTheme().applyStyle(mStylePref.getListFontStyle().resid(), true);
         getTheme().applyStyle(mStylePref.getPostFontStyle().resid(), true);
+        getTheme().applyStyle(mStylePref.getThemeStyle().resid(), true);
     }
 
     @Override

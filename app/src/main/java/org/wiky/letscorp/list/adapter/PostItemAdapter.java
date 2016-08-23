@@ -1,6 +1,6 @@
 package org.wiky.letscorp.list.adapter;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -29,8 +29,10 @@ public class PostItemAdapter extends RecyclerView.Adapter {
     private List<PostItem> mItems;
     private boolean mLoading;
     private OnItemClickListener mOnItemClickListener;
+    private Context mContext;
 
-    public PostItemAdapter() {
+    public PostItemAdapter(Context context) {
+        mContext = context;
         mItems = new ArrayList<>();
         mLoading = false;
     }
@@ -108,9 +110,9 @@ public class PostItemAdapter extends RecyclerView.Adapter {
                 }
             });
             if (data.readn) { /* 文章已经阅读过 */
-                viewHolder.mTitle.setTextColor(Color.GRAY);
+                viewHolder.mTitle.setTextColor(viewHolder.mDate.getCurrentTextColor());
             } else {
-                viewHolder.mTitle.setTextColor(Color.BLACK);
+                viewHolder.mTitle.setTextColor((Integer) viewHolder.mTitle.getTag());
             }
         }
     }
@@ -156,6 +158,7 @@ public class PostItemAdapter extends RecyclerView.Adapter {
         public PostItemHolder(View itemView) {
             super(itemView);
             mTitle = (TextView) itemView.findViewById(R.id.item_title);
+            mTitle.setTag(mTitle.getCurrentTextColor());
             mContent = (TextView) itemView.findViewById(R.id.item_content);
             mComment = (TextView) itemView.findViewById(R.id.item_comment);
             mDate = (TextView) itemView.findViewById(R.id.item_date);

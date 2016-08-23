@@ -55,4 +55,7 @@
     <string name="processing">Processing</string>
     <string name="summary_random_username">use a random username for comment, otherwise the one used last time</string>
     <string name="general">General</string>
+    <string name="pref_key_theme" translatable="false">pref_key.theme</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
 </resources>

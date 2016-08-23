@@ -12,7 +12,7 @@
         android:id="@+id/post.view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#EEEEEE"
+        android:background="?attr/post_background_color"
         android:clipToPadding="false"
         android:paddingBottom="20dp"
         android:paddingEnd="15dp"

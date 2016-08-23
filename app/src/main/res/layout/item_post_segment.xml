@@ -10,6 +10,7 @@
         android:id="@+id/post.content.text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="?attr/post_info_color"
         android:textSize="?attr/post_content_size" />
 
     <TextView
@@ -18,6 +19,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/blockquote"
         android:paddingStart="20dp"
+        android:textColor="?attr/post_info_color"
         android:textSize="?attr/post_content_size"
         android:textStyle="italic" />
 

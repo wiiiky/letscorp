@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +18,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -94,6 +96,11 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_post);
+
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.post_background_color, typedValue, true);
+        int color = (typedValue.data & 0x00FFFFFF) | 0xCC000000;
+        getWindow().setBackgroundDrawable(new ColorDrawable(color));
 
         mPostItem = getIntent().getParcelableExtra("data");
         setTitle(mPostItem.title);

@@ -15,7 +15,7 @@
         android:layout_marginRight="10dp"
         android:text=""
         android:textAlignment="center"
-        android:textColor="@color/md_black_1000"
+        android:textColor="?attr/post_title_color"
         android:textSize="?attr/post_title_size" />
 
     <TextView
@@ -26,6 +26,7 @@
         android:layout_below="@id/post.header.title"
         android:layout_centerHorizontal="false"
         android:layout_marginTop="4dp"
+        android:textColor="?attr/post_info_color"
         android:textSize="?attr/post_info_size" />
 
     <TextView
@@ -36,6 +37,7 @@
         android:layout_below="@id/post.header.category"
         android:layout_centerHorizontal="false"
         android:layout_marginTop="2dp"
+        android:textColor="?attr/post_info_color"
         android:textSize="?attr/post_info_size" />
 
     <TextView
@@ -46,6 +48,7 @@
         android:layout_below="@id/post.header.tag"
         android:layout_centerHorizontal="false"
         android:layout_marginTop="5dp"
+        android:textColor="?attr/post_info_color"
         android:textSize="?attr/post_info_size" />
 
 </RelativeLayout>

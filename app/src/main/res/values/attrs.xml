@@ -22,4 +22,12 @@
         <attr name="comment_primary_size" format="dimension" />
         <attr name="comment_secondary_size" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="ThemeStyle">
+        <attr name="list_background_color" format="color" />
+        <attr name="card_background_color" format="color" />
+        <attr name="post_title_color" format="color" />
+        <attr name="post_info_color" format="color" />
+        <attr name="post_background_color" format="color" />
+    </declare-styleable>
 </resources>

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="preferencescreen">
+
     <PreferenceCategory android:title="@string/general">
         <CheckBoxPreference
             android:key="@string/pref_key_comment_username"
             android:summary="@string/summary_random_username"
             android:title="@string/random_username" />
     </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/appearance">
         <Preference
             android:key="@string/pref_key_list_font"
@@ -14,6 +16,9 @@
         <Preference
             android:key="@string/pref_key_post_font"
             android:title="@string/post_font_size" />
+        <Preference
+            android:key="@string/pref_key_theme"
+            android:title="Theme" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/data">
@@ -26,4 +31,5 @@
             android:summary="@string/clear_search_history_only"
             android:title="@string/clear_search_history" />
     </PreferenceCategory>
+
 </PreferenceScreen>

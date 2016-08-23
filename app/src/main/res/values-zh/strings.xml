@@ -50,4 +50,6 @@
     <string name="processing">发布中</string>
     <string name="summary_random_username">评论时使用随机用户名，否则使用上次使用的用户名</string>
     <string name="general">通用</string>
+    <string name="light">亮色</string>
+    <string name="dark">暗色</string>
 </resources>

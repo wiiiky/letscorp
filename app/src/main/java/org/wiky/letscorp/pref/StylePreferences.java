@@ -4,6 +4,7 @@ import android.content.Context;
 
 import org.wiky.letscorp.pref.style.ListFontStyle;
 import org.wiky.letscorp.pref.style.PostFontStyle;
+import org.wiky.letscorp.pref.style.ThemeStyle;
 
 /**
  * Created by wiky on 8/9/16.
@@ -12,6 +13,7 @@ import org.wiky.letscorp.pref.style.PostFontStyle;
 public class StylePreferences extends BasePreferences {
     private final static String LIST_FONT_STYLE = "LIST_FONT_STYLE";
     private final static String POST_FONT_STYLE = "POST_FONT_STYLE";
+    private final static String THEME_STYLE = "THEME_STYLE";
 
     public StylePreferences(Context context) {
         super(context);
@@ -32,5 +34,13 @@ public class StylePreferences extends BasePreferences {
 
     public void setPostFontStyle(PostFontStyle style) {
         edit().putString(POST_FONT_STYLE, style.name()).commit();
+    }
+
+    public ThemeStyle getThemeStyle() {
+        return ThemeStyle.valueOf(open().getString(THEME_STYLE, ThemeStyle.LIGHT.name()));
+    }
+
+    public void setThemeStyle(ThemeStyle style) {
+        edit().putString(THEME_STYLE, style.name()).commit();
     }
 }

@@ -56,7 +56,7 @@ public abstract class BasePostListVIew extends RecyclerView {
     }
 
     private void initialize(Context context) {
-        mAdapter = new PostItemAdapter();
+        mAdapter = new PostItemAdapter(context);
         mLayoutManager = new LinearLayoutManager(context);
         mPage = 1;
         mReseting = false;

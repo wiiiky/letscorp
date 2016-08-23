@@ -10,5 +10,6 @@
     <color name="refresh_progress_1">@color/colorAccent</color>
     <color name="refresh_progress_2">@color/colorAccent2</color>
     <color name="refresh_progress_3">@color/colorPrimary</color>
-    <color name="colorFuzzy">#EEEEEEEE</color>
+
+    <color name="colorDarkBackground">#333</color>
 </resources>

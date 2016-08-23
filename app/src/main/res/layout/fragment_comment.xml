@@ -11,7 +11,7 @@
         android:id="@+id/post.comment_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#EEEEEE" />
+        android:background="?attr/post_background_color" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/post.add_comment"

@@ -1,9 +1,11 @@
 package org.wiky.letscorp.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,10 @@ public class ImageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
+
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.colorPrimaryDark, typedValue, true);
+        getWindow().setBackgroundDrawable(new ColorDrawable(typedValue.data));
 
         Intent intent = getIntent();
         ArrayList<String> urls = intent.getStringArrayListExtra("urls");
