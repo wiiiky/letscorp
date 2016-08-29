@@ -130,5 +130,6 @@
         <item name="android:itemBackground">@color/colorDarkBackground</item>
         <item name="android:textColor">#FFF</item>
         <item name="android:textColorSecondary">#DDD</item>
+        <item name="android:actionModeShareDrawable">@color/colorDarkBackground</item>
     </style>
 </resources>

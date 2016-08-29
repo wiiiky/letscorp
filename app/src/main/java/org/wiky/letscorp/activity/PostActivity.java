@@ -135,7 +135,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
         MenuItemCompat.setActionProvider(menu.findItem(R.id.action_share), shareActionProvider);
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, mPostItem.href);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, String.format("%s %s", mPostItem.title, mPostItem.href));
         shareIntent.setType("text/plain");
         shareActionProvider.setShareIntent(shareIntent);
         return true;
