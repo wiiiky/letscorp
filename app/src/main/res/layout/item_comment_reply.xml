@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/card_background_color"
     android:orientation="vertical"
     android:padding="8dp">
 
@@ -22,7 +23,7 @@
             android:id="@+id/comment.username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorSecondaryText"
+            android:textColor="?android:attr/textColorSecondary"
             android:textSize="?attr/comment_primary_size" />
 
         <TextView
@@ -30,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:textColor="@color/colorAccent"
+            android:textColor="?android:attr/colorAccent"
             android:textSize="?attr/comment_primary_size" />
 
         <RelativeLayout
@@ -39,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/comment.username"
             android:layout_marginTop="6dp"
-            android:background="@color/md_grey_50"
+            android:background="?attr/card_background_color"
             android:elevation="0dp"
             android:padding="5dp">
 
@@ -48,6 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/comment_cite"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="?attr/comment_secondary_size" />
 
             <TextView
@@ -56,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:layout_toEndOf="@id/comment.cite.cite"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="?attr/comment_secondary_size" />
 
             <TextView
@@ -65,6 +68,7 @@
                 android:layout_below="@id/comment.cite.username"
                 android:layout_marginStart="3dp"
                 android:layout_toEndOf="@id/comment.cite.cite"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="?attr/comment_secondary_size" />
 
         </RelativeLayout>
@@ -75,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/comment.cite"
             android:layout_marginTop="5dp"
-            android:textColor="@color/colorPrimaryText" />
+            android:textColor="?android:attr/textColorSecondary" />
 
         <android.support.v7.widget.CardView
             android:id="@+id/comment.reply_container"

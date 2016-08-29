@@ -147,7 +147,7 @@ public class SettingsActivity extends BaseActivity {
         /* 更改主题 */
         private void changeThemeStyle() {
             new MaterialDialog.Builder(getActivity())
-                    .title(R.string.post_font_size)
+                    .title(R.string.theme)
                     .items(ThemeStyle.items())
                     .autoDismiss(false)
                     .positiveText(R.string.ok)

@@ -18,7 +18,7 @@
             android:title="@string/post_font_size" />
         <Preference
             android:key="@string/pref_key_theme"
-            android:title="Theme" />
+            android:title="@string/theme" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/data">

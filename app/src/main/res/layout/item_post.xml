@@ -37,7 +37,6 @@
             android:layout_below="@id/item.content"
             android:layout_marginTop="4dp">
 
-
             <TextView
                 android:id="@+id/item.comment"
                 android:layout_width="wrap_content"
