@@ -33,10 +33,12 @@ import org.wiky.letscorp.Application;
 import org.wiky.letscorp.R;
 import org.wiky.letscorp.api.Api;
 import org.wiky.letscorp.component.ImageViewer;
+import org.wiky.letscorp.data.model.Comment;
 import org.wiky.letscorp.data.model.Post;
 import org.wiky.letscorp.data.model.PostItem;
 import org.wiky.letscorp.list.CommentListView;
 import org.wiky.letscorp.list.PostView;
+import org.wiky.letscorp.list.adapter.CommentAdapter;
 import org.wiky.letscorp.list.adapter.PostAdapter;
 import org.wiky.letscorp.util.Username;
 import org.wiky.letscorp.util.Util;
@@ -286,7 +288,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
      * 文章评论页面
      * 评论列表，以及添加评论
      */
-    public static class PostCommentFragment extends Fragment implements View.OnClickListener {
+    public static class PostCommentFragment extends Fragment implements View.OnClickListener, CommentAdapter.OnItemLongClickListener {
         private static final String ARG_COMMENTS = "comments";
 
         private CommentListView mCommentList;
@@ -326,6 +328,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
                     }
                 }
             });
+            mCommentList.setOnItemLongClickListener(this);
             return rootView;
         }
 
@@ -379,8 +382,8 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             mCommentList.setComments(mData.comments);
         }
 
-        @Override
-        public void onClick(View view) {
+        /* 评论对话框，parentid是要回复的评论ID */
+        private void showCommentDialog(final int parentid) {
             if (mData == null) {
                 return;
             }
@@ -398,7 +401,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
             author.setText(name);
             author.setSelection(name.length());
             new MaterialDialog.Builder(getContext())
-                    .title(R.string.add_comment)
+                    .title(parentid <= 0 ? R.string.add_comment : R.string.reply)
                     .customView(root, true)
                     .negativeText(R.string.cancel)
                     .negativeColorRes(R.color.colorSecondaryText)
@@ -423,7 +426,7 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
                                     .progress(true, 0)
                                     .cancelable(false)
                                     .show();
-                            Api.postComment(mData, a, c, 0, new Api.ApiHandler<Post>() {
+                            Api.postComment(mData, a, c, parentid, new Api.ApiHandler<Post>() {
                                 @Override
                                 public void onSuccess(Post data) {
                                     mData = data;
@@ -471,6 +474,16 @@ public class PostActivity extends BaseActivity implements ViewPager.OnPageChange
                             .start();
                 }
             });
+        }
+
+        @Override
+        public void onClick(View view) {
+            showCommentDialog(0);
+        }
+
+        @Override
+        public void onLongClick(Comment comment) {
+            showCommentDialog(comment.id);
         }
     }
 

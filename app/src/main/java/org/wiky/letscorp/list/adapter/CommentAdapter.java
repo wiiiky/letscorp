@@ -21,6 +21,12 @@ import java.util.Objects;
 public class CommentAdapter extends RecyclerView.Adapter {
 
     private List<Comment> mData;
+    private OnItemLongClickListener mOnLongClickListener = new OnItemLongClickListener() {
+        @Override
+        public void onLongClick(Comment comment) {
+
+        }
+    };
 
     public CommentAdapter(List<Comment> comments) {
         mData = comments;
@@ -53,6 +59,17 @@ public class CommentAdapter extends RecyclerView.Adapter {
         } else {
             viewHolder.replyContainer.setVisibility(View.GONE);
         }
+        viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                mOnLongClickListener.onLongClick(data);
+                return true;
+            }
+        });
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        mOnLongClickListener = listener;
     }
 
     @Override
@@ -65,19 +82,27 @@ public class CommentAdapter extends RecyclerView.Adapter {
         mData = comments;
         if (mData.size() > oldData.size()) {
             for (int i = 0; i < oldData.size(); i++) {
-                if (!Objects.equals(oldData.get(i).id, mData.get(i).id)) {
+                Comment o = oldData.get(i);
+                Comment n = mData.get(i);
+                if (!Objects.equals(o.id, n.id) || o.children.size() != n.children.size()) {
                     notifyItemChanged(i);
                 }
             }
             notifyItemRangeInserted(oldData.size(), mData.size() - oldData.size());
         } else {
             for (int i = 0; i < mData.size(); i++) {
-                if (!Objects.equals(oldData.get(i).id, mData.get(i).id)) {
+                Comment o = oldData.get(i);
+                Comment n = mData.get(i);
+                if (!Objects.equals(o.id, n.id) || o.children.size() != n.children.size()) {
                     notifyItemChanged(i);
                 }
             }
             notifyItemRangeRemoved(mData.size(), oldData.size() - mData.size());
         }
+    }
+
+    public interface OnItemLongClickListener {
+        void onLongClick(Comment comment);
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {

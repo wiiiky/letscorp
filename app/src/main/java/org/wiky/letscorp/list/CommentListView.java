@@ -50,6 +50,10 @@ public class CommentListView extends RecyclerView {
         new VerticalOverScrollBounceEffectDecorator(new RecyclerViewOverScrollDecorAdapter(this));
     }
 
+    public void setOnItemLongClickListener(CommentAdapter.OnItemLongClickListener listener) {
+        mAdapter.setOnItemLongClickListener(listener);
+    }
+
     public void setComments(List<Comment> comments) {
         mAdapter.setComments(comments);
     }

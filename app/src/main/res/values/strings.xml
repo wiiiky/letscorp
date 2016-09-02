@@ -39,6 +39,7 @@
     <string name="anonymous">Anonymous</string>
     <string name="content">Content</string>
     <string name="add_comment">Add Comment</string>
+    <string name="reply">Reply</string>
     <string name="list_font_size">List Font Size</string>
     <string name="appearance">Appearance</string>
     <string name="post_font_size">Post Font Size</string>
