@@ -1,6 +1,7 @@
 package org.wiky.letscorp.list.anim;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.animation.DecelerateInterpolator;
@@ -9,22 +10,6 @@ import org.wiky.letscorp.Application;
 
 /* 评论列表的动画 */
 public class CommentAnimator extends DefaultItemAnimator {
-
-//    @Override
-//    public boolean animateChange(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder,
-//                                 int fromX, int fromY, int toX, int toY) {
-//        if (oldHolder == newHolder) {
-//            dispatchChangeFinished(oldHolder, false);
-//        } else {
-//            if (oldHolder != null) {
-//                dispatchChangeFinished(oldHolder, true);
-//            }
-//            if (newHolder != null) {
-//                dispatchChangeFinished(newHolder, false);
-//            }
-//        }
-//        return false;
-//    }
 
     @Override
     public boolean animateAdd(RecyclerView.ViewHolder viewHolder) {
@@ -42,31 +27,22 @@ public class CommentAnimator extends DefaultItemAnimator {
                 .setDuration(250)
                 .setInterpolator(new DecelerateInterpolator())
                 .setStartDelay(30 * holder.getLayoutPosition())
-                .setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animator) {
-
-                    }
-
+                .setListener(new AnimatorListenerAdapter() {
                     private void end() {
                         holder.itemView.setAlpha(1.0f);
                         holder.itemView.setTranslationX(0.0f);
                         dispatchAddFinished(holder);
                     }
-
                     @Override
-                    public void onAnimationEnd(Animator animator) {
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
                         end();
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animator) {
+                    public void onAnimationCancel(Animator animation) {
+                        super.onAnimationCancel(animation);
                         end();
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animator) {
-
                     }
                 })
                 .start();
